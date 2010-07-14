@@ -1,0 +1,9 @@
+
+ PvA
+----------------------
+
+Smarty wegwerken (done)
+GLOBALS[Viewport(s)] wegwerken (done)
+
+de classes/wrappers passen niet meer bij de omschrijving 'mvc',
+ze moeten een betere naam krijgen dan *View om naar core te gaan.

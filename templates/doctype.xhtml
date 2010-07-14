@@ -1,0 +1,30 @@
+<?php
+/**
+ * XHTML 1.1 Strict
+ */ 
+echo '<?xml'; ?> version="1.0" encoding="<?php echo $charset; ?>"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nl">
+<head>
+	<title><?php echo $title; ?></title>
+<?php foreach ($headerTags as $tag):
+	echo "\t".$tag."\n";
+endforeach; ?>
+</head>
+<?php flush(); ?>
+<body<?php echo $bodyParameters; ?>>
+
+<?php render($body); ?>
+
+
+<?php if ($statusbar): ?>
+<div class="statusbar" id="statusbar">
+	<img style="float:right;margin-right:10px;" src="http://bfanger.nl/core/images/debug_hide.gif" onclick="javascript:document.getElementById('statusbar').style.display='none';" alt="Verberg statusbalk" />
+	<?php echo $GLOBALS['website']->statusbar(); ?>
+</div>
+
+
+<?php endif; ?>
+</body>
+</html>
+

@@ -1,0 +1,10 @@
+#
+# Dit is een voorbeeld ".htaccess" bestand.
+#
+
+# Alles, behalve bestaande bestanden naar de rewrite.php doorsluisen
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$            rewrite.php?%{QUERY_STRING}
+
+Allow from all

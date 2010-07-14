@@ -1,0 +1,30 @@
+<?php
+/**
+ * HTML Transitional
+ */
+?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="nl">
+<head>
+	<title><?php echo $title; ?></title>
+<?php foreach ($headerTags as $tag):
+	echo "\t".$tag."\n";
+endforeach; ?>
+</head>
+<?php flush(); ?>
+<body<?php echo $bodyParameters; ?>>
+
+<?php render($body); ?>
+
+
+<?php if ($statusbar): ?>
+<div class="statusbar" id="statusbar">
+	<img style="float:right;margin-right:10px;" src="http://bfanger.nl/core/images/debug_hide.gif" onclick="javascript:document.getElementById('statusbar').style.display='none';" alt="Verberg statusbalk" />
+	<?php echo $GLOBALS['website']->statusbar(); ?>
+</div>
+
+
+<?php endif; ?>
+</body>
+</html>
+

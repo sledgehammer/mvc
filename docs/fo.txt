@@ -1,0 +1,14 @@
+
+ SledgeHammer Webcore
+----------------------
+
+Basis voor document en pagina rendering.
+
+Scope
+------
+* MVC
+* Minumum aan components/viewports
+
+Buiten scope
+-------------
+alle componentes onder de zon
