@@ -130,7 +130,6 @@ abstract class Website extends VirtualFolder implements Component {
 	 */
 	function statusbar() {
 		statusbar();
-		echo 'Version:&nbsp;<b>'.str_replace(' ', '&nbsp;', VersionControl::get_version(PATH)).'</b>';
 	}
 
 	/**
