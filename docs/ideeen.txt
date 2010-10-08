@@ -1,0 +1,50 @@
+
+ Http Headers
+----------------------
+
+Probleem:
+  Content en Headers versturen.
+
+Huidige oplossing:
+  door de isWrappable() functie wordt bepaald in het Website object of het component de wrapComponent() functie ingaat.
+  Deze aanpak is niet flexibel
+
+Nieuwe flow:
+
+VirtualFolder en Command blijven hetzelfde, maar de functie execute() wordt hernoemd naar generateContent();
+Een Website class krijgt ook nog een extra generateDocument() functie.
+(Deze vervangt de initDocument en render)
+
+getDocument() blijft (voor styling, <title>, enz), maar de headers eigenschap wordt anders.
+
+een document krijgt een getHeaders() functie.
+
+De componenten vormen een tree.
+
+ Document
+ |- Layout Template
+    |- Menu
+    |- Content
+
+Een component *mag* een getHeaders() functie hebben.
+Als een component deze functie implementeerd zal deze een header array returnen.
+
+Als een component subcomponenten bevat, moet deze de getHeaders implementeren en alle subcomponenten controleren of deze een getHeaders() bevatten.
+
+Deze wordt dan samengevoegd tot de uiteindelijke lijst met headers.
+Des te lager in de tree, des te meer voorang de header.
+
+
+Hmm wanneer worden er headers aangepast? alleen bij stand-alone(Json, Image, File) of ook door geneste componenten?
+bijde, met name de statuscode (404 500) wordt aangepast.
+
+
+Design decisions:
+  headers horen bij de view.
+  HttpError wordt een compontent.
+
+I.p.v. een isWrappable() wordt er gekeken of  ge-extend wordt van de Document class.
+Hierdoor krijgt de gd library een depenancy van mvc.
+
+
+
