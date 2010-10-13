@@ -151,16 +151,6 @@ abstract class VirtualFolder extends Object implements Command {
 	}
 
 	/**
-	 * @return HtmlDocument|Document
-	 *
-	function getDocument() {
-		if ($this->parent !== null) {
-			return $this->parent->getDocument();
-		}
-		throw new Exception('None of the VirtualFolders implemented the getDocument() method'); 
-	}*/
-
-	/**
 	 * Event dat getriggert wordt als een (virtuele) bestand niet gevonden wordt.
 	 * Geeft deze of een parent van deze virtualfolder de mogenlijkheid om een custom actie uit te voeren.
 	 * 
@@ -170,11 +160,9 @@ abstract class VirtualFolder extends Object implements Command {
 		if ($this->parent !== null) {
 			return $this->parent->onFileNotFound();
 		}
-		$command = new HttpError(404);
-		$component = $command->execute();
 		$relativePath = substr(rawurldecode(URL::info('path')), strlen(WEBPATH) - 1); // Relative path vanaf de WEBROOT
 		notice('HTTP[404] File "'.$relativePath.'" not found');
-		return $component;
+		return new HttpError(404);
 
 	}
 
@@ -200,22 +188,16 @@ abstract class VirtualFolder extends Object implements Command {
 		foreach ($modules as $module) {
 			if (is_dir($module['path'].$publicFolder)) { // Controleren of map bestaat in de public mappen
 				if ($isFolder) {
-					$command = new HttpError(403);
-					$component = $command->execute();
 					error_log('HTTP[403] Directory listing for "'.URL::uri().'" not allowed');
-					return $component;
+					return new HttpError(403);
 				} else { // De map bestaat maar het bestand is niet gevonden.
-					$command = new HttpError(404);
-					$component = $command->execute();
 					notice('HTTP[404] File "'.basename($relativePath).'" not found in "'.dirname($relativePath).'/"', 'VirtualFolder "'.get_class($GLOBALS['VirtualFolder']).'" doesn\'t handle the "'.basename($GLOBALS['VirtualFolder']->getPath(true)).'" folder');
-					return $component;
+					return new HttpError(404);
 				}
 			}
 		}
-		$command = new HttpError(404);
-		$component = $command->execute();
 		notice('HTTP[404] VirtualFolder "'.get_class($GLOBALS['VirtualFolder']).'" has no "'.basename($GLOBALS['VirtualFolder']->getPath(true)).'" folder');
-		return $component;
+		return new HttpError(404);
 	}
 
 	/**
