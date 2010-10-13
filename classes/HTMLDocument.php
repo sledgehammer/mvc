@@ -5,12 +5,14 @@
  * @package MVC
  */
 
-class HTMLDocument extends Document {
+class HTMLDocument extends Object implements Document {
 
 	public
 		$doctype,
-		$statusbar, // bool  Bepaald of de statusbalk getoond word. (Wordt automatisch bepaald door de ErrorHandler->html waarde)
+		$showStatusbar, // bool  Bepaald of de statusbalk getoond word. (Wordt automatisch bepaald door de ErrorHandler->html waarde)
+		$content, // Component
 		// Tags die in de <head> vallen
+		/*
 		$title, // De <title> tag
 		$stylesheets = array(), // De stylesheet urls
 		$javascripts = array(), // De javascript urls (Bij voorkeur geen javascript in de head.)
@@ -19,14 +21,32 @@ class HTMLDocument extends Document {
 		$meta_tags = array(), // De <meta> tags
 		$link_tags = array(), // De <link> tags 
 		$script_tags = array(), // De <script> tags
-
+*/
 		$bodyParameters = array(); // parameters die binnen de <body> tag geplaatst worden
 
-	function __construct($doctype = 'xhtml', $charset = 'UTF-8') {
-		parent::__construct($charset);
+	private $headers;
+
+	function __construct($doctype = 'xhtml') {
+		//parent::__construct($charset);
 		$this->doctype = $doctype;
-		$this->statusbar = $GLOBALS['ErrorHandler']->html; // Als er html error getoond mogen worden, toon dan ook de statusbalk.
-		$this->headers['mimetype'] = 'Content-Type: text/html; charset='.strtolower($charset);
+		$this->showStatusbar = $GLOBALS['ErrorHandler']->html; // Als er html error getoond mogen worden, toon dan ook de statusbalk.
+		
+	}
+
+	function  getHeaders() {
+		$headers = array('http' => array(
+			'Content-Type' => 'text/html; charset='.strtolower($GLOBALS['charset']),
+		));
+
+		if (defined('WEBPATH') && WEBPATH != '/' && file_exists(PATH.'application/public/favicon.ico')) {
+			$headers['link']['favicon'] = array('rel' => 'shortcut icon', 'href' => WEBROOT.'favicon.ico', 'type' => 'image/x-icon');
+		}
+		// $headers['http']['Content-Type'] = 'application/xhtml+xml';
+		if ($GLOBALS['ErrorHandler']->html) {
+			$headers['css']['debug'] = WEBROOT.'core/stylesheets/debug.css';
+		}
+		$this->headers = merge_headers($headers, $this->content);;
+		return $this->headers;
 	}
 
 	/**
@@ -36,27 +56,36 @@ class HTMLDocument extends Document {
 	 */
 	function render() {
 		$variables = array(
-			'charset' => $this->charset,
-			'title' => $this->title,
-			'headerTags' => array(),
-			'bodyParameters' => implode_xml_parameters($this->bodyParameters, $this->charset),
-			'body' => $this->component,
-			'statusbar' => $this->statusbar
+			'charset' => $GLOBALS['charset'],
+			'title' => array_value($this->headers, 'title'),
+			'bodyParameters' => implode_xml_parameters($this->bodyParameters),
+			'body' => $this->content,
+			'showStatusbar' => $this->showStatusbar,
 		);
+		
 		// tags binnen de <head> instellen
 		$head = array(
-			'meta' => $this->meta_tags,
-			'link' => $this->link_tags,
+			'meta' => array(),
+			'link' => array(),
 		);
-		$eot = ($this->doctype === 'xhtml') ? ' />' : '>'; // End of Tag instellen
-		foreach ($this->stylesheets as $url) {
-			$head['link'][] = array('rel' => 'stylesheet', 'href' => $url, 'type' => 'text/css');
+		if (isset($this->headers['meta'])) {
+			$head['meta'] = $this->headers['meta'];
 		}
-		foreach ($head as $tag => $tags) {
-			foreach ($tags as $parameters) {
-				$variables['headerTags'][] = '<'.$tag.implode_xml_parameters($parameters, $this->charset).$eot;
+		if (isset($this->headers['link'])) {
+			$head['link'] = $this->headers['link'];
+		}
+		if (isset($this->headers['css'])) {
+			foreach ($this->headers['css'] as $url) {
+				$head['link'][] = array('href' => $url, 'type' => 'text/css', 'rel' => 'stylesheet');
 			}
 		}
+		$eot = ($this->doctype === 'xhtml') ? ' />' : '>'; // End of Tag instellen
+		foreach ($head as $tag => $tags) {
+			foreach ($tags as $parameters) {
+				$variables['head'][] = '<'.$tag.implode_xml_parameters($parameters).$eot;
+			}
+		}
+		/*
 		$scripts = $this->script_tags;
 		foreach ($this->javascripts as $identifier => $url) {
 			if (is_int($identifier)) {
@@ -74,9 +103,14 @@ class HTMLDocument extends Document {
 			if (isset($parameters['type'])  && isset($parameters['src']) && $parameters['type'] == 'text/javascript') { // Het het om een javascript bestand?
 			}
 			$variables['headerTags'][] = '<script'.implode_xml_parameters($parameters).'></script>';
-		}
-		$this->component = new Template('doctype.'.$this->doctype, $variables);
-		parent::render();
+		}*/
+		
+		$template = new Template('doctype.'.$this->doctype, $variables);
+		$template->render();
+	}
+	
+	function isDocument() {
+		return true;
 	}
 }
 ?>

@@ -36,7 +36,7 @@ abstract class VirtualFolder extends Object implements Command {
 	 * Bepaald of deze VirtualFolder bestandsnamen zonder extenties accepteerd.
 	 * Als deze niet geaccepteerd worden(false), zal de bestandsnaam (via een redirect) omgezet worden naar een mapnaam.
 	 *
-	 * @var bool $allow_files_without_extension
+	 * @var bool
 	 */
 	protected $handle_filenames_without_extension = false;
 
@@ -63,7 +63,7 @@ abstract class VirtualFolder extends Object implements Command {
 	 *
 	 * @return Component
 	 */
-	function execute() {
+	function generateContent() {
 		$this->initDepth();
 		$path = URL::extract_path();
 		$folders = $path['folders'];
@@ -152,13 +152,13 @@ abstract class VirtualFolder extends Object implements Command {
 
 	/**
 	 * @return HtmlDocument|Document
-	 */
+	 *
 	function getDocument() {
 		if ($this->parent !== null) {
 			return $this->parent->getDocument();
 		}
 		throw new Exception('None of the VirtualFolders implemented the getDocument() method'); 
-	}
+	}*/
 
 	/**
 	 * Event dat getriggert wordt als een (virtuele) bestand niet gevonden wordt.

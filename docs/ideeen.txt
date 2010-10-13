@@ -11,11 +11,13 @@ Huidige oplossing:
 
 Nieuwe flow:
 
+
 VirtualFolder en Command blijven hetzelfde, maar de functie execute() wordt hernoemd naar generateContent();
 Een Website class krijgt ook nog een extra generateDocument() functie.
 (Deze vervangt de initDocument en render)
 
 getDocument() blijft (voor styling, <title>, enz), maar de headers eigenschap wordt anders.
+
 
 een document krijgt een getHeaders() functie.
 
@@ -43,8 +45,31 @@ Design decisions:
   headers horen bij de view.
   HttpError wordt een compontent.
 
-I.p.v. een isWrappable() wordt er gekeken of  ge-extend wordt van de Document class.
-Hierdoor krijgt de gd library een depenancy van mvc.
+I.p.v. een isWrappable() wordt er gekeken of ge-extend wordt van de Document class?
+(Hierdoor krijgt de gd library een depenancy van mvc)
+Maar als er een website in een website getoond moet worden geeft dit dan problemen?
+Nee, dat kan als de static getDocument() functie gebruikt wordt.
 
+Step1 (done)
+* Refactor Website to generateDocument() en generateContent()
+* Website is geen Component meer, maar een controller
+
+Step 2
+De rol van de Document class wegwerken, deze rol*1 naar Website verplaatsen.
+
+*1 HTTP header & content versturen naar de browser. Het document opslaan functie verplaatsen naar een nieuwe class?
+
+HtmlDocument wordt een Component, deze vult m.b.v. de getHeaders() de <head> van de template.
+Stylesheets zullen nu op de Layout template gezet worden.
+
+Issue: Je weet van te voren niet of de output in een layout gezet moet worden.
+mogelijke functienamen: isMasterPage(),  isWrappable(), isContent(), isDocument()
+
+Issue: Voordat de render() aangeroepen wordt dient de getHeaders() slecht 1x aangeroepen te worden.
+Op verschillende stadia zijn de header gegevens nodig.
+
+Step 3
+Issue: active charset (default instellen op utf8)
+Kan niet meer via getDocument()
 
 

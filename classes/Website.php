@@ -6,13 +6,7 @@
  * @package MVC
  */
 
-abstract class Website extends VirtualFolder implements Component {
-
-	/**
-	 * @var Document|HtmlDocument $document
-	 */
-	protected
-		$document;
+abstract class Website extends VirtualFolder {
 
 	/**
 	 * De Website inititaliseren
@@ -20,7 +14,6 @@ abstract class Website extends VirtualFolder implements Component {
 	function __construct() {
 		parent::__construct();
 		$this->publicMethods = array_diff($this->publicMethods, array('init', 'render', 'statusbar', 'wrapComponent', 'onDatabaseFailure', 'initDocument', 'initLanguage', 'isWrapable')); // Een aantal functies *niet* public maken
-		$this->initDocument(); // Initialiseerd het $Document object.
 		$this->initLanguage();
 		// $this->sessionStart(); // Initialiseer de sessie		
 	}
@@ -29,21 +22,22 @@ abstract class Website extends VirtualFolder implements Component {
 	 * Genereerd de inhoud van de pagina (in een Component)
 	 * @return Component
 	 */
-	function execute() {
+	function generateContent() {
 		if ($GLOBALS['database_failure']) { // Zijn er geen database problemen? 
 			return $this->onDatabaseFailure();
 		}
-		return parent::execute();
+		return parent::generateContent();
 	}
 
-	function render() {
-		$component = $this->execute();
+	/*function generateDocument() {
+		$component = $this->generateContent();
 		if (!defined('MICROTIME_EXECUTE')) {
 			define('MICROTIME_EXECUTE', microtime(true));
 		}
 		if (!is_component($component)) {
-			warning(get_class($this).'->execute() should return a Component');
-		} else {
+			warning(get_class($this).'->generateContent() should return a Component, instead of '.syntax_highlight($component));
+		}
+		else {
 			$isWrapable = true;
 			if (method_exists($component, 'isWrapable')) {
 				$isWrapable =  $component->isWrapable();
@@ -55,15 +49,35 @@ abstract class Website extends VirtualFolder implements Component {
 				return;
 			}
 		}
-		$this->document->component = $component;
-		$this->document->render();
+		$document = new HTMLDocument();
+		$document->component = $component;
+		return $document;
+	}*/
+
+	function handleRequest() {
+		$content = $this->generateContent();
+		$isDocument = false;
+		if (method_exists($content, 'isDocument')) {
+			$isDocument =  $content->isDocument();
+		}
+		if ($isDocument) {
+			$document = $content;
+		} else {
+			$document = $this->generateDocument($content);
+		}
+		$headers = $document->getHeaders();
+		send_headers($headers['http']);
+		$document->render();
 	}
 
 	/**
-	 * @return HtmlDocument|Document
+	 *
+	 * @return Template
 	 */
-	function getDocument() {
-		return $this->document;
+	protected function generateDocument($content) {
+		$document = new HTMLDocument();
+		$document->content = $content;
+		return $document;
 	}
 
 	protected function wrapComponent($component) {
@@ -84,18 +98,17 @@ abstract class Website extends VirtualFolder implements Component {
 	 * Het Document object aanmaken en initialiseren.
 	 *
 	 * @return HTMLDocument
-	 */
-	protected function initDocument() {
-		$this->document = new HTMLDocument;
-		if (defined('WEBPATH') && WEBPATH != '/' && file_exists(PATH.'application/public/favicon.ico')) {
-			$this->document->link_tags['favicon'] = array('rel' => 'shortcut icon', 'href' => WEBROOT.'favicon.ico', 'type' => 'image/x-icon');
-		}
-		//$Document->headers['Content-Type'] = 'Content-Type: application/xhtml+xml'; 
-		if ($GLOBALS['ErrorHandler']->html) {
-			$this->document->stylesheets[] = WEBROOT.'core/stylesheets/debug.css';
-		}
+	 * /
+	function getDocument() {
 		return $this->document;
 	}
+
+	protected function initDocument() {
+		$this->document = new HTMLDocument;
+		
+		return $this->document;
+	}
+	*/
 
 	/**
 	 * Stel de Locale in zodat getallen en datums op de juiste manier worden weergegeven
@@ -157,14 +170,6 @@ abstract class Website extends VirtualFolder implements Component {
 			}
 			session_start();
 		}
-	}
-
-	/**
-	 * Als de website gebruikt wordt als component, dan kan deze niet gewrapped worden.  
-	 * @return false
-	 */
-	function isWrapable() {
-		return false;
 	}
 }
 ?>

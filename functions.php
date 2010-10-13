@@ -75,7 +75,7 @@ function viewport_exists($viewport) { // [bool]
 function implode_xml_parameters($parameterArray, $charset = null) {
 	$xml = '';
 	if ($charset === null) {
-		$charset = getDocument()->charset;
+		$charset = $GLOBALS['charset'];
 	}
 	foreach($parameterArray as $key => $value) {
 		$xml .= ' '.$key.'="'.htmlentities($value, ENT_COMPAT, $charset).'"';
@@ -148,16 +148,29 @@ function explode_xml_parameters($parameterString) {
 }
 
 /**
- * Het actieve document opvragen. 
+ * Het resultaat van 2 Component->getHeaders() samenvoegen.
+ * De waardes in $header1 worden aangevuld en overschreven door de waardes in header2
  *
- * @throws Exception
- * @return Document
+ * @param array $headers
+ * @param Component $component
+ * @return array
  */
-function  getDocument() {
-	if (isset($GLOBALS['VirtualFolder'])) {
-		return $GLOBALS['VirtualFolder']->getDocument();
+function merge_headers($headers, $component) {
+	if (method_exists($component, 'getHeaders')) {
+		$appendHeaders = $component->getHeaders();
+		foreach ($appendHeaders as $category => $values) {
+			if (empty ($headers[$category])) { // Staat deze category nog niet in de headers?
+				$headers[$category] = $values;
+				continue;
+			}
+			if ($category == 'title') {
+				$headers['title'] = $values;
+			} else {
+				$headers[$category] = array_merge($headers[$category], $values);
+			}
+		}
 	}
-	throw new Exception('No VirtualFolders are active');
+	return $headers;
 }
 
 /**
@@ -195,6 +208,12 @@ function mirror_file($filename) {
 	return render_file($filename);
 }
 
+/**
+ * Genereer een <script src=""> tag, mits deze al een keer gegenereerd is.
+ * @param string $src
+ * @param string $identifier
+ * @return void
+ */
 function javascript_once($src, $identifier = null) {
 	if ($identifier === null) {
 		$identifier = $src;
