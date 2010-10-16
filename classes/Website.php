@@ -19,54 +19,14 @@ abstract class Website extends VirtualFolder {
 	}
 
 	/**
-	 * Genereerd de inhoud van de pagina (in een Component)
-	 * @return Component
+	 * Aan de hand van de Request een Response versturen
+	 *
+	 * @return void
 	 */
-	function generateContent() {
-		if ($GLOBALS['database_failure']) { // Zijn er geen database problemen? 
-			return $this->onDatabaseFailure();
-		}
-		return parent::generateContent();
-	}
-
-	/*function generateDocument() {
-		$component = $this->generateContent();
+	function handleRequest() {
+		$document = $this->generateDocument();
 		if (!defined('MICROTIME_EXECUTE')) {
 			define('MICROTIME_EXECUTE', microtime(true));
-		}
-		if (!is_component($component)) {
-			warning(get_class($this).'->generateContent() should return a Component, instead of '.syntax_highlight($component));
-		}
-		else {
-			$isWrapable = true;
-			if (method_exists($component, 'isWrapable')) {
-				$isWrapable =  $component->isWrapable();
-			}
-			if ($isWrapable) {
-				$component = $this->wrapComponent($component);
-			} else {
-				$component->render();
-				return;
-			}
-		}
-		$document = new HTMLDocument();
-		$document->component = $component;
-		return $document;
-	}*/
-
-	function handleRequest() {
-		$content = $this->generateContent();
-		$isDocument = false;
-		if (method_exists($content, 'isDocument')) {
-			$isDocument =  $content->isDocument();
-		}
-		if ($isDocument) {
-			$document = $content;
-		} else {
-			$document = $this->generateDocument($content);
-			if (!method_exists($document, 'isDocument') || $document->isDocument() == false) {
-				warning('Unexpected '.syntax_highlight($document).'. '.get_class($this).'->generateDocument() should return a Document object');
-			}
 		}
 		$headers = $document->getHeaders();
 		send_headers($headers['http']);
@@ -75,16 +35,32 @@ abstract class Website extends VirtualFolder {
 
 	/**
 	 *
-	 * @return Template
+	 * @return Document
 	 */
-	protected function generateDocument($content) {
+	function generateDocument() {
+		if ($GLOBALS['database_failure']) { // Zijn er geen database problemen?
+			$content = $this->onDatabaseFailure();
+		} else {
+			$content = $this->generateContent();
+		}
+		$isDocument = false;
+		if (method_exists($content, 'isDocument')) {
+			$isDocument =  $content->isDocument();
+		}
+		if ($isDocument) {
+			return $content;
+		}
 		$document = new HTMLDocument();
-		$document->content = $content;
+		$document->content = $this->wrapContent($content);
 		return $document;
 	}
 
-	protected function wrapComponent($component) {
-		return $component;
+	/**
+	 * 
+	 * @return Component
+	 */
+	abstract protected function wrapContent($content) {
+		return $content;
 	}
 
 	/**
@@ -93,25 +69,11 @@ abstract class Website extends VirtualFolder {
 	 * @return Component
 	 */
 	protected function onDatabaseFailure() {
-		$this->document->headers[] = $_SERVER['SERVER_PROTOCOL'].' 500 Internal Server Error';
-		return new MessageBox ('error.png', 'Er is een fout opgetreden', 'Er kon geen verbinding gemaakt worden met de database.');
+		$html = component_to_string(new MessageBox ('error.png', 'Er is een fout opgetreden', 'Er kon geen verbinding gemaakt worden met de database.'));
+		return new HTML($html, array(
+			'http' => array('Status' => '500 Internal Server Error')
+		));
 	}
-
-	/**
-	 * Het Document object aanmaken en initialiseren.
-	 *
-	 * @return HTMLDocument
-	 * /
-	function getDocument() {
-		return $this->document;
-	}
-
-	protected function initDocument() {
-		$this->document = new HTMLDocument;
-		
-		return $this->document;
-	}
-	*/
 
 	/**
 	 * Stel de Locale in zodat getallen en datums op de juiste manier worden weergegeven
