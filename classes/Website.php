@@ -64,6 +64,9 @@ abstract class Website extends VirtualFolder {
 			$document = $content;
 		} else {
 			$document = $this->generateDocument($content);
+			if (!method_exists($document, 'isDocument') || $document->isDocument() == false) {
+				warning('Unexpected '.syntax_highlight($document).'. '.get_class($this).'->generateDocument() should return a Document object');
+			}
 		}
 		$headers = $document->getHeaders();
 		send_headers($headers['http']);

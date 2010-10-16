@@ -33,6 +33,10 @@ class HTMLDocument extends Object implements Document {
 		
 	}
 
+	/**
+	 *
+	 * @return array
+	 */
 	function  getHeaders() {
 		$headers = array('http' => array(
 			'Content-Type' => 'text/html; charset='.strtolower($GLOBALS['charset']),
