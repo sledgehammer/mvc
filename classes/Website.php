@@ -59,9 +59,7 @@ abstract class Website extends VirtualFolder {
 	 * 
 	 * @return Component
 	 */
-	abstract protected function wrapContent($content) {
-		return $content;
-	}
+	abstract protected function wrapContent($content);
 
 	/**
 	 * Als er een database verbinding is mislukt zal deze functie wordt aangeroepen om de request af te handelen.
