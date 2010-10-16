@@ -156,6 +156,9 @@ function explode_xml_parameters($parameterString) {
  * @return array
  */
 function merge_headers($headers, $component) {
+	if (is_string(array_value($headers, 'css'))) {
+		$headers['css'] = array($headers['css']);
+	}
 	if (method_exists($component, 'getHeaders')) {
 		$appendHeaders = $component->getHeaders();
 		foreach ($appendHeaders as $category => $values) {
@@ -163,10 +166,23 @@ function merge_headers($headers, $component) {
 				$headers[$category] = $values;
 				continue;
 			}
-			if ($category == 'title') {
-				$headers['title'] = $values;
-			} else {
-				$headers[$category] = array_merge($headers[$category], $values);
+			switch ($category) {
+
+				case 'title':
+					$headers['title'] = $values;
+					break;
+
+				case 'css':
+					if (is_string($values)) {
+						$values = array($values);
+					}
+					$headers['css'] = array_merge($headers['css'], $values);
+
+					break;
+
+				default:
+					$headers[$category] = array_merge($headers[$category], $values);
+					break;
 			}
 		}
 	}
