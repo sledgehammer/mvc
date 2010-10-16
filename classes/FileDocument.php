@@ -6,7 +6,7 @@
  * @package MVC
  */
 
-class FileDocument extends Object implements Component {
+class FileDocument extends Object implements Document {
 
 	public
 		$headers = array();
@@ -25,24 +25,20 @@ class FileDocument extends Object implements Component {
 		$this->etag = array_value($options, 'etag');
 		if (!file_exists($filename)) {
 			if (basename($filename) == 'index.html') {
-				$this->headers[] = $_SERVER['SERVER_PROTOCOL'].' 403 Forbidden';
-				$this->error = 403;
+				$this->error = new HttpError(403);
 			} else {
-				$this->headers[] = $_SERVER['SERVER_PROTOCOL'].' 404 Not Found';
-				$this->error = 404;
+				$this->error = new HttpError(404);
 			}
 			return;
 		}
 		$last_modified = filemtime($filename);
 		if ($last_modified === false) {
-			$this->headers[] = $_SERVER['SERVER_PROTOCOL'].' 500 Internal Server Error';
-			$this->error = 500;
+			$this->error = new HttpError(500);
 			return;
 		}
 		if (array_key_exists('HTTP_IF_MODIFIED_SINCE', $_SERVER)) {
 			$if_modified_since = strtotime(preg_replace('/;.*$/', '', $_SERVER['HTTP_IF_MODIFIED_SINCE']));
 			if ($if_modified_since >= $last_modified) { // Is the Cached version the most recent?
-				$this->headers[] = $_SERVER['SERVER_PROTOCOL'].' 304 Not Modified';
 				$this->notModified = true;
 				return;
 			}
@@ -50,7 +46,6 @@ class FileDocument extends Object implements Component {
 		if ($this->etag) {
 			$etag = md5_file($filename);
 			if (array_value($_SERVER, 'HTTP_IF_NONE_MATCH') === $etag) {
-				$this->headers[] = $_SERVER['SERVER_PROTOCOL'].' 304 Not Modified';
 				$this->notModified = true;
 				return;
 			}
@@ -58,21 +53,43 @@ class FileDocument extends Object implements Component {
 		}
 		$this->notModified = false;
 		if (is_dir($filename)) {
-			$this->headers[] = $_SERVER['SERVER_PROTOCOL'].' 403 Forbidden';
-			$this->error = 403;
+			$this->error = new HttpError(403);
 			return;
 		}
-		$this->headers[] = 'Content-Type: '.mimetype($filename);
-		$this->headers[] = 'Last-Modified: '.gmdate('r', $last_modified);
+		$this->headers['Content-Type'] = mimetype($filename);
+		$this->headers['Last-Modified'] = gmdate('r', $last_modified);
 		$filesize = filesize($filename);
 		if ($filesize === false) {
-			$this->headers[] = $_SERVER['SERVER_PROTOCOL'].' 500 Internal Server Error';
-			$this->error = 500;
+			$this->error = new HttpError(500);
 			return;
 		}
-		$this->headers[] = 'Content-Length: '.$filesize; // @todo Detecteer bestanden groter dan 2GiB, deze geven fouten.
+		$this->headers['Content-Length'] = $filesize; // @todo Detecteer bestanden groter dan 2GiB, deze geven fouten.
 	}
 
+	function getHeaders() {
+		if ($this->error) { // Is er een fout opgetreden?
+			return $this->error->getHeaders();
+		}
+		if ($this->notModified) { // Is het bestand niet aangepast?
+			return array('http' => array(
+				'Status' => '304 Not Modified'
+			));
+		}
+		// Het bestand bestaat en kan verstuurd worden.
+		return array('http' => $this->headers);
+	}
+
+	function render() {
+		if ($this->error) { // Is er een fout opgetreden?
+			$this->error->render();
+			return;
+		}
+		if ($this->notModified) { // Is het bestand niet aangepast?
+			return; // De inhoud van het bestand NIET versturen
+		}
+		readfile($this->filename);
+	}
+/*
 	function render() {
 		if ($this->error) {
 			if ($this->error == 404) { // Bij een 404 error een notice geven. De 500's geven al een notice. 
@@ -91,17 +108,16 @@ class FileDocument extends Object implements Component {
 		}
 		readfile($this->filename);
 	}
+ */
 
 	/**
-	 * Dit component kan niet binnen een ander component getoond worden.
-	 *  
 	 * @return bool
 	 */	
-	function isWrapable() {
+	function isDocument() {
 		if ($this->error) {
-			return true;
+			return false; // Als het bestand niet betaat, geeft dan een foutmelding in de layout van de website
 		}
-		return false;
+		return true;
 	}
 }
 ?>

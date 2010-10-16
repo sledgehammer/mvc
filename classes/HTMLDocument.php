@@ -9,8 +9,9 @@ class HTMLDocument extends Object implements Document {
 
 	public
 		$doctype,
-		$showStatusbar, // bool  Bepaald of de statusbalk getoond word. (Wordt automatisch bepaald door de ErrorHandler->html waarde)
 		$content, // Component
+		$showStatusbar; // bool  Bepaald of de statusbalk getoond word. (Wordt automatisch bepaald door de ErrorHandler->html waarde)
+
 		// Tags die in de <head> vallen
 		/*
 		$title, // De <title> tag
@@ -21,9 +22,9 @@ class HTMLDocument extends Object implements Document {
 		$meta_tags = array(), // De <meta> tags
 		$link_tags = array(), // De <link> tags 
 		$script_tags = array(), // De <script> tags
-*/
-		$bodyParameters = array(); // parameters die binnen de <body> tag geplaatst worden
 
+		$bodyParameters = array(); // parameters die binnen de <body> tag geplaatst worden
+*/
 	private $headers;
 
 	function __construct($doctype = 'xhtml') {
@@ -38,9 +39,13 @@ class HTMLDocument extends Object implements Document {
 	 * @return array
 	 */
 	function  getHeaders() {
-		$headers = array('http' => array(
-			'Content-Type' => 'text/html; charset='.strtolower($GLOBALS['charset']),
-		));
+		$headers = array(
+			'http' => array(
+				'Content-Type' => 'text/html; charset='.strtolower($GLOBALS['charset']),
+			),
+			'charset' => $GLOBALS['charset'],
+			'bodyParameters' => array()
+		);
 
 		if (defined('WEBPATH') && WEBPATH != '/' && file_exists(PATH.'application/public/favicon.ico')) {
 			$headers['link']['favicon'] = array('rel' => 'shortcut icon', 'href' => WEBROOT.'favicon.ico', 'type' => 'image/x-icon');
@@ -49,7 +54,10 @@ class HTMLDocument extends Object implements Document {
 		if ($GLOBALS['ErrorHandler']->html) {
 			$headers['css']['debug'] = WEBROOT.'core/stylesheets/debug.css';
 		}
-		$this->headers = merge_headers($headers, $this->content);;
+		$this->headers = merge_headers($headers, $this->content);
+		if (empty($this->headers['title'])) {
+			notice('getHeaders() should contain a "title" element for a HTMLDocument');
+		}
 		return $this->headers;
 	}
 
@@ -59,13 +67,17 @@ class HTMLDocument extends Object implements Document {
 	 * @return void
 	 */
 	function render() {
+		if ($this->headers == null) {
+			notice(get_class($this).'->getHeaders() should be executed before '.get_class($this).'->render()');
+		}
 		$variables = array(
-			'charset' => $GLOBALS['charset'],
-			'title' => array_value($this->headers, 'title'),
-			'bodyParameters' => implode_xml_parameters($this->bodyParameters),
+			'charset' => $this->headers['charset'],
+			'title' => $this->headers['title'],
+			'bodyParameters' => implode_xml_parameters($this->headers['bodyParameters']),
 			'body' => $this->content,
 			'showStatusbar' => $this->showStatusbar,
 		);
+		
 		
 		// tags binnen de <head> instellen
 		$head = array(
