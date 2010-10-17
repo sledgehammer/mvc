@@ -72,7 +72,8 @@ class HTMLDocument extends Object implements Document {
 		}
 		$variables = array(
 			'charset' => $this->headers['charset'],
-			'title' => $this->headers['title'],
+			'title' => array_value($this->headers, 'title'),
+			'head' => array(),
 			'bodyParameters' => implode_xml_parameters($this->headers['bodyParameters']),
 			'body' => $this->content,
 			'showStatusbar' => $this->showStatusbar,
