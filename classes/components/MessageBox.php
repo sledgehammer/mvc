@@ -20,12 +20,11 @@ class MessageBox extends Object implements Component {
 	 */
 	function __construct($icon, $title, $message) { // [void]
 		if (in_array($icon, array('warning', 'error', 'done'))) {
-			$icon = WEBROOT.'mvc/images/MessageBox/'.$icon.'.png';
+			$icon = WEBROOT.'mvc/icons/MessageBox/'.$icon.'.png';
 		}
 		$this->icon = $icon;
 		$this->title = $title;
 		$this->message = $message;
-		$this->template = $template;
 	}
 
 	/**
