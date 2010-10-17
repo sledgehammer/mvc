@@ -11,20 +11,18 @@ class MessageBox extends Object implements Component {
 	public
 		$icon,
 		$title,
-		$message,
-		$template;
+		$message;
 
 	/**
-	 * @param string $icon_filename  Bestandsnaam van een Icoon uit de "images/dialog/" map
+	 * @param string $icon  Bestandsnaam van een Icoon uit de "images/dialog/" map
 	 * @param string $title  Ttitel van het bericht
 	 * @param string $message  Inhoud van het bericht
-	 * @param string $template  Template bestand dat wordt weergegeven
 	 */
-	function __construct($icon_filename, $title, $message, $template = 'MessageBox.html') { // [void]
-		if (!preg_match('/\.[^.]{2,4}$/', $icon_filename)) { // Ongeldige bestandsnaam? (geen  extentie)
-			notice('Invalid filename icon_filename: "'.$icon_filename.'"');
+	function __construct($icon, $title, $message) { // [void]
+		if (in_array($icon, array('warning', 'error', 'done'))) {
+			$icon = WEBROOT.'mvc/images/MessageBox/'.$icon.'.png';
 		}
-		$this->icon = WEBROOT.'mvc/images/MessageBox/'.$icon_filename;
+		$this->icon = $icon;
 		$this->title = $title;
 		$this->message = $message;
 		$this->template = $template;
@@ -36,7 +34,7 @@ class MessageBox extends Object implements Component {
 	 * @return void
 	 */
 	function render() {
-		$template = new Template($this->template, array(
+		$template = new Template('MessageBox.html', array(
 			'icon' => $this->icon,
 			'title' => $this->title,
 			'message' => $this->message,

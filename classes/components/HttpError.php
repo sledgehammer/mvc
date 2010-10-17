@@ -54,7 +54,7 @@ class HttpError extends Object implements Component {
 			case 401:
 				return array(
 					'header' => 'Unauthorized',
-					'icon'=> 'warning.png',
+					'icon'=> 'warning',
 					'title' => 'Niet geauthoriseerd',
 					'message' => 'U heeft onvoldoende rechten om deze pagina te bekijken.',
 				);
@@ -62,7 +62,7 @@ class HttpError extends Object implements Component {
 			case 403:
 				return array(
 					'header' => 'Forbidden',
-					'icon'=> 'warning.png',
+					'icon'=> 'warning',
 					'title' => 'Verboden toegang',
 					'message' => (substr(URL::info('path'), -1) == '/') ? 'U mag de inhoud van deze map niet bekijken' : 'U mag deze pagina niet bekijken',
 				);
@@ -70,7 +70,7 @@ class HttpError extends Object implements Component {
 			case 404:
 				return array(
 					'header' => 'Not Found',
-					'icon'=> 'warning.png',
+					'icon'=> 'warning',
 					'title' => 'Bestand niet gevonden',
 					'message' => 'De opgegeven URL "'.URL::uri().'" kon niet worden gevonden.',
 				);
@@ -78,7 +78,7 @@ class HttpError extends Object implements Component {
 			case 500:
 				return array(
 					'header' => 'Internal Server Error',
-					'icon'=> 'error.png',
+					'icon'=> 'error',
 					'title' => 'Interne serverfout',
 					'message' => 'Er is een interne fout opgetreden, excuses voor het ongemak.',
 				);
