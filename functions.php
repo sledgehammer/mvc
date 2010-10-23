@@ -152,38 +152,43 @@ function explode_xml_parameters($parameterString) {
  * De waardes in $header1 worden aangevuld en overschreven door de waardes in header2
  *
  * @param array $headers
- * @param Component $component
+ * @param array|Component $component Een component of een header array
  * @return array
  */
 function merge_headers($headers, $component) {
 	if (is_string(array_value($headers, 'css'))) {
 		$headers['css'] = array($headers['css']);
 	}
-	if (method_exists($component, 'getHeaders')) {
+
+	if (is_array($component)) { // Is er een header array meegegeven i.p.v. een Component?
+		$appendHeaders = $component;
+	} elseif (method_exists($component, 'getHeaders')) {
 		$appendHeaders = $component->getHeaders();
-		foreach ($appendHeaders as $category => $values) {
-			if (empty ($headers[$category])) { // Staat deze category nog niet in de headers?
-				$headers[$category] = $values;
-				continue;
-			}
-			switch ($category) {
+	} else {
+		return $headers; // Er zijn geen headers om te mergen.
+	}
+	foreach ($appendHeaders as $category => $values) {
+		if (empty ($headers[$category])) { // Staat deze category nog niet in de headers?
+			$headers[$category] = $values;
+			continue;
+		}
+		switch ($category) {
 
-				case 'title':
-					$headers['title'] = $values;
-					break;
+			case 'title':
+				$headers['title'] = $values;
+				break;
 
-				case 'css':
-					if (is_string($values)) {
-						$values = array($values);
-					}
-					$headers['css'] = array_merge($headers['css'], $values);
+			case 'css':
+				if (is_string($values)) {
+					$values = array($values);
+				}
+				$headers['css'] = array_merge($headers['css'], $values);
 
-					break;
+				break;
 
-				default:
-					$headers[$category] = array_merge($headers[$category], $values);
-					break;
-			}
+			default:
+				$headers[$category] = array_merge($headers[$category], $values);
+				break;
 		}
 	}
 	return $headers;

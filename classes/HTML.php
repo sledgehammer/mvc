@@ -8,19 +8,10 @@
 class HTML extends Object implements Component {
 
 	public
-		$data,
-		$headers;
+		$data;
 
-	function __construct($data, $headers = array()) {
+	function __construct($data) {
 		$this->data = $data; // waarde instellen.
-		$this->headers = $headers;
-	}
-
-	/**
-	 * @return array
-	 */
-	function getHeaders() {
-		return $this->headers;
 	}
 
 	/**

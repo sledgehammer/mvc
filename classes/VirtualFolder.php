@@ -30,6 +30,10 @@ abstract class VirtualFolder extends Object implements Command {
 	 */
 	protected $depthIncrement = 1;
 
+	/**
+	 * automatisch gegenereerde array die bepaald of een methode via een url aangeroepen 
+	 * @var array
+	 */
 	protected $publicMethods;
 
 	/**

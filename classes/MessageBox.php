@@ -14,7 +14,7 @@ class MessageBox extends Object implements Component {
 		$message;
 
 	/**
-	 * @param string $icon  Bestandsnaam van een Icoon uit de "images/dialog/" map
+	 * @param string $icon  Bestandsnaam van een Icoon
 	 * @param string $title  Ttitel van het bericht
 	 * @param string $message  Inhoud van het bericht
 	 */
@@ -25,6 +25,12 @@ class MessageBox extends Object implements Component {
 		$this->icon = $icon;
 		$this->title = $title;
 		$this->message = $message;
+	}
+
+	function getHeaders() {
+		return array(
+			'title' => $this->title
+		);
 	}
 
 	/**
