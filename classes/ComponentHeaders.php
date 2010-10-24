@@ -46,5 +46,13 @@ class ComponentHeaders extends Object implements Component {
 	function render() {
 		$this->component->render();
 	}
+
+	function isDocument() {
+		if (method_exists($this->component, 'isDocument'))
+		{
+			return $this->component->isDocument();
+		}
+		return false;
+	}
 }
 ?>
