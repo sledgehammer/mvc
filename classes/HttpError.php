@@ -51,6 +51,14 @@ class HttpError extends Object implements Component {
 
 		switch ($this->errorCode) {
 
+			case 400:
+				return array(
+					'header' => 'Bad Request',
+					'icon' => 'error',
+					'title' => 'Bad Request',
+					'message' => 'Server begreep de aanvraag niet'
+				);
+
 			case 401:
 				return array(
 					'header' => 'Unauthorized',
@@ -82,7 +90,15 @@ class HttpError extends Object implements Component {
 					'title' => 'Interne serverfout',
 					'message' => 'Er is een interne fout opgetreden, excuses voor het ongemak.',
 				);
-				
+
+			case 501:
+				return array(
+					'header' => 'Not Implemented',
+					'icon' => 'error',
+					'title' => 'Not Implemented',
+					'message' => 'Dit wordt niet door de server ondersteund'
+				);
+
 			default:
 				throw new Exception('HTTP errorCode '.$this->errorCode.' is not (yet) supported.');
 
