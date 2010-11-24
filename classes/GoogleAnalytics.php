@@ -21,11 +21,15 @@ class GoogleAnalytics extends Object implements Component {
 
 	function render() {
 		$srcPrefix = (value($_SERVER['HTTPS']) == 'on') ? 'https://ssl' : 'http://www';
-		javascript_once($srcPrefix.'.google-analytics.com/ga.js'); 
 		echo '<script type="text/javascript">'."\n";
-		echo '	var pageTracker = _gat._getTracker("'.$this->code.'");'."\n";
-		echo '	pageTracker._initData();'."\n";
-		echo '	pageTracker._trackPageview();'."\n";
+		echo "	var _gaq = _gaq || [];\n";
+		echo "	_gaq.push(['_setAccount','{$this->code}']);\n";
+		echo "	_gaq.push(['_trackPageview']);\n";
+		echo "	(function() {\n";
+		echo "		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;\n";
+		echo "		ga.src = '{$srcPrefix}google-analytics.com/ga.js';\n";
+		echo "		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);\n";
+		echo "	})();\n";
 		echo '</script>';
 	}
 }
