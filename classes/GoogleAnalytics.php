@@ -27,7 +27,7 @@ class GoogleAnalytics extends Object implements Component {
 		echo "	_gaq.push(['_trackPageview']);\n";
 		echo "	(function() {\n";
 		echo "		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;\n";
-		echo "		ga.src = '{$srcPrefix}google-analytics.com/ga.js';\n";
+		echo "		ga.src = '{$srcPrefix}.google-analytics.com/ga.js';\n";
 		echo "		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);\n";
 		echo "	})();\n";
 		echo '</script>';
