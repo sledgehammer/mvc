@@ -7,10 +7,17 @@
 
 class HTMLDocument extends Object implements Document {
 
-	public
-		$doctype,
-		$content, // Component
-		$showStatusbar; // bool  Bepaald of de statusbalk getoond word. (Wordt automatisch bepaald door de ErrorHandler->html waarde)
+	public $doctype;
+	
+	/**
+	 * @var Component
+	 */
+	public $content;
+	/**
+	 * Bepaald of de statusbalk getoond word. (Wordt automatisch bepaald door de ErrorHandler->html waarde)
+	 * @var bool
+	 */
+	public $showStatusbar;
 
 		// Tags die in de <head> vallen
 		/*
@@ -79,6 +86,12 @@ class HTMLDocument extends Object implements Document {
 			'showStatusbar' => $this->showStatusbar,
 		);
 		
+		$validHeaders = array('http', 'title', 'charset', 'css', 'meta', 'link', 'bodyParameters');
+		foreach ($this->headers as $key => $value) {
+			if (!in_array($key, $validHeaders)) {
+				notice('Invalid header: "'.$key.'", expecting "'.human_implode('" or "', $validHeaders, '", "').'"');
+			}
+		}
 		
 		// tags binnen de <head> instellen
 		$head = array(

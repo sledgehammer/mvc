@@ -187,7 +187,11 @@ function merge_headers($headers, $component) {
 				break;
 
 			default:
-				$headers[$category] = array_merge($headers[$category], $values);
+				if (!is_array($values)) {
+					notice('Invalid "'.$category.'" header: values not an array, but a '.gettype($values), array('values' => $values));
+				} else {
+					$headers[$category] = array_merge($headers[$category], $values);
+				}
 				break;
 		}
 	}

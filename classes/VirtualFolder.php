@@ -77,7 +77,7 @@ abstract class VirtualFolder extends Object implements Command {
 			$extension = file_extension($filename, $file);
 			if ($extension === NULL && $this->handle_filenames_without_extension == false) { // Ongeldige bestandsnaam? (geen  extentie)
 				error_log('filename without extension, redirecting to "'.$filename.'/"', E_NOTICE);
-				redirect($filename.'/'); //	Redirect naar dezelfde url, maar dan als mapnaam
+				return new Redirect($filename.'/'); // Redirect naar dezelfde url, maar dan als mapnaam
 			}
 			if ($this->publicMethods === null) {
 				notice('Check if the parent::__construct() is called in '.get_class($this)."__construct()");

@@ -22,6 +22,5 @@ class HTML extends Object implements Component {
 	function render() {
 		echo $this->data;
 	}
-
 }
 ?>
