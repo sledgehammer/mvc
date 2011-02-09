@@ -15,10 +15,14 @@ class FileDocument extends Object implements Document {
 		$filename,
 		$error = false,
 		$notModified = false,
-		$etag;
+		$etag,
+		$fileContents;
 
 	/**
-	 * @param array $options  array('etag'=> bool)
+	 * @param array $options  array(
+	 *	'etag'=> bool,
+	 *  'file_get_contents' => bool,
+	 * )
 	 */
 	function __construct($filename, $options = array('etag' => false)) {
 		$this->filename = $filename;
@@ -64,6 +68,9 @@ class FileDocument extends Object implements Document {
 			return;
 		}
 		$this->headers['Content-Length'] = $filesize; // @todo Detecteer bestanden groter dan 2GiB, deze geven fouten.
+		if (array_value($options, 'file_get_contents')) {
+			$this->fileContents = file_get_contents($filename);
+		}
 	}
 
 	function getHeaders() {
@@ -87,7 +94,11 @@ class FileDocument extends Object implements Document {
 		if ($this->notModified) { // Is het bestand niet aangepast?
 			return; // De inhoud van het bestand NIET versturen
 		}
-		readfile($this->filename);
+		if ($this->fileContents !== null) {
+			echo $this->fileContents;
+		} else {
+			readfile($this->filename);
+		}
 	}
 /*
 	function render() {
