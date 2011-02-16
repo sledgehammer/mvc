@@ -168,10 +168,6 @@ function merge_headers($headers, $component) {
 		return $headers; // Er zijn geen headers om te mergen.
 	}
 	foreach ($appendHeaders as $category => $values) {
-		if (empty ($headers[$category])) { // Staat deze category nog niet in de headers?
-			$headers[$category] = $values;
-			continue;
-		}
 		switch ($category) {
 
 			case 'title':
@@ -179,16 +175,22 @@ function merge_headers($headers, $component) {
 				break;
 
 			case 'css':
+			case 'javascript':
 				if (is_string($values)) {
 					$values = array($values);
 				}
-				$headers['css'] = array_merge($headers['css'], $values);
-
+				if (empty($headers[$category])) {
+					$headers[$category] = $values;
+				} else {
+					$headers[$category] = array_merge($headers[$category], $values);
+				}
 				break;
 
 			default:
 				if (!is_array($values)) {
 					notice('Invalid "'.$category.'" header: values not an array, but a '.gettype($values), array('values' => $values));
+				} elseif (empty($headers[$category])) {
+					$headers[$category] = $values;
 				} else {
 					$headers[$category] = array_merge($headers[$category], $values);
 				}

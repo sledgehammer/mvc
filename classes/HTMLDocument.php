@@ -7,6 +7,10 @@
 
 class HTMLDocument extends Object implements Document {
 
+	/**
+	 * Bepaald de template die door de HTMLDocument wordt gebruikt. xhtml, html of ajax
+	 * @var string
+	 */
 	public $doctype;
 	
 	/**
@@ -19,33 +23,30 @@ class HTMLDocument extends Object implements Document {
 	 */
 	public $showStatusbar;
 
-		// Tags die in de <head> vallen
-		/*
-		$title, // De <title> tag
-		$stylesheets = array(), // De stylesheet urls
-		$javascripts = array(), // De javascript urls (Bij voorkeur geen javascript in de head.)
-
-		// Voor specifieke attibuten in de head tags zijn er deze:
-		$meta_tags = array(), // De <meta> tags
-		$link_tags = array(), // De <link> tags 
-		$script_tags = array(), // De <script> tags
-
-		$bodyParameters = array(); // parameters die binnen de <body> tag geplaatst worden
-*/
+	/**
+	 *  Tags die in de <head> vallen
+	 *
+	 * title, // De <title> tag
+	 * css = array(), // De stylesheet urls
+	 * javascript = array(), // De javascript urls (Bij voorkeur geen javascript in de head.)
+	 *
+	 * meta = array(), // De <meta> tags
+	 * link = array(), // De <link> tags
+	 * bodyParameters = array(); // parameters die binnen de <body> tag geplaatst worden
+	 * @var array
+	 */
 	private $headers;
 
 	function __construct($doctype = 'xhtml') {
-		//parent::__construct($charset);
 		$this->doctype = $doctype;
 		$this->showStatusbar = $GLOBALS['ErrorHandler']->html; // Als er html error getoond mogen worden, toon dan ook de statusbalk.
-		
 	}
 
 	/**
-	 *
+	 * Vraag de headers op en werk de interne headers array bij.
 	 * @return array
 	 */
-	function  getHeaders() {
+	function getHeaders() {
 		$headers = array(
 			'http' => array(
 				'Content-Type' => 'text/html; charset='.strtolower($GLOBALS['charset']),
@@ -86,7 +87,7 @@ class HTMLDocument extends Object implements Document {
 			'showStatusbar' => $this->showStatusbar,
 		);
 		
-		$validHeaders = array('http', 'title', 'charset', 'css', 'meta', 'link', 'bodyParameters');
+		$validHeaders = array('http', 'title', 'charset', 'css', 'meta', 'link', 'javascript', 'bodyParameters');
 		foreach ($this->headers as $key => $value) {
 			if (!in_array($key, $validHeaders)) {
 				notice('Invalid header: "'.$key.'", expecting "'.human_implode('" or "', $validHeaders, '", "').'"');
@@ -115,26 +116,15 @@ class HTMLDocument extends Object implements Document {
 				$variables['head'][] = '<'.$tag.implode_xml_parameters($parameters).$eot;
 			}
 		}
-		/*
-		$scripts = $this->script_tags;
-		foreach ($this->javascripts as $identifier => $url) {
-			if (is_int($identifier)) {
-				$scripts[] = array('src' => $url, 'type' => 'text/javascript');
-			} else {
-				$scripts[$identifier] = array('src' => $url, 'type' => 'text/javascript');
+		if (isset($this->headers['javascript'])) {
+			foreach ($this->headers['javascript'] as $identifier => $url) {
+				if (is_int($identifier)) {
+					$identifier = $parameters['src'];
+				}
+				$GLOBALS['included_javascript'][$identifier] = true;
+				$variables['head'][] = '<script'.implode_xml_parameters(array('src' => $url, 'type' => 'text/javascript')).'></script>'; // <script> moet gesloten worden met </script> Geeft anders problemen in IE
 			}
 		}
-		
-		foreach ($scripts as $identifier => $parameters) {
-			if (is_int($identifier)) {
-				$identifier = $parameters['src'];
-			}
-			$GLOBALS['included_javascript'][$identifier] = true;
-			if (isset($parameters['type'])  && isset($parameters['src']) && $parameters['type'] == 'text/javascript') { // Het het om een javascript bestand?
-			}
-			$variables['headerTags'][] = '<script'.implode_xml_parameters($parameters).'></script>';
-		}*/
-		
 		$template = new Template('doctype.'.$this->doctype, $variables);
 		$template->render();
 	}
