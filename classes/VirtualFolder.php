@@ -135,8 +135,7 @@ abstract class VirtualFolder extends Object implements Command {
 	 */
 	function dynamicFilename($filename) {
 		if ($filename == 'index.html') {
-			notice('No index() method configured for '.get_class($this), 'override VirtualFolder->index() or VirtualFolder->dynamicFilename()');
-			return new HttpError(403);
+			return new HttpError(403, array('notice' => 'No index() method configured for '.get_class($this), 'override VirtualFolder->index() or VirtualFolder->dynamicFilename()'));
 		}
 		return $this->onFileNotFound();
 	}
@@ -163,8 +162,7 @@ abstract class VirtualFolder extends Object implements Command {
 			return $this->parent->onFileNotFound();
 		}
 		$relativePath = substr(rawurldecode(URL::info('path')), strlen(WEBPATH) - 1); // Relative path vanaf de WEBROOT
-		notice('HTTP[404] File "'.$relativePath.'" not found');
-		return new HttpError(404);
+		return new HttpError(404, array('notice' => 'HTTP[404] File "'.$relativePath.'" not found'));
 
 	}
 
@@ -193,13 +191,14 @@ abstract class VirtualFolder extends Object implements Command {
 					error_log('HTTP[403] Directory listing for "'.URL::uri().'" not allowed');
 					return new HttpError(403);
 				} else { // De map bestaat maar het bestand is niet gevonden.
-					notice('HTTP[404] File "'.basename($relativePath).'" not found in "'.dirname($relativePath).'/"', 'VirtualFolder "'.get_class($GLOBALS['VirtualFolder']).'" doesn\'t handle the "'.basename($GLOBALS['VirtualFolder']->getPath(true)).'" folder');
-					return new HttpError(404);
+					return new HttpError(404, array('notice' => array(
+						'HTTP[404] File "'.basename($relativePath).'" not found in "'.dirname($relativePath).'/"', 
+						'VirtualFolder "'.get_class($GLOBALS['VirtualFolder']).'" doesn\'t handle the "'.basename($GLOBALS['VirtualFolder']->getPath(true)).'" folder'
+					)));
 				}
 			}
 		}
-		notice('HTTP[404] VirtualFolder "'.get_class($GLOBALS['VirtualFolder']).'" has no "'.basename($GLOBALS['VirtualFolder']->getPath(true)).'" folder');
-		return new HttpError(404);
+		return new HttpError(404, array('notice' => 'HTTP[404] VirtualFolder "'.get_class($GLOBALS['VirtualFolder']).'" has no "'.basename($GLOBALS['VirtualFolder']->getPath(true)).'" folder'));
 	}
 
 	/**

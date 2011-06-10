@@ -15,14 +15,20 @@ class HttpError extends Object implements Component {
 	 * @var int
 	 */
 	private $errorCode;
+	private $options;
 
 	/**
 	 * Maak een HTTP-error aan
 	 *
-	 * @param int $statusCode foutcode van de fout 404,403 enz
+	 * @param int $statusCode  HTTP Foutcode van de fout 404,403 enz
+	 * @param int $options  Array met ptionele instellingen: array(
+	 *   'notice' => Geeft deze notice na het renderen.
+	 *   'warning' => Geeft deze warning na het renderen. 
+	 * 
 	 */
-	function __construct($errorCode) {
+	function __construct($errorCode, $options = array()) {
 		$this->errorCode = $errorCode;
+		$this->options = $options;
 	}
 
 	function getHeaders() {
@@ -40,11 +46,26 @@ class HttpError extends Object implements Component {
 	 */
 	function render() {
 		$error = $this->getError();
-		//if ($GLOBALS['ErrorHandler']->html && !headers_sent()) { // Worden er foutrapporten ge-echo-t worden?
-		//	header($_SERVER['SERVER_PROTOCOL'].' '.$this->errorCode.' '.$error['header']);
-		//}
 		$messageBox = new MessageBox($error['icon'], $error['title'], $error['message']."<br />\n".value($_SERVER['SERVER_SIGNATURE']));
 		$messageBox->render();
+		foreach ($this->options as $option => $value) {
+			switch ($option) {
+				
+				case 'notice':
+				case 'warning':
+					$function = $option;
+					if (is_array($value)) {
+						call_user_func_array($function, $value);
+					} else {
+						call_user_func($function, $value);
+					}
+					break;
+				
+				default:
+					notice('Unknown option: "'.$option.'"');
+					break;
+			}
+		}
 	}
 
 	private function getError() {
