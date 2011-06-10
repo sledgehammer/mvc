@@ -89,19 +89,21 @@ class HttpError extends Object implements Component {
 				);
 
 			case 403:
+				$url = new URL();
 				return array(
 					'header' => 'Forbidden',
 					'icon'=> 'warning',
 					'title' => 'Verboden toegang',
-					'message' => (substr(URL::info('path'), -1) == '/') ? 'U mag de inhoud van deze map niet bekijken' : 'U mag deze pagina niet bekijken',
+					'message' => (substr($url->path, -1) == '/') ? 'U mag de inhoud van deze map niet bekijken' : 'U mag deze pagina niet bekijken',
 				);
 	
-			case 404:
+			case 404:	
+				$url = new URL();
 				return array(
 					'header' => 'Not Found',
 					'icon'=> 'warning',
 					'title' => 'Bestand niet gevonden',
-					'message' => 'De opgegeven URL "'.URL::uri().'" kon niet worden gevonden.',
+					'message' => 'De opgegeven URL "'.$url.'" kon niet worden gevonden.',
 				);
 
 			case 500:
