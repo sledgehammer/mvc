@@ -70,8 +70,8 @@ abstract class VirtualFolder extends Object implements Command {
 	function generateContent() {
 		$this->initDepth();
 		$url = URL::getCurrentURL();
-		$folders = $url->folders;
-		$filename = $url->filename; 
+		$folders = $url->getFolders();
+		$filename = $url->getFilename(); 
 		$folder_count = count($folders);
 		if ($folder_count == $this->depth) {
 			$extension = file_extension($filename, $file);
@@ -110,7 +110,7 @@ abstract class VirtualFolder extends Object implements Command {
 	 */
 	function getPath($includeSubfolders = false) {
 		$this->initDepth();
-		$folders = URL::getCurrentURL()->folders;
+		$folders = URL::getCurrentURL()->getFolders();
 		$path = '/';
 		for($i = 0; $i < $this->depth; $i++) {
 			$path .= $folders[$i].'/';
