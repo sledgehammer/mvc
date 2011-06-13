@@ -69,7 +69,7 @@ abstract class VirtualFolder extends Object implements Command {
 	 */
 	function generateContent() {
 		$this->initDepth();
-		$url = new URL();
+		$url = URL::getCurrentURL();
 		$folders = $url->folders;
 		$filename = $url->filename; 
 		$folder_count = count($folders);
@@ -110,9 +110,7 @@ abstract class VirtualFolder extends Object implements Command {
 	 */
 	function getPath($includeSubfolders = false) {
 		$this->initDepth();
-		//$extractedPath = URL::extract_path();
-		$url = new URL();
-		$folders = $url->folders;
+		$folders = URL::getCurrentURL()->folders;
 		$path = '/';
 		for($i = 0; $i < $this->depth; $i++) {
 			$path .= $folders[$i].'/';
@@ -162,7 +160,7 @@ abstract class VirtualFolder extends Object implements Command {
 		if ($this->parent !== null) {
 			return $this->parent->onFileNotFound();
 		}
-		$relativePath = substr(rawurldecode(URL::info('path')), strlen(WEBPATH) - 1); // Relative path vanaf de WEBROOT
+		$relativePath = substr(rawurldecode(URL::getCurrentURL()->path), strlen(WEBPATH) - 1); // Relative path vanaf de WEBROOT
 		return new HttpError(404, array('notice' => 'HTTP[404] File "'.$relativePath.'" not found'));
 
 	}
@@ -177,28 +175,49 @@ abstract class VirtualFolder extends Object implements Command {
 		if ($this->parent !== null) {
 			return $this->parent->onFolderNotFound();
 		}
-		$relativePath = substr(rawurldecode(URL::info('path')), strlen(WEBPATH) - 1); // Relative path vanaf de WEBROOT
+		$url = URL::getCurrentURL();
+		$relativePath = substr(rawurldecode($url->path), strlen(WEBPATH) - 1); // Relative path vanaf de WEBROOT
 		$isFolder = (substr($relativePath, -1) == '/'); // Gaat de request om een folder?
 		if ($isFolder) {
-			$publicFolder = 'public'.$relativePath;
+			$folder = $relativePath;
 		} else {
-			$publicFolder = 'public'.dirname($relativePath).'/';
+			$folder = dirname($relativePath).'/';
 		}
-		// Zoek door de modules public mappen en kijk of de map bestaat.			
-		$modules = SledgeHammer::getModules();
-		foreach ($modules as $module) {
-			if (is_dir($module['path'].$publicFolder)) { // Controleren of map bestaat in de public mappen
-				if ($isFolder) {
-					error_log('HTTP[403] Directory listing for "'.URL::uri().'" not allowed');
-					return new HttpError(403);
-				} else { // De map bestaat maar het bestand is niet gevonden.
-					return new HttpError(404, array('notice' => array(
-						'HTTP[404] File "'.basename($relativePath).'" not found in "'.dirname($relativePath).'/"', 
-						'VirtualFolder "'.get_class($GLOBALS['VirtualFolder']).'" doesn\'t handle the "'.basename($GLOBALS['VirtualFolder']->getPath(true)).'" folder'
-					)));
-				}
+		$publicFolder = array(PATH.'application/public'.$folder);
+		$folders = explode('/', substr($folder, 1, -1));
+		if (count($folders) != 0) {
+			$module = $folders[0];
+			$modules = SledgeHammer::getModules();
+			if (isset($modules[$module])) {
+				$publicFolder[] = $modules[$module]['path'].'public'.substr($folder, strlen($module) + 1);
 			}
 		}
+		// Zoek door de public mappen en kijk of de map/bestand bestaat.
+		$foundPublicFolder = false;
+		foreach ($publicFolder as $folder) {
+			if (is_dir($folder)) {
+				$foundPublicFolder = $folder;
+				if ($isFolder) {
+					error_log('HTTP[403] Directory listing for "'.$url.'" not allowed');
+					return new HttpError(403);
+				}
+			}
+			$path = $isFolder ? $folder : $folder.basename($relativePath);
+			if (file_exists($path)) {
+				if (is_readable($path)) {
+					return new HttpError(500, array('warning', 'render_public_folder.php should have renderd the file: "'.$path.'"'));
+				} else {
+					return new HttpError(403, array('warning' => 'Permission denied for file "'.basename($path).'" in "'.dirname($path).'/"'));
+				}
+			}		
+		}
+		if ($foundPublicFolder) {
+			return new HttpError(404, array('notice' => array(
+				'HTTP[404] File "'.basename($relativePath).'" not found in "'.dirname($relativePath).'/"', 
+				'VirtualFolder "'.get_class($GLOBALS['VirtualFolder']).'" doesn\'t handle the "'.basename($GLOBALS['VirtualFolder']->getPath(true)).'" folder'
+			)));
+		}			
+		// Gaat om een bestand in een virtualfolder
 		return new HttpError(404, array('notice' => 'HTTP[404] VirtualFolder "'.get_class($GLOBALS['VirtualFolder']).'" has no "'.basename($GLOBALS['VirtualFolder']->getPath(true)).'" folder'));
 	}
 
