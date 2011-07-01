@@ -8,7 +8,7 @@
  *
  * @package MVC
  */
-
+namespace SledgeHammer;
 abstract class VirtualFolder extends Object implements Command {
 
 	/**

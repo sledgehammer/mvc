@@ -5,7 +5,7 @@
  *
  * @package MVC
  */
-
+namespace SledgeHammer;
 interface Command {
 
 	/**

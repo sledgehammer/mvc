@@ -5,6 +5,7 @@
  * 
  * @package MVC
  */
+namespace SledgeHammer;
 class Json extends Object implements Document {
 	
 	/**

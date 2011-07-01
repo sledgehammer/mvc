@@ -5,7 +5,7 @@
  *
  * @package MVC
  */
-
+namespace SledgeHammer;
 class Template extends Object implements Component {
 
 	/**

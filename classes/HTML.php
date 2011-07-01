@@ -4,7 +4,7 @@
  *
  * @package MVC
  */
-
+namespace SledgeHammer;
 class HTML extends Object implements Component {
 
 	public

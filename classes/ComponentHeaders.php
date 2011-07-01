@@ -6,6 +6,7 @@
  *
  * @package MVC
  */
+namespace SledgeHammer;
 class ComponentHeaders extends Object implements Component {
 
 	/**

@@ -5,7 +5,7 @@
  *
  * @package MVC
  */
-
+namespace SledgeHammer;
 class MessageBox extends Object implements Component {
 
 	public

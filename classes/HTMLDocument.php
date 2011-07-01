@@ -4,7 +4,7 @@
  *
  * @package MVC
  */
-
+namespace SledgeHammer;
 class HTMLDocument extends Object implements Document {
 
 	/**

@@ -8,7 +8,7 @@
  * @todo uitbreiden met een speciale url die de cache bestanden verwijderd.
  * @package MVC
  */
-
+namespace SledgeHammer;
 class WebsiteCache extends Website {
 
 	public

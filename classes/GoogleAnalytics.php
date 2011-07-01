@@ -4,7 +4,7 @@
  *
  * @package MVC
  */
-
+namespace SledgeHammer;
 class GoogleAnalytics extends Object implements Component {
 
 	public

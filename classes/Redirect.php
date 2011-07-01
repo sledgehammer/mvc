@@ -6,6 +6,7 @@
  *
  * @package MVC
  */
+namespace SledgeHammer;
 class Redirect extends Object implements Document {
 
 	private $headers;

@@ -4,7 +4,7 @@
  * 
  * @package MVC
  */
-
+namespace SledgeHammer;
 class JsonCrudFolder extends VirtualFolder {
 	
 	public

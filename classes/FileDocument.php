@@ -5,7 +5,7 @@
  *
  * @package MVC
  */
-
+namespace SledgeHammer;
 class FileDocument extends Object implements Document {
 
 	public

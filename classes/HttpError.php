@@ -7,7 +7,7 @@
  *
  * @package MVC
  */
-
+namespace SledgeHammer;
 class HttpError extends Object implements Component {
 
 	/**
