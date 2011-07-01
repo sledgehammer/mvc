@@ -5,6 +5,15 @@
  * @package MVC
  */
 
+/**
+ * render($component) is hetzelde als een $component->render(), 
+ * Maar render($component) geeft *geen* fatal error als er geen render() methode in het object zit.
+ */
+function render($component) {
+	if(is_component($component, true)) {
+		$component->render();
+	} 
+}
 
 /**
  * Geeft de uitvoer van een component als string.
@@ -18,16 +27,6 @@ function component_to_string($component) {
 		$component->render();
 		return ob_get_clean();
 	}
-}
-
-/**
- * render($component) is hetzelde als een $component->render(), 
- * Maar render($component) geeft *geen* fatal error als er geen render() methode in het object zit.
- */
-function render($component) {
-	if(is_component($component, true)) {
-		$component->render();
-	} 
 }
 
 /**
@@ -82,10 +81,6 @@ function implode_xml_parameters($parameterArray, $charset = null) {
 	}
 	return $xml;
 }
-function parse_xml_parameters($parameters) {
-	deprecated('Use implode_xml_parameters() instead');
-	return implode_xml_parameters($parameters);
-}
 
 /**
  * Zet een string met parameters om naar een array.
@@ -107,7 +102,7 @@ function explode_xml_parameters($parameterString) {
 	// Parse de string via een state-machine
 	while ($parameterString) {
 		switch ($state) {
-			
+
 			case 'NAME': // Zoek de attribuut naam.(de tekst voor de '=') 
 				$equalsPos = strpos($parameterString, '=');
 				if (!$equalsPos) { // er zijn geen attributen meer.
@@ -128,7 +123,7 @@ function explode_xml_parameters($parameterString) {
 				}
 				$state = 'VALUE';
 				break;
-				
+
 			case 'VALUE':			
 				if (preg_match('/^([^'.$delimiter.']*)['.$delimiter.']/', $parameterString, $match)) {
 					$parameters[$attributeName] = $match[1]; // De waarde is bekend.
@@ -156,7 +151,7 @@ function explode_xml_parameters($parameterString) {
  * @return array
  */
 function merge_headers($headers, $component) {
-	if (is_string(array_value($headers, 'css'))) {
+	if (is_string(SledgeHammer\array_value($headers, 'css'))) {
 		$headers['css'] = array($headers['css']);
 	}
 
