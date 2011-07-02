@@ -4,41 +4,46 @@
  *
  * @package MVC
  */
+namespace SledgeHammer;
+class IteratorView extends Object implements \Iterator, \Countable {
 
-class ListView extends Object implements Iterator, Countable {
-
-	public
-		$list,
-		$view;
+	/**
+	 * @var Iterator
+	 */
+	public $iterator;
+	/**
+	 * @var AbstractView
+	 */
+	public $view;
 
 	/**
 	 * 
 	 * @param Iterator $list
 	 * @param AbstractView $view
 	 */		
-	function __construct($list, $view) {
-		$this->list = $list;
+	function __construct($iterator, $view) {
+		$this->iterator = $iterator;
 		$this->view = $view;
 	}
 	function current() {
-		$data = $this->list->current();
+		$data = $this->iterator->current();
 		$this->view->setData($data);
 		return clone $this->view; // Geef een kopie van het view object, anders zal een iterator_to_array niet werken. 
 	}
 	function next() {
-		return $this->list->next();
+		return $this->iterator->next();
 	}
 	function key() {
-		return $this->list->key();
+		return $this->iterator->key();
 	}
 	function valid() {
-		return $this->list->valid();
+		return $this->iterator->valid();
 	}
 	function rewind() {
-		return $this->list->rewind();
+		return $this->iterator->rewind();
 	}
 	function count() {
-		return $this->list->count();
+		return $this->iterator->count();
 	}
 }
 ?>

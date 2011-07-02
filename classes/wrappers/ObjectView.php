@@ -4,11 +4,10 @@
  *
  * @package MVC
  */
-
+namespace SledgeHammer;
 class ObjectView extends AbstractView {
 
-	protected
-		$_object;
+	protected $_object;
 
 	/**
 	 * De brondata instellen

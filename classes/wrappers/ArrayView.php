@@ -4,7 +4,7 @@
  *
  * @package MVC
  */
-
+namespace SledgeHammer;
 class ArrayView extends AbstractView {
 
 	private
