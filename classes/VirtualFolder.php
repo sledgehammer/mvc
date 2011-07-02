@@ -187,7 +187,7 @@ abstract class VirtualFolder extends Object implements Command {
 		$folders = explode('/', substr($folder, 1, -1));
 		if (count($folders) != 0) {
 			$module = $folders[0];
-			$modules = SledgeHammer::getModules();
+			$modules = Framework::getModules();
 			if (isset($modules[$module])) {
 				$publicFolder[] = $modules[$module]['path'].'public'.substr($folder, strlen($module) + 1);
 			}
