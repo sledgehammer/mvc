@@ -244,27 +244,23 @@ abstract class VirtualFolder extends Object implements Command {
 	 */
 	private function initDepth() {
 		if ($this->depth !== NULL) { // Is de diepte reeds ingesteld?
-			if (isset($GLOBALS['VirtualFolder']) == false) {
-				if (($this instanceof Website) == false) {
-					notice('VirtualFolder zonder Website object?');
-				}
-				$GLOBALS['VirtualFolder'] = &$this; // De globale pointer laten verwijzen naar deze 'virtuele map'
-			}
 			return;
 		}
-		if (isset($GLOBALS['VirtualFolder'])) {
-			$this->parent = &$GLOBALS['VirtualFolder'];
-		}
-		$GLOBALS['VirtualFolder'] = &$this; // De globale pointer laten verwijzen naar deze 'virtuele map'
-		if ($this->parent === NULL) { // Gaat het om de eerste VirtualFolder (Website)
-			if (defined('WEBPATH')) {
+		if (isset($GLOBALS['VirtualFolder']) == false) { // Gaat het om de eerste VirtualFolder (Website)
+			if (($this instanceof Website) == false) {
+				notice('VirtualFolder outside a Website object?');
+			}
+			$GLOBALS['VirtualFolder'] = &$this; // De globale pointer laten verwijzen naar deze 'virtuele map'
+			if (defined(__NAMESPACE__.'\WEBPATH')) {
 				$this->depth = preg_match_all('/[^\/]+\//', WEBPATH, $match);
 			} else {
 				$this->depth = 0;
 			}
-		} else { // De VirtualFolder bevind zich in een ander  VirtualFolder
-			$this->depth = $this->parent->depth + $this->parent->depthIncrement;
+			return;
 		}
+		$this->parent = &$GLOBALS['VirtualFolder'];
+		$GLOBALS['VirtualFolder'] = &$this; // De globale pointer laten verwijzen naar deze 'virtuele map'
+		$this->depth = $this->parent->depth + $this->parent->depthIncrement;
 	}
 }
 ?>

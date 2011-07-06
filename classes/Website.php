@@ -25,8 +25,8 @@ abstract class Website extends VirtualFolder {
 	 */
 	function handleRequest() {
 		$document = $this->generateDocument();
-		if (!defined('MICROTIME_EXECUTE')) {
-			define('MICROTIME_EXECUTE', microtime(true));
+		if (!defined(__NAMESPACE__.'\MICROTIME_EXECUTE')) {
+			define(__NAMESPACE__.'\MICROTIME_EXECUTE', microtime(true));
 		}
 		$headers = $document->getHeaders();
 		send_headers($headers['http']);
