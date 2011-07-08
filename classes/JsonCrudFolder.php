@@ -38,7 +38,7 @@ class JsonCrudFolder extends VirtualFolder {
 		try {
 			return parent::execute();
 		}
-		catch (Exception $e) {
+		catch (\Exception $e) {
 			return jsonError($e);
 		}
 	}
@@ -124,10 +124,10 @@ class JsonCrudFolder extends VirtualFolder {
 	 */
 	protected function getNewValues() {
 		if ($_SERVER['REQUEST_METHOD'] != 'POST') {
-			throw new Exception('Invalid request-method "'.$_SERVER['REQUEST_METHOD'].'", expecting "POST"');
+			throw new \Exception('Invalid request-method "'.$_SERVER['REQUEST_METHOD'].'", expecting "POST"');
 		}
 		if(count($_POST) < $this->requireDataOnSave) {
-			throw new Exception('Er zijn onvoldoende gegevens verstuurd. (Minimaal '.$this->requireDataOnSave.' $_POST variabele is vereist)');
+			throw new \Exception('Er zijn onvoldoende gegevens verstuurd. (Minimaal '.$this->requireDataOnSave.' $_POST variabele is vereist)');
 		}
 		return $_POST;
 	}

@@ -60,7 +60,7 @@ abstract class AbstractView extends Object implements \ArrayAccess, \Iterator {
 	 * @return void
 	 */
 	function setFields($fields) {
-		$this->_fields = new ArrayIterator($fields);
+		$this->_fields = new \ArrayIterator($fields);
 	}
 	/**
 	 * Vraag een eigenschap op uit de ingestelde $data.
@@ -106,7 +106,7 @@ abstract class AbstractView extends Object implements \ArrayAccess, \Iterator {
 			// Het is geen ComplexType
 		}
 		if ($useFilter && $filter == 'deny') { // De 'deny' filter is een uitzondering omdat in deze situatie de property niet opgrvraagd dient te worden.
-			throw new Exception('Access to element "'.$identifier.'" is denied');
+			throw new \Exception('Access to element "'.$identifier.'" is denied');
 		}
 		// Controleer of deze View class een functie heeft "get_$identifier()"
 		$method = 'get_'.$identifier;
@@ -120,13 +120,13 @@ abstract class AbstractView extends Object implements \ArrayAccess, \Iterator {
 			if ($filter === null) { // Is de filter nog niet bepaald (geen complextype, maar ook geen filter bekend.)
 				$filter = $this->detectFilter($identifier, gettype($value)); // De filter detecteren
 				if ($filter == 'deny') { // Is de gedetecteerde filter de 'deny' filter?
-					throw new Exception('Access to element "'.$identifier.'" is denied');
+					throw new \Exception('Access to element "'.$identifier.'" is denied');
 				}
 			}
 			if ($filter !== false) {
 				$method = $filter.'_filter';
 				if (!method_exists($this, $method)) {
-					throw new Exception('Filter-function "'.$filter.'_filter($value)" doesn\'t exist in '.get_class($this));
+					throw new \Exception('Filter-function "'.$filter.'_filter($value)" doesn\'t exist in '.get_class($this));
 				}
 				$value = $this->$method($value, $identifier); // De waarde filteren
 			}
@@ -207,7 +207,7 @@ abstract class AbstractView extends Object implements \ArrayAccess, \Iterator {
 	}
 
 	function __set($property, $value) {
-		throw new Exception('View objects are readonly');
+		throw new \Exception('View objects are readonly');
 	}
 
 	/**
@@ -218,13 +218,13 @@ abstract class AbstractView extends Object implements \ArrayAccess, \Iterator {
 		return $this->_getElement($property);
 	}
 	function offsetSet($property, $value) {
-		throw new Exception('View objects are readonly');
+		throw new \Exception('View objects are readonly');
 	}
 	function offsetUnset($property) {
-		throw new Exception('View objects are readonly');
+		throw new \Exception('View objects are readonly');
 	}
 	function offsetExists($property) {
-		throw new Exception('offsetExists() not (yet) supported');
+		throw new \Exception('offsetExists() not (yet) supported');
 	}
 
 	/**
@@ -278,7 +278,7 @@ abstract class AbstractView extends Object implements \ArrayAccess, \Iterator {
 		if ($filter !== false) {				
 			$method = $filter.'_filter';
 			if (!method_exists($this, $method)) {
-				throw new Exception('Filter-function "'.$filter.'_filter($value)" doesn\'t exist in '.get_class($this));
+				throw new \Exception('Filter-function "'.$filter.'_filter($value)" doesn\'t exist in '.get_class($this));
 			}
 			$value = $this->$method($value); // De waarde filteren
 		}

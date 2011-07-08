@@ -25,8 +25,8 @@ abstract class Website extends VirtualFolder {
 	 */
 	function handleRequest() {
 		$document = $this->generateDocument();
-		if (!defined(__NAMESPACE__.'\MICROTIME_EXECUTE')) {
-			define(__NAMESPACE__.'\MICROTIME_EXECUTE', microtime(true));
+		if (!defined('SledgeHammer\MICROTIME_EXECUTE')) {
+			define('SledgeHammer\MICROTIME_EXECUTE', microtime(true));
 		}
 		$headers = $document->getHeaders();
 		send_headers($headers['http']);
@@ -67,7 +67,7 @@ abstract class Website extends VirtualFolder {
 	 * @return Component
 	 */
 	protected function onDatabaseFailure() {
-		$html = component_to_string(new MessageBox ('error.png', 'Er is een fout opgetreden', 'Er kon geen verbinding gemaakt worden met de database.'));
+		$html = component_to_string(new MessageBox('error.png', 'Er is een fout opgetreden', 'Er kon geen verbinding gemaakt worden met de database.'));
 		return new HTML($html, array(
 			'http' => array('Status' => '500 Internal Server Error')
 		));

@@ -231,7 +231,7 @@ abstract class VirtualFolder extends Object implements Command {
 			return $this;
 		} elseif ($this->parent === NULL) { // Is de virtualfolder niet gevonden in de hierarchie?
 			$message = ($class === null) ? 'VirtualFolder "'.get_class($this).'" has no parent' : 'VirtualFolder \''.$class.'\' is niet actief';
-			throw new Exception($message);
+			throw new \Exception($message);
 		}
 		return $this->parent->getParentByClass($class);
 	}
@@ -251,7 +251,7 @@ abstract class VirtualFolder extends Object implements Command {
 				notice('VirtualFolder outside a Website object?');
 			}
 			$GLOBALS['VirtualFolder'] = &$this; // De globale pointer laten verwijzen naar deze 'virtuele map'
-			if (defined(__NAMESPACE__.'\WEBPATH')) {
+			if (defined('SledgeHammer\WEBPATH')) {
 				$this->depth = preg_match_all('/[^\/]+\//', WEBPATH, $match);
 			} else {
 				$this->depth = 0;

@@ -2,7 +2,6 @@
 /**
  *
  */
-
 class MvcFunctions extends UnitTestCase {
 
 	function test_explode_xml_parmeters() {
@@ -22,7 +21,7 @@ class MvcFunctions extends UnitTestCase {
 			)
 		);
 		foreach ($expectations as $tag => $expectation) {
-			$this->assertEqual($expectation, explode_xml_parameters($tag));
+			$this->assertEqual($expectation, SledgeHammer\explode_xml_parameters($tag));
 		}		
 	}
 }

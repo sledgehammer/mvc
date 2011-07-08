@@ -121,7 +121,7 @@ class HttpError extends Object implements Component {
 				);
 
 			default:
-				throw new Exception('HTTP errorCode '.$this->errorCode.' is not (yet) supported.');
+				throw new \Exception('HTTP errorCode '.$this->errorCode.' is not (yet) supported.');
 
 		}
 	}
