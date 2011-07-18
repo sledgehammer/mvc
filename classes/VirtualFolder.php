@@ -134,7 +134,10 @@ abstract class VirtualFolder extends Object implements Command {
 	 */
 	function dynamicFilename($filename) {
 		if ($filename == 'index.html') {
-			return new HttpError(403, array('notice' => 'No index() method configured for '.get_class($this), 'override VirtualFolder->index() or VirtualFolder->dynamicFilename()'));
+			return new HttpError(403, array('notice' => array(
+				'No index() method configured for '.get_class($this),
+				'override VirtualFolder->index() or VirtualFolder->dynamicFilename() in "'.get_class($this).'"'
+			)));
 		}
 		return $this->onFileNotFound();
 	}
