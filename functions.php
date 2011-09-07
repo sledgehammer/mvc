@@ -248,7 +248,7 @@ namespace SledgeHammer {
 	 * @return Json
 	 */
 	function jsonError($errorMsg, $messageVarname = 'errorMsg') {
-		if ($errorMsg instanceof Exception) {
+		if ($errorMsg instanceof \Exception) {
 			ErrorHandler::handle_exception($errorMsg);
 			$errorMsg = $errorMsg->getMessage();
 		} else {

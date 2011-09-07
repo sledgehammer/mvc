@@ -251,7 +251,7 @@ abstract class AbstractView extends Object implements \ArrayAccess, \Iterator {
 				foreach ($this->_complexTypes as $prefix => $complexType) {
 					if ($complexType['source'] == $field) {
 						$this->_subfields = $this->_getElement($field);
-						if ($this->_subfields instanceof Iterator) {
+						if ($this->_subfields instanceof \Iterator) {
 							$this->_subfields->rewind();
 							$this->_subfield_prefix = $prefix;
 						} 
