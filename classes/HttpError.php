@@ -49,7 +49,7 @@ class HttpError extends Object implements Component {
 		$messageBox = new MessageBox($error['icon'], $error['title'], $error['message']."<br />\n".value($_SERVER['SERVER_SIGNATURE']));
 		$messageBox->render();
 		foreach ($this->options as $option => $value) {
-			switch ($option) {
+			switch ((string) $option) {
 				
 				case 'notice':
 				case 'warning':
@@ -62,7 +62,7 @@ class HttpError extends Object implements Component {
 					break;
 				
 				default:
-					notice('Unknown option: "'.$option.'"');
+					notice('Unknown option: "'.$option.'"', array('value' => $value));
 					break;
 			}
 		}

@@ -208,7 +208,7 @@ abstract class VirtualFolder extends Object implements Command {
 			$path = $isFolder ? $folder : $folder.basename($relativePath);
 			if (file_exists($path)) {
 				if (is_readable($path)) {
-					return new HttpError(500, array('warning', 'render_public_folder.php should have renderd the file: "'.$path.'"'));
+					return new HttpError(500, array('warning' => 'render_public_folder.php should have renderd the file: "'.$path.'"'));
 				} else {
 					return new HttpError(403, array('warning' => 'Permission denied for file "'.basename($path).'" in "'.dirname($path).'/"'));
 				}
