@@ -21,7 +21,7 @@ class HttpError extends Object implements Component {
 	 * Maak een HTTP-error aan
 	 *
 	 * @param int $statusCode  HTTP Foutcode van de fout 404,403 enz
-	 * @param int $options  Array met ptionele instellingen: array(
+	 * @param int $options  Array met optionele instellingen: array(
 	 *   'notice' => Geeft deze notice na het renderen.
 	 *   'warning' => Geeft deze warning na het renderen. 
 	 * 
