@@ -19,7 +19,7 @@ endforeach; ?>
 
 <?php if ($statusbar): ?>
 <div class="statusbar" id="statusbar">
-	<img style="float:right;margin-right:10px;" src="http://bfanger.nl/core/images/debug_hide.gif" onclick="javascript:document.getElementById('statusbar').style.display='none';" alt="Verberg statusbalk" />
+	<a href="javascript:document.getElementById('statusbar').style.display='none';" title="Hide statusbar" style="float:right;margin-right: 4px; font: 14px sans-serif; text-decoration: none;">&#10062;</a>
 	<?php echo $GLOBALS['website']->statusbar(); ?>
 </div>
 
