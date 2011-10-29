@@ -15,6 +15,7 @@ foreach ($head as $html) {
 </head>
 <?php flush(); ?>
 <body<?php echo $bodyParameters; ?>>
+
 <?php render($body); ?>
 <?php if ($showStatusbar): ?>
 
@@ -23,9 +24,8 @@ foreach ($head as $html) {
 	<a href="javascript:document.getElementById('statusbar').style.display='none';" title="Hide statusbar" style="float:right;margin-right: 4px; font: 14px sans-serif; text-decoration: none;">&#10062;</a>
 	<?php echo $GLOBALS['website']->statusbar(); ?>
 </div>
-
-
 <?php endif; ?>
+
 </body>
 </html>
 

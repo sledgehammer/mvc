@@ -1,6 +1,6 @@
 <?php
 /**
- * Een typische html/xhtml pagina 
+ * The container for generating html pages.
  *
  * @package MVC
  */
@@ -32,12 +32,13 @@ class HTMLDocument extends Object implements Document {
 	 *
 	 * meta = array(), // De <meta> tags
 	 * link = array(), // De <link> tags
+	 * htmlParameters = array(); // parameters die binnen de <html> tag geplaatst worden
 	 * bodyParameters = array(); // parameters die binnen de <body> tag geplaatst worden
 	 * @var array
 	 */
 	private $headers;
 
-	function __construct($doctype = 'xhtml') {
+	function __construct($doctype = 'html') {
 		$this->doctype = $doctype;
 		$this->showStatusbar = $GLOBALS['ErrorHandler']->html; // Als er html error getoond mogen worden, toon dan ook de statusbalk.
 	}
@@ -52,7 +53,8 @@ class HTMLDocument extends Object implements Document {
 				'Content-Type' => 'text/html; charset='.strtolower($GLOBALS['charset']),
 			),
 			'charset' => $GLOBALS['charset'],
-			'bodyParameters' => array()
+			'htmlParameters' => array(),
+			'bodyParameters' => array(),
 		);
 
 		if (defined('WEBPATH') && WEBPATH != '/' && file_exists(PATH.'application/public/favicon.ico')) {
@@ -82,12 +84,13 @@ class HTMLDocument extends Object implements Document {
 			'charset' => $this->headers['charset'],
 			'title' => array_value($this->headers, 'title'),
 			'head' => array(),
+			'htmlParameters' => implode_xml_parameters($this->headers['htmlParameters']),
 			'bodyParameters' => implode_xml_parameters($this->headers['bodyParameters']),
 			'body' => $this->content,
 			'showStatusbar' => $this->showStatusbar,
 		);
 		
-		$validHeaders = array('http', 'title', 'charset', 'css', 'meta', 'link', 'javascript', 'bodyParameters');
+		$validHeaders = array('http', 'title', 'charset', 'css', 'meta', 'link', 'javascript', 'htmlParameters', 'bodyParameters');
 		foreach ($this->headers as $key => $value) {
 			if (!in_array($key, $validHeaders)) {
 				notice('Invalid header: "'.$key.'", expecting "'.human_implode('" or "', $validHeaders, '", "').'"');
@@ -125,7 +128,7 @@ class HTMLDocument extends Object implements Document {
 				$variables['head'][] = '<script'.implode_xml_parameters(array('src' => $url, 'type' => 'text/javascript')).'></script>'; // <script> moet gesloten worden met </script> Geeft anders problemen in IE
 			}
 		}
-		$template = new Template('doctype.'.$this->doctype, $variables);
+		$template = new Template('doctype/'.$this->doctype.'.php', $variables);
 		$template->render();
 	}
 	

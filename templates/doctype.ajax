@@ -1,7 +1,0 @@
-<?php
-/**
- * Dit "DocType" wordt o.a. gebruikt voor jQuery.load()
- * door deze template kun je een HTMLDocument gebruiken (incl. headers) maar zonder de <html> <head> en <body> tags
- */ 
-render($body); 
-?>
