@@ -62,7 +62,7 @@ class HTMLDocument extends Object implements Document {
 		}
 		// $headers['http']['Content-Type'] = 'application/xhtml+xml';
 		if ($GLOBALS['ErrorHandler']->html) {
-			$headers['css']['debug'] = WEBROOT.'core/stylesheets/debug.css';
+			$headers['css']['debug'] = WEBROOT.'core/css/debug.css';
 		}
 		$this->headers = merge_headers($headers, $this->content);
 		if (empty($this->headers['title'])) {
@@ -131,7 +131,7 @@ class HTMLDocument extends Object implements Document {
 		$template = new Template('doctype/'.$this->doctype.'.php', $variables);
 		$template->render();
 	}
-	
+
 	function isDocument() {
 		return true;
 	}
