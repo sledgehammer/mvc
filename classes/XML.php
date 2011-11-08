@@ -1,23 +1,24 @@
 <?php
 /**
- * XML
- * @package
+ * XML Component
+ *
+ * @package MVC
  */
 namespace SledgeHammer;
+
 class XML extends Object implements Document {
 
 	/**
 	 * @var SimpleXMLElement|DOMDocument
 	 */
 	private $xml;
-	
+
 	function __construct($xml) {
 		$this->xml = $xml;
 	}
-	
+
 	function render() {
 		if ($this->xml instanceof \SimpleXMLElement) {
-//			echo $this->xml->saveXML();
 			$dom = dom_import_simplexml($this->xml)->ownerDocument;
 			$dom->formatOutput = true;
 			echo $dom->saveXML();
@@ -25,10 +26,22 @@ class XML extends Object implements Document {
 			echo $this->xml;
 		}
 	}
-	
+
+	function isDocument() {
+		return true;
+	}
+
+	function getHeaders() {
+		return array(
+			'http' => array(
+				'Content-Type' => 'text/xml',
+			)
+		);
+	}
+
 	/**
 	 *
-	 * @param array $data 
+	 * @param array $data
 	 * @return \SimpleXMLElement
 	 */
 	static function build($data) {
@@ -41,7 +54,7 @@ class XML extends Object implements Document {
 
 	/**
 	 * @param \SimpleXMLElement $xml
-	 * @param array $data 
+	 * @param array $data
 	 */
 	static function addNodes($xml, $data, $node) {
 		foreach ($data as $key => $value) {
@@ -57,15 +70,6 @@ class XML extends Object implements Document {
 		}
 	}
 
-	function isDocument() {
-		return true;
-	}
-
-	function getHeaders() {
-		return array('http' => array(
-			'Content-Type' => 'text/xml',
-		));
-	}
 }
 
 ?>
