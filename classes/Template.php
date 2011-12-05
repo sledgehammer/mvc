@@ -6,7 +6,7 @@
  * @package MVC
  */
 namespace SledgeHammer;
-class Template extends Object implements Component {
+class Template extends Object implements View {
 
 	/**
 	 *
@@ -21,12 +21,12 @@ class Template extends Object implements Component {
 	public $template;
 	/**
 	 * Variabelen die in de template worden gezet. Als je array('naam' => value) meegeeft kun in de template {$naam} gebruiken
-	 * @var array  
+	 * @var array
 	 */
 	public $variables;
 	/**
 	 * De variable die gebruikt wordt voor de getHeaders()
-	 * @var array  
+	 * @var array
 	 */
 	public $headers;
 
@@ -57,7 +57,7 @@ class Template extends Object implements Component {
 
 	/**
 	 * De template parsen en weergeven
-	 * 
+	 *
 	 * @return void
 	 */
 	function render() {
@@ -77,7 +77,7 @@ class Template extends Object implements Component {
 	private function getComponents($array) {
 		$components = array();
 		foreach ($array as $element) {
-			if (is_component($element)) {
+			if (is_view($element)) {
 				$components[] = $element;
 			} elseif (is_array($element)) {
 				$nestedComponents = $this->getComponents($element);

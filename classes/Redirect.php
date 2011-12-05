@@ -1,26 +1,31 @@
 <?php
 /**
- * De MVC variant op de redirect() functie.
- * De redirect() functie beeindig/exit() direct het script, terwijl dit Redirect object via de FrontController wordt afgehandeld.
- * En is daardoor compatible met HttpServer in de http_daemon module.
+ * The MVC alternative to the redirect() function.
+ *
+ * Because redirect() function stops execution of the script, the flow of the MVC classes is interupted.
+ * The Redirect class completes the MVC flow and send the headers via the Website->handleRequest()
+ *
+ * (Compatible with SledgeHammer\HttpServer)
  *
  * @package MVC
  */
 namespace SledgeHammer;
 class Redirect extends Object implements Document {
 
-	private $headers;
+	private $url;
+	private $permanently;
 
 	function __construct($url, $permanently = false) {
-		$this->headers = array(
-			'Status' => ($permanently ? '301 Moved Permanently': '302 Found'),
-			'Location' => $url
-		);
+		$this->url = $url;
+		$this->permanently = $permanently;
 	}
 
 	function getHeaders() {
 		return array(
-			'http' => $this->headers
+			'http' => array(
+				'Status' => ($this->permanently ? '301 Moved Permanently': '302 Found'),
+				'Location' => $this->url
+			)
 		);
 	}
 

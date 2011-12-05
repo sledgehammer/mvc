@@ -1,46 +1,31 @@
 <?php
 /**
- * Globale functies van de Webcore module
+ * Global function of the MVC module
  *
  * @package MVC
  */
 
 namespace {
 	// global namespace (zodat deze functies direct in een template gebruikt kunnen worden)
-	
+
 	/**
-	 * render($component) is hetzelde als een $component->render(), 
-	 * Maar render($component) geeft *geen* fatal error als er geen render() methode in het object zit.
+	 * render($view) is an alias to $view->render()
+	 * but render($view) generates a notice when the $view issn't a View compatible object instead of an fatal error
 	 */
-	function render($component) {
-		if(SledgeHammer\is_valid_component($component)) {
-			$component->render();
+	function render($view) {
+		if (SledgeHammer\is_valid_view($view)) {
+			$view->render();
 		}
 	}
 
 	/**
-	 * Geeft de uitvoer van een component als string.
-	 * (Uitvoer zoals emails en header() worden niet afgevangen)
+	 * Check if the $view parameter is compatible with the View interface via ducktyping.
 	 *
-	 * @return string
+	 * @param View $view
+	 * @return bool
 	 */
-	function component_to_string($component) {
-		if (SledgeHammer\is_valid_component($component)) {
-			ob_start();
-			$component->render();
-			return ob_get_clean();
-		}
-	}
-
-	/**
-	 * Controleer of de $variable een component compatible object is. (ducktyping)
-	 *
-	 * @param mixed $variable
-	 * @param bool $showNotice   Show errors
-	 * @return bool 
-	 */
-	function is_component(&$component = '__UNDEFINED__') {
-		return (is_object($component) && method_exists($component, 'render'));
+	function is_view(&$view = '__UNDEFINED__') {
+		return (is_object($view) && method_exists($view, 'render'));
 	}
 
 	/**
@@ -59,44 +44,57 @@ namespace {
 		$GLOBALS['included_javascript'][$identifier] = true;
 		echo '<script type="text/javascript" src="'.$src.'"></script>'."\n";
 	}
-}
 
+}
 namespace SledgeHammer {
-	
+
+	/**
+	 * Geeft de uitvoer van een component als string.
+	 * (Uitvoer zoals emails en header() worden niet afgevangen)
+	 *
+	 * @return string
+	 */
+	function export_view($component) {
+		if (SledgeHammer\is_valid_view($component)) {
+			ob_start();
+			$component->render();
+			return ob_get_clean();
+		}
+	}
+
 	/**
 	 * Check if $component is a Component-compatible and otherwise report notices
-	 * 
-	 * @param mixed $variable
+	 *
+	 * @param View $variable
 	 * @return $bool
 	 */
-	function is_valid_component(&$component = '__UNDEFINED__') {
-		if (is_component($component)) {
+	function is_valid_view(&$view = '__UNDEFINED__') {
+		if (is_view($view)) {
 			return true;
-		} 
-		if (is_object($component)) {
-			notice ('Invalid $component, class "'.get_class($component).'" must implement a render() method');
-		} elseif ($variable == '__UNDEFINED__') {
+		}
+		if (is_object($view)) {
+			notice('Invalid $view, class "'.get_class($view).'" must implement a render() method');
+		} elseif ($view == '__UNDEFINED__') {
 			notice('Variable is undefined');
 		} else {
-			notice('Invalid datatype: "'.gettype($component).'", expecting a Component object');
+			notice('Invalid datatype: "'.gettype($view).'", expecting a Component object');
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Zet een array om naar xml/html parameters; array('x' => 'y') wordt ' x="y"'
-	 * 
+	 *
 	 * @param array $parameters
 	 * @param string $charset  De charset van de parameters (voor htmlentities). Standaard wordt de charset van het actieve document gebruikt.
 	 * @return string
 	 */
-
 	function implode_xml_parameters($parameterArray, $charset = null) {
 		$xml = '';
 		if ($charset === null) {
 			$charset = $GLOBALS['charset'];
 		}
-		foreach($parameterArray as $key => $value) {
+		foreach ($parameterArray as $key => $value) {
 			$xml .= ' '.$key.'="'.htmlentities($value, ENT_COMPAT, $charset).'"';
 		}
 		return $xml;
@@ -104,32 +102,32 @@ namespace SledgeHammer {
 
 	/**
 	 * Zet een string met parameters om naar een array.
-	 *' x="y"' wordt  array('x' => 'y') 
-	 * 
+	 * ' x="y"' wordt  array('x' => 'y')
+	 *
 	 * @param string $tag
 	 * @return array
 	 */
 	function explode_xml_parameters($parameterString) {
 		/* De reguliere expressies manier kan niet omgaan met values die geen quotes hebben e.d..
-		if (preg_match_all('/(?P<attr>[a-z]*)=[\"\'](?P<value>[a-zA-Z0-9\/._-]*)[\"\']/', $parameterString, $match)) {
-			foreach ($match['attr'] as $index => $key) {
-				$parameters[$key] = $match['value'][$index];		
-			} 
-		}
-		//*/
+		  if (preg_match_all('/(?P<attr>[a-z]*)=[\"\'](?P<value>[a-zA-Z0-9\/._-]*)[\"\']/', $parameterString, $match)) {
+		  foreach ($match['attr'] as $index => $key) {
+		  $parameters[$key] = $match['value'][$index];
+		  }
+		  }
+		  // */
 		$parameters = array();
 		$state = 'NAME';
-		// Parse de string via een state-machine
+		// Parse the string via a state-machine
 		while ($parameterString) {
 			switch ($state) {
 
-				case 'NAME': // Zoek de attribuut naam.(de tekst voor de '=') 
+				case 'NAME': // Zoek de attribuut naam.(de tekst voor de '=')
 					$equalsPos = strpos($parameterString, '=');
 					if (!$equalsPos) { // er zijn geen attributen meer.
 						break 2; // stop met tokenizing
 					}
 					$value = trim(substr($parameterString, 0, $equalsPos));
-					$value = preg_replace('/.*[ \t]/','', $value); // als er een spatie of tab in de naam staat, haal deze (en alles ervoor) weg
+					$value = preg_replace('/.*[ \t]/', '', $value); // als er een spatie of tab in de naam staat, haal deze (en alles ervoor) weg
 					$attributeName = $value; // attribuutnaam is bekend.
 
 					$parameterString = ltrim(substr($parameterString, $equalsPos + 1)); // De parameterstring inkorten.
@@ -144,7 +142,7 @@ namespace SledgeHammer {
 					$state = 'VALUE';
 					break;
 
-				case 'VALUE':			
+				case 'VALUE':
 					if (preg_match('/^([^'.$delimiter.']*)['.$delimiter.']/', $parameterString, $match)) {
 						$parameters[$attributeName] = $match[1]; // De waarde is bekend.
 						$parameterString = substr($parameterString, strlen($match[0]));
@@ -157,7 +155,7 @@ namespace SledgeHammer {
 
 				default:
 					error('Invalid state');
-			}		
+			}
 		}
 		return $parameters;
 	}
@@ -167,7 +165,7 @@ namespace SledgeHammer {
 	 * De waardes in $header1 worden aangevuld en overschreven door de waardes in header2
 	 *
 	 * @param array $headers
-	 * @param array|Component $component Een component of een header array
+	 * @param array|View $component Een component of een header array
 	 * @return array
 	 */
 	function merge_headers($headers, $component) {
@@ -216,10 +214,10 @@ namespace SledgeHammer {
 	}
 
 	/**
-	 * Stel de $parameters['class'] in of voegt de $class toe aan de $parameters['class'] 
-	 * 
+	 * Stel de $parameters['class'] in of voegt de $class toe aan de $parameters['class']
+	 *
 	 * @param string $class
-	 * @param array $parameters 
+	 * @param array $parameters
 	 * @return void
 	 */
 	function append_class_to_parameters($class, &$parameters) {
@@ -230,7 +228,7 @@ namespace SledgeHammer {
 		}
 	}
 
-	/** 
+	/**
 	 * ID and NAME must begin with a letter ([A-Za-z]) and may be followed by any number of letters, digits ([0-9]), hyphens ("-"), underscores ("_"), colons (":"), and periods (".").
 	 */
 	function tidy_id($cdata) {
@@ -240,35 +238,42 @@ namespace SledgeHammer {
 	}
 
 	/**
-	 * Genereer een warning() voor de EerrorHandler en verstuur de foutmelding in Json formaat naar de browser.
-	 * Deze dient dan via javascript de error te tonen. Met bv: showError(result.errorMsg)
-	 * 
-	 * @param string|Exception $errorMsg  De foutmelding string
-	 * @param string $messageVarname  De naam van de variabele die gebruikt wordt in de json response voor de foutmelding. (ext_improved.js gaat uit van "errorMsg")
+	 * Reports the error/exception to the ErrorHandler and returns the error in a Json view.
+	 * The javascript client should detect and report the error to the user:
+	 *   if (result.succes !== true) { alert(result.error); }
+	 *
+	 * @param string|Exception $error  The error message or Exception
 	 * @return Json
 	 */
-	function jsonError($errorMsg, $messageVarname = 'errorMsg') {
-		if ($errorMsg instanceof \Exception) {
-			ErrorHandler::handle_exception($errorMsg);
-			$errorMsg = $errorMsg->getMessage();
+	function jsonError($error) {
+		if ($error instanceof \Exception) {
+			ErrorHandler::handle_exception($error);
+			$error = $error->getMessage();
 		} else {
-			warning('JsonError: '. $errorMsg);
+			warning('JsonError: '.$error);
 		}
 		return new Json(array(
 			'success' => false,
-			$messageVarname => $errorMsg
+			'error' => $error
 		));
 	}
 
 	/**
 	 * Short for "new Json(array('success' => true))"
-	 * @param array $data (optioneel) Gegevens die naast de success worden meegestuurd.
+	 *
+	 * @param mixed $data [optional] Gegevens die naast de success worden meegestuurd.
 	 */
-	function jsonSuccess($data = array()) {
-		return new Json(array_merge(
-			$data,
-			array('success' => true)
+	function jsonSuccess($data = null) {
+		if ($data === null) {
+			return new Json(array(
+				'success' => true)
+			);
+		}
+		return new Json(array(
+			'success' => true,
+			'data' => $data
 		));
 	}
+
 }
 ?>

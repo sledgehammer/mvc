@@ -1,24 +1,25 @@
 <?php
 /**
- * A Document is a standalone component, that can't be wrapped in a layout.
+ * A Document is a standalone view, that can't be wrapped inside another view.
  * Example documents are: Json, FileDocument and HTMLDocument
  *
  * @package MVC
  */
 namespace SledgeHammer;
-interface Document extends Component {
-	
+interface Document extends View {
+
 	/**
 	 * Determines if the component is a Document.
 	 * This allows errors to be wrapped in a layout.
-	 * 
+	 *
 	 * @return bool
 	 */
 	function isDocument();
 
 	/**
-	 * The HTTP headers for this type of document.
-	 * 
+	 * The headers for this type of document.
+	 * Must include 'http' headers
+	 *
 	 * @return array
 	 */
 	function getHeaders();

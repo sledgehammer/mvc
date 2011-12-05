@@ -1,12 +1,12 @@
 <?php
 /**
- * HttpProxy, load the contents and http-headers of the url and use them as a MVC Component.
+ * HttpProxy, load the contents and http-headers of the url and use them as a remote FileDocument
  *
  * @package MVC
  */
 namespace SledgeHammer;
 
-class HttpProxy extends Object implements Component {
+class HttpProxy extends Object implements View {
 
 	private $error = false;
 	private $headers = array();

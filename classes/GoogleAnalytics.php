@@ -5,13 +5,13 @@
  * @package MVC
  */
 namespace SledgeHammer;
-class GoogleAnalytics extends Object implements Component {
+class GoogleAnalytics extends Object implements View {
 
 	public
-		$code; 
+		$code;
 
 	/**
-	 *  
+	 *
 	 * @param string $code  "UA-xxxxxxx-x"
 	 */
 	function __construct($code) {

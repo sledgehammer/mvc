@@ -5,13 +5,13 @@ SledgeHammer MVC API
 MVC aka Model View Controller
 
 
-Compontents (View)
+View
 -------------------
-De "View" wordt d.m.v. Components opgebouwd.
-Deze Components zij te vergelijken met een ASP.NET UserControl
+De "View" wordt d.m.v. Views opgebouwd.
+Deze view objects zijn te vergelijken met een ASP.NET UserControl
 
-Een Component heeft een "render" functie. Deze stuurt output direct naar de browser (echo) en heeft geen returnwaarde.
-En component class *mag* een getHeaders() functie bevatten, deze returnt informatie die voor het component verstuurd dient te worden.
+Een View heeft een "render" functie. Deze stuurt output direct naar de browser (echo) en heeft geen returnwaarde.
+En View class *mag* een getHeaders() functie bevatten, deze returnt informatie die voor het component verstuurd dient te worden.
 Denk aan "HTTP headers", stylesheets en andere elementen voor in de <head>
 
 

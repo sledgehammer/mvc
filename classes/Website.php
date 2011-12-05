@@ -15,7 +15,7 @@ abstract class Website extends VirtualFolder {
 		parent::__construct();
 		$this->publicMethods = array_diff($this->publicMethods, array('init', 'render', 'statusbar', 'wrapComponent', 'onDatabaseFailure', 'initDocument', 'initLanguage', 'isWrapable')); // Een aantal functies *niet* public maken
 		$this->initLanguage();
-		// $this->sessionStart(); // Initialiseer de sessie		
+		// $this->sessionStart(); // Initialiseer de sessie
 	}
 
 	/**
@@ -56,7 +56,7 @@ abstract class Website extends VirtualFolder {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return Component
 	 */
 	abstract protected function wrapContent($content);
@@ -67,7 +67,7 @@ abstract class Website extends VirtualFolder {
 	 * @return Component
 	 */
 	protected function onDatabaseFailure() {
-		$html = component_to_string(new MessageBox('error.png', 'Er is een fout opgetreden', 'Er kon geen verbinding gemaakt worden met de database.'));
+		$html = export_view(new MessageBox('error.png', 'Er is een fout opgetreden', 'Er kon geen verbinding gemaakt worden met de database.'));
 		return new HTML($html, array(
 			'http' => array('Status' => '500 Internal Server Error')
 		));
@@ -93,7 +93,7 @@ abstract class Website extends VirtualFolder {
 				warning('Invalid language: "'.$language.'"');
 				return;
 		}
-		if (!setlocale(LC_ALL, $locales)) { 	
+		if (!setlocale(LC_ALL, $locales)) {
 			exec('locale -a', $available_locales);
 			notice('Setting locale to "'.implode('", "', $locales).'" has failed', 'Available locales: "'.implode('", "', $available_locales).'"');
 		} elseif (setlocale(LC_ALL, 0) == 'C') {
@@ -109,14 +109,14 @@ abstract class Website extends VirtualFolder {
 	}
 
 	/**
-	 * De sessie starten, biedt de mogenlijkheid voor sessies in de database 
+	 * De sessie starten, biedt de mogenlijkheid voor sessies in de database
 	 */
 	protected function sessionStart() { // [void]
 		if (headers_sent($bestand, $regel)) {
 			notice('Sessie kon niet gestart worden. Er was uitvoer in '.$bestand.' op regel '.$regel);
 		} else {
 			if (isset($_SESSION)) { // Is de sessie al gestart?
-				return; 
+				return;
 			}
 			// Voorkom PHPSESSID in de broncode bij zoekmachines
 			if (isset($_SERVER['HTTP_USER_AGENT'])) { // Is de browser meegegeven?

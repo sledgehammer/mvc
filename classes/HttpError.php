@@ -2,13 +2,13 @@
 /**
  * Geeft een HTTP foutmelding naar de gebruiker
  * Overschrijft de <title> en headers
- * 
+ *
  * @todo Overige HTTP errors toevoegen.
  *
  * @package MVC
  */
 namespace SledgeHammer;
-class HttpError extends Object implements Component {
+class HttpError extends Object implements View {
 
 	/**
 	 * Een HTTP Error Code, bijvoorbeeld 404
@@ -23,8 +23,8 @@ class HttpError extends Object implements Component {
 	 * @param int $statusCode  HTTP Foutcode van de fout 404,403 enz
 	 * @param int $options  Array met optionele instellingen: array(
 	 *   'notice' => Geeft deze notice na het renderen.
-	 *   'warning' => Geeft deze warning na het renderen. 
-	 * 
+	 *   'warning' => Geeft deze warning na het renderen.
+	 *
 	 */
 	function __construct($errorCode, $options = array()) {
 		$this->errorCode = $errorCode;
@@ -50,7 +50,7 @@ class HttpError extends Object implements Component {
 		$messageBox->render();
 		foreach ($this->options as $option => $value) {
 			switch ((string) $option) {
-				
+
 				case 'notice':
 				case 'warning':
 					$function = $option;
@@ -60,7 +60,7 @@ class HttpError extends Object implements Component {
 						call_user_func($function, $value);
 					}
 					break;
-				
+
 				default:
 					notice('Unknown option: "'.$option.'"', array('value' => $value));
 					break;
@@ -95,8 +95,8 @@ class HttpError extends Object implements Component {
 					'title' => 'Verboden toegang',
 					'message' => (substr(URL::getCurrentURL()->path, -1) == '/') ? 'U mag de inhoud van deze map niet bekijken' : 'U mag deze pagina niet bekijken',
 				);
-	
-			case 404:	
+
+			case 404:
 				return array(
 					'header' => 'Not Found',
 					'icon'=> 'warning',

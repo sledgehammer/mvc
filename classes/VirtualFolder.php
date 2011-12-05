@@ -9,14 +9,14 @@
  * @package MVC
  */
 namespace SledgeHammer;
-abstract class VirtualFolder extends Object implements Command {
+abstract class VirtualFolder extends Object implements Controller {
 
 	/**
 	 * Diepte van deze virtual folder.
 	 * Als deze VirtualFolder de inhoud van de map "http://domain/folder/" afhandeld, dan $depth == 1.
 	 * Een VirtualFolder van "http://domain/folder/subfolder/" heeft $depth == 2
-	 * 
-	 * @var int $depth  
+	 *
+	 * @var int $depth
 	 */
 	protected $depth;
 
@@ -24,14 +24,14 @@ abstract class VirtualFolder extends Object implements Command {
 	 * Het aantal niveau's(submappen) dat door deze VirtualFolder wordt afgehandeld.
 	 * Deze variabele wordt gebruikt om de $depth van de submap uit te rekenen.
 	 * Dit is handig als je een andere VirtualFolder wilt gebruiken terwijl je zelf al meerdere submappen gebruikt.
-	 * Als je je de $depth_increment op 0 zet, dan wordt de andere VirtualFolder niet als subfolder,maar als de dezelfde folder gebruikt.  
-	 * 
+	 * Als je je de $depth_increment op 0 zet, dan wordt de andere VirtualFolder niet als subfolder,maar als de dezelfde folder gebruikt.
+	 *
 	 * @var int $depth_increment
 	 */
 	protected $depthIncrement = 1;
 
 	/**
-	 * automatisch gegenereerde array die bepaald of een methode via een url aangeroepen 
+	 * automatisch gegenereerde array die bepaald of een methode via een url aangeroepen
 	 * @var array
 	 */
 	protected $publicMethods;
@@ -48,7 +48,7 @@ abstract class VirtualFolder extends Object implements Command {
 	 *
 	 * @var VirtualFolder $parent  Deze virtuele map is een submap van ...
 	 */
-	private	$parent; 
+	private	$parent;
 
 
 	function __construct() {
@@ -71,7 +71,7 @@ abstract class VirtualFolder extends Object implements Command {
 		$this->initDepth();
 		$url = URL::getCurrentURL();
 		$folders = $url->getFolders();
-		$filename = $url->getFilename(); 
+		$filename = $url->getFilename();
 		$folder_count = count($folders);
 		if ($folder_count == $this->depth) {
 			$extension = file_extension($filename, $file);
@@ -87,10 +87,10 @@ abstract class VirtualFolder extends Object implements Command {
 				return $this->$function($extension); // Roept bijvoorbeeld de $this->index('html') functie aan.
 			}
 			return $this->dynamicFilename($filename);
-		} 
+		}
 		if ($folder_count > $this->depth) {
 			if ($folder_count != ($this->depth + 1)) {
-				$filename = false;; // Deze submap heeft nog 1 of meer submappen. 
+				$filename = false;; // Deze submap heeft nog 1 of meer submappen.
 			}
 			$folder = $folders[$this->depth];
 			$function = str_replace('-', '_', $folder).'_folder';
@@ -102,7 +102,7 @@ abstract class VirtualFolder extends Object implements Command {
 		warning('Not enough (virtual) subfolders in URI', 'VirtualFolder depth('.$this->depth.') exceeds maximum('.count($folders).')');
 		return $this->onFolderNotFound(); // @todo eigen event?
 	}
-	
+
 	/**
 	 * Het pad opvragen van deze VirtualFolder
 	 *
@@ -156,7 +156,7 @@ abstract class VirtualFolder extends Object implements Command {
 	/**
 	 * Event dat getriggert wordt als een (virtuele) bestand niet gevonden wordt.
 	 * Geeft deze of een parent van deze virtualfolder de mogenlijkheid om een custom actie uit te voeren.
-	 * 
+	 *
 	 * @return HttpError
 	 */
 	protected function onFileNotFound() {
@@ -171,7 +171,7 @@ abstract class VirtualFolder extends Object implements Command {
 	/**
 	 * Event/Action voor het afhandelen van niet bestaande (virtuele) mappen.
 	 * Geeft deze of een parent van deze virtualfolder de mogenlijkheid om een custom actie uit te voeren.
-	 * 
+	 *
 	 * @return HttpError
 	 */
 	protected function onFolderNotFound() {
@@ -212,21 +212,21 @@ abstract class VirtualFolder extends Object implements Command {
 				} else {
 					return new HttpError(403, array('warning' => 'Permission denied for file "'.basename($path).'" in "'.dirname($path).'/"'));
 				}
-			}		
+			}
 		}
 		if ($foundPublicFolder) {
 			return new HttpError(404, array('notice' => array(
-				'HTTP[404] File "'.basename($relativePath).'" not found in "'.dirname($relativePath).'/"', 
+				'HTTP[404] File "'.basename($relativePath).'" not found in "'.dirname($relativePath).'/"',
 				'VirtualFolder "'.get_class($GLOBALS['VirtualFolder']).'" doesn\'t handle the "'.basename($GLOBALS['VirtualFolder']->getPath(true)).'" folder'
 			)));
-		}			
+		}
 		// Gaat om een bestand in een virtualfolder
 		return new HttpError(404, array('notice' => 'HTTP[404] VirtualFolder "'.get_class($GLOBALS['VirtualFolder']).'" has no "'.basename($GLOBALS['VirtualFolder']->getPath(true)).'" folder'));
 	}
 
 	/**
 	 * De VirtualFolder van een bepaalde class opvragen die zich hoger in de hierarchie bevind.
-	 * 
+	 *
 	 * @return VirtualFolder
 	 */
 	function &getParentByClass($class) {
@@ -242,7 +242,7 @@ abstract class VirtualFolder extends Object implements Command {
 	/**
 	 * Mits de $this->depth niet is ingesteld zal de waarde van $this->depth berekent worden.
 	 * Hoe diep de handler genest is wordt aan de hand van de Parent->depth berekend.
-	 * 
+	 *
 	 * @return int
 	 */
 	private function initDepth() {

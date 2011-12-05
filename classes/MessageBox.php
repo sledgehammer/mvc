@@ -6,7 +6,7 @@
  * @package MVC
  */
 namespace SledgeHammer;
-class MessageBox extends Object implements Component {
+class MessageBox extends Object implements View {
 
 	public
 		$icon,
