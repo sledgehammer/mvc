@@ -12,9 +12,9 @@ class HTMLDocument extends Object implements Document {
 	 * @var string
 	 */
 	public $doctype;
-	
+
 	/**
-	 * @var Component
+	 * @var View
 	 */
 	public $content;
 	/**
@@ -89,14 +89,14 @@ class HTMLDocument extends Object implements Document {
 			'body' => $this->content,
 			'showStatusbar' => $this->showStatusbar,
 		);
-		
+
 		$validHeaders = array('http', 'title', 'charset', 'css', 'meta', 'link', 'javascript', 'htmlParameters', 'bodyParameters');
 		foreach ($this->headers as $key => $value) {
 			if (!in_array($key, $validHeaders)) {
 				notice('Invalid header: "'.$key.'", expecting "'.human_implode('" or "', $validHeaders, '", "').'"');
 			}
 		}
-		
+
 		// tags binnen de <head> instellen
 		$head = array(
 			'meta' => array(),

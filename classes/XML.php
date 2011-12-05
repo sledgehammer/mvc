@@ -1,6 +1,6 @@
 <?php
 /**
- * XML Component
+ * XML View
  *
  * @package MVC
  */

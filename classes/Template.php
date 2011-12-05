@@ -48,7 +48,7 @@ class Template extends Object implements View {
 	 */
 	function getHeaders() {
 		$headers = $this->headers;
-		$components = $this->getComponents($this->variables);
+		$components = $this->getSubviews($this->variables);
 		foreach ($components as $component) {
 			$headers = merge_headers($headers, $component);
 		}
@@ -74,19 +74,16 @@ class Template extends Object implements View {
 		array_unshift(self::$templateFolders, $path); // schuif het nieuwe thema vooraan
 	}
 
-	private function getComponents($array) {
-		$components = array();
+	private function getSubviews($array) {
+		$views = array();
 		foreach ($array as $element) {
 			if (is_view($element)) {
-				$components[] = $element;
+				$views[] = $element;
 			} elseif (is_array($element)) {
-				$nestedComponents = $this->getComponents($element);
-				foreach ($nestedComponents as $component) {
-					$components[] = $component;
-				}
+				$views = array_merge($views, $this->getSubviews($element));
 			}
 		}
-		return $components;
+		return $views;
 
 	}
 }

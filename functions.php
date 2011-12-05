@@ -63,7 +63,7 @@ namespace SledgeHammer {
 	}
 
 	/**
-	 * Check if $component is a Component-compatible and otherwise report notices
+	 * Check if $component is compatible with the View interface, otherwise report notices
 	 *
 	 * @param View $variable
 	 * @return $bool
@@ -77,7 +77,7 @@ namespace SledgeHammer {
 		} elseif ($view == '__UNDEFINED__') {
 			notice('Variable is undefined');
 		} else {
-			notice('Invalid datatype: "'.gettype($view).'", expecting a Component object');
+			notice('Invalid datatype: "'.gettype($view).'", expecting a View object');
 		}
 		return false;
 	}
@@ -161,22 +161,22 @@ namespace SledgeHammer {
 	}
 
 	/**
-	 * Het resultaat van 2 Component->getHeaders() samenvoegen.
+	 * Het resultaat van 2 View->getHeaders() samenvoegen.
 	 * De waardes in $header1 worden aangevuld en overschreven door de waardes in header2
 	 *
 	 * @param array $headers
-	 * @param array|View $component Een component of een header array
+	 * @param array|View $view Een component of een header array
 	 * @return array
 	 */
-	function merge_headers($headers, $component) {
+	function merge_headers($headers, $view) {
 		if (is_string(array_value($headers, 'css'))) {
 			$headers['css'] = array($headers['css']);
 		}
 
-		if (is_array($component)) { // Is er een header array meegegeven i.p.v. een Component?
-			$appendHeaders = $component;
-		} elseif (method_exists($component, 'getHeaders')) {
-			$appendHeaders = $component->getHeaders();
+		if (is_array($view)) { // Is er een header array meegegeven i.p.v. een View?
+			$appendHeaders = $view;
+		} elseif (method_exists($view, 'getHeaders')) {
+			$appendHeaders = $view->getHeaders();
 		} else {
 			return $headers; // Er zijn geen headers om te mergen.
 		}

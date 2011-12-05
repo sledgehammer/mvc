@@ -1,7 +1,7 @@
 <?php
 /**
  * Add Headers to any View.
- * Makes it possible to add headers from a Controller without adding a headers to all Component classes.
+ * Makes it possible to add headers from a Controller without adding a headers to all View classes.
  *
  * @package MVC
  */
