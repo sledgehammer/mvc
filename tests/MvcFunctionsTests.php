@@ -1,8 +1,12 @@
 <?php
 /**
+ * Test the implementation of MVC's global functions
  *
+ * @package MVC
  */
-class MvcFunctions extends UnitTestCase {
+namespace SledgeHammer;
+
+class MvcFunctionsTests extends TestCase {
 
 	function test_explode_xml_parmeters() {
 		// array( $tag => $expected_result
@@ -10,7 +14,7 @@ class MvcFunctions extends UnitTestCase {
 			'<img src="cms_images/DSCF4821.JPG" height="240" width="320">' => array(
 				'src' => 'cms_images/DSCF4821.JPG',
 				'height' => '240',
-				'width'=> '320',
+				'width' => '320',
 			),
 			'<img src="cms_images/DSCF4821.JPG" height=240>' => array(
 				'src' => 'cms_images/DSCF4821.JPG',
@@ -21,8 +25,10 @@ class MvcFunctions extends UnitTestCase {
 			)
 		);
 		foreach ($expectations as $tag => $expectation) {
-			$this->assertEqual($expectation, SledgeHammer\explode_xml_parameters($tag));
-		}		
+			$this->assertEqual($expectation, explode_xml_parameters($tag));
+		}
 	}
+
 }
+
 ?>
