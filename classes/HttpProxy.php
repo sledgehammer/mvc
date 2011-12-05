@@ -18,11 +18,13 @@ class HttpProxy extends Object implements View {
 			// Parse the headers that came with the file_get_contents() call.
 			foreach ($http_response_header as $header) {
 				if (preg_match('/^HTTP\/1.[01](.+)$/', $header, $match)) {
+					$this->headers = array(); // drop (redirect) headers
 					$this->headers['Status'] = ltrim($match[1]);
 					continue;
 				}
 				$pos = strpos($header, ':');
-				$this->headers[substr($header, 0, $pos)] = ltrim(substr($header, $pos + 1));
+				$name = substr($header, 0, $pos);
+				$this->headers[$name] = ltrim(substr($header, $pos + 1));
 			}
 		} else {
 			if (isset($http_response_header)) {
