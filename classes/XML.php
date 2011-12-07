@@ -19,6 +19,7 @@ class XML extends Object implements Document {
 
 	function render() {
 		if ($this->xml instanceof \SimpleXMLElement) {
+//			echo $this->xml->asXML();
 			$dom = dom_import_simplexml($this->xml)->ownerDocument;
 			$dom->formatOutput = true;
 			echo $dom->saveXML();
@@ -44,10 +45,16 @@ class XML extends Object implements Document {
 	 * @param array $data
 	 * @return \SimpleXMLElement
 	 */
-	static function build($data) {
+	static function build($data, $charset = null) {
+		if (count($data) != 1) {
+			throw new \Exception('The array should contain only 1 (root)element');
+		}
+		if ($charset === null) {
+			$charset = $GLOBALS['charset'];
+		}
 		reset($data);
 		$root = key($data);
-		$xml = new \SimpleXMLElement('<?xml version="1.0" encoding="utf-8"?><'.$root.' />');
+		$xml = new \SimpleXMLElement('<?xml version="1.0" encoding="'.$charset.'"?><'.$root.' />');
 		self::addNodes($xml, current($data), $root);
 		return $xml;
 	}
@@ -56,7 +63,7 @@ class XML extends Object implements Document {
 	 * @param \SimpleXMLElement $xml
 	 * @param array $data
 	 */
-	static function addNodes($xml, $data, $node) {
+	static function addNodes($xml, $data, $node, $detectEncoding = false) {
 		foreach ($data as $key => $value) {
 			if (is_array($value)) {
 				if (is_int($key)) {
