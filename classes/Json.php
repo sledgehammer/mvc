@@ -54,9 +54,6 @@ class Json extends Object implements Document {
 		$json = json_encode($this->data);
 		$error = json_last_error();
 		if ($error !== JSON_ERROR_NONE) {
-			if ($GLOBALS['ErrorHandler']->html) {
-				header('Content-Type: text/html; charset=UTF-8');
-			}
 			notice('[Json error] '.self::translateJsonError($error));
 		}
 		echo $json;

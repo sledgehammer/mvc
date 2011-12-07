@@ -9,23 +9,36 @@ namespace SledgeHammer;
 class XML extends Object implements Document {
 
 	/**
-	 * @var SimpleXMLElement|DOMDocument
+	 * @var SimpleXMLElement|DOMDocument|array|string
 	 */
 	private $xml;
 
-	function __construct($xml) {
+	/**
+	 * @var bool  Format XML with indentation and validates the XML.
+	 */
+	private $formatOutput;
+
+	function __construct($xml, $formatOutput = true) {
 		$this->xml = $xml;
+		$this->formatOutput = $formatOutput;
 	}
 
 	function render() {
 		if ($this->xml instanceof \SimpleXMLElement) {
-//			echo $this->xml->asXML();
-			$dom = dom_import_simplexml($this->xml)->ownerDocument;
-			$dom->formatOutput = true;
-			echo $dom->saveXML();
+			$xml = $this->xml->asXML();
+		} elseif ($this->xml instanceof \DOMDocument) {
+			$xml = $this->xml->saveXML();
 		} else {
-			echo $this->xml;
+			$xml = $this->xml;
 		}
+		if ($this->formatOutput) {
+			$doc = new \DOMDocument();
+			if ($doc->loadXML($xml)) {
+				$doc->formatOutput = true;
+				$xml = $doc->saveXML();
+			}
+		}
+		echo $xml;
 	}
 
 	function isDocument() {
@@ -41,21 +54,28 @@ class XML extends Object implements Document {
 	}
 
 	/**
+	 * Convert an array or object to a SimpleXMLElement
 	 *
-	 * @param array $data
+	 * @param array|object $data
 	 * @return \SimpleXMLElement
 	 */
 	static function build($data, $charset = null) {
-		if (count($data) != 1) {
-			throw new \Exception('The array should contain only 1 (root)element');
+		if (is_object($data)) {
+			$root = get_class($data);
+			$elements = get_object_vars($data);
+		} else {
+			if (count($data) != 1) {
+				throw new \Exception('The array should contain only 1 (root)element');
+			}
+			reset($data);
+			$root = key($data);
+			$elements = current($data);
 		}
 		if ($charset === null) {
 			$charset = $GLOBALS['charset'];
 		}
-		reset($data);
-		$root = key($data);
 		$xml = new \SimpleXMLElement('<?xml version="1.0" encoding="'.$charset.'"?><'.$root.' />');
-		self::addNodes($xml, current($data), $root);
+		self::addNodes($xml, $elements, $root);
 		return $xml;
 	}
 
@@ -63,7 +83,7 @@ class XML extends Object implements Document {
 	 * @param \SimpleXMLElement $xml
 	 * @param array $data
 	 */
-	static function addNodes($xml, $data, $node, $detectEncoding = false) {
+	private static function addNodes($xml, $data, $node, $detectEncoding = false) {
 		foreach ($data as $key => $value) {
 			if (is_array($value)) {
 				if (is_int($key)) {
