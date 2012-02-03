@@ -1,23 +1,20 @@
 <?php
 /**
- * Superklasse van Website objecten, een combinatie van een Builder en een Handler
- * DesignPatterns: Builder, Command, Chain of Responsibility & Singleton
+ * Superclass for the Website classes.
+ * DesignPatterns: FrontController, Command, Chain of Responsibility
  *
  * @package MVC
  */
 namespace SledgeHammer;
 abstract class Website extends VirtualFolder {
 
-	/**
-	 * De Website inititaliseren
-	 */
 	function __construct() {
 		parent::__construct();
 		$this->publicMethods = array_diff($this->publicMethods, array('handleRequest', 'generateDocument', 'statusbar',  'initLanguage', 'isWrapable')); // Een aantal functies *niet* public maken
 	}
 
 	/**
-	 * Aan de hand van de Request een Response versturen
+	 * Send a Response based on the Request
 	 *
 	 * @return void
 	 */
@@ -32,14 +29,15 @@ abstract class Website extends VirtualFolder {
 	}
 
 	/**
+	 * Generate a Document for this request
 	 *
 	 * @return Document
 	 */
 	function generateDocument() {
-		if ($GLOBALS['database_failure']) { // Zijn er geen database problemen?
-			$content = $this->onDatabaseFailure();
-		} else {
+		try {
 			$content = $this->generateContent();
+		} catch (\Exception $exception) {
+			$content = new HttpError(500, array('exception' => $exception));
 		}
 		$isDocument = false;
 		if (method_exists($content, 'isDocument')) {
@@ -54,25 +52,16 @@ abstract class Website extends VirtualFolder {
 	}
 
 	/**
+	 * Imbed the view inside your Layout View
+	 *
 	 * @return View
 	 */
 	abstract protected function wrapContent($content);
 
-	/**
-	 * Als er een database verbinding is mislukt zal deze functie wordt aangeroepen om de request af te handelen.
-	 *
-	 * @return View
-	 */
-	protected function onDatabaseFailure() {
-		$html = export_view(new MessageBox('error.png', 'Er is een fout opgetreden', 'Er kon geen verbinding gemaakt worden met de database.'));
-		return new HTML($html, array(
-			'http' => array('Status' => '500 Internal Server Error')
-		));
-	}
-
 
 	/**
-	 * Geeft informatie over: parsetijden, geheugenverbruik, queries, etc
+	 * Render debugging information.
+	 * Allow subclasses to render custom statusbar info.
 	 */
 	function statusbar() {
 		statusbar();

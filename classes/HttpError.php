@@ -1,9 +1,9 @@
 <?php
 /**
- * Geeft een HTTP foutmelding naar de gebruiker
- * Overschrijft de <title> en headers
+ * HTTP error page
+ * Sends the correct HTTP header and displays an MessageBox with the error.
  *
- * @todo Overige HTTP errors toevoegen.
+ * @todo Add all known HTTP errors http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
  *
  * @package MVC
  */
@@ -11,20 +11,21 @@ namespace SledgeHammer;
 class HttpError extends Object implements View {
 
 	/**
-	 * Een HTTP Error Code, bijvoorbeeld 404
+	 * The HTTP ErrorCode (404, 500, etc)
 	 * @var int
 	 */
 	private $errorCode;
+	/**
+	 * @var array
+	 */
 	private $options;
 
 	/**
-	 * Maak een HTTP-error aan
-	 *
 	 * @param int $statusCode  HTTP Foutcode van de fout 404,403 enz
-	 * @param int $options  Array met optionele instellingen: array(
-	 *   'notice' => Geeft deze notice na het renderen.
-	 *   'warning' => Geeft deze warning na het renderen.
-	 *
+	 * @param array $options  [optional] Array with additional settings
+	 *   notice: Report a notice after render()
+	 *   warning: Report a warning after render()
+	 *   exception: Report an exception after render()
 	 */
 	function __construct($errorCode, $options = array()) {
 		$this->errorCode = $errorCode;
@@ -40,7 +41,7 @@ class HttpError extends Object implements View {
 	}
 
 	/**
-	 * Genereer een MessageBox met de foutmelding
+	 * Render a MessageBox with the error
 	 *
 	 * @return void
 	 */
@@ -59,6 +60,10 @@ class HttpError extends Object implements View {
 					} else {
 						call_user_func($function, $value);
 					}
+					break;
+
+				case 'exception':
+					ErrorHandler::handle_exception($value);
 					break;
 
 				default:
