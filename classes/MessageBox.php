@@ -5,20 +5,32 @@
  *
  * @package MVC
  */
+
 namespace SledgeHammer;
+
 class MessageBox extends Object implements View {
 
-	public
-		$icon,
-		$title,
-		$message;
+	/**
+	 * @var string
+	 */
+	private $icon;
 
 	/**
-	 * @param string $icon  Bestandsnaam van een Icoon
-	 * @param string $title  Ttitel van het bericht
-	 * @param string $message  Inhoud van het bericht
+	 * @var string
 	 */
-	function __construct($icon, $title, $message) { // [void]
+	private $title;
+
+	/**
+	 * @var string
+	 */
+	private $message;
+
+	/**
+	 * @param string $icon  warning|error|done or  url of the image
+	 * @param string $title
+	 * @param string $message
+	 */
+	function __construct($icon, $title, $message) {
 		if (in_array($icon, array('warning', 'error', 'done'))) {
 			$icon = WEBROOT.'mvc/icons/MessageBox/'.$icon.'.png';
 		}
@@ -39,12 +51,14 @@ class MessageBox extends Object implements View {
 	 * @return void
 	 */
 	function render() {
-		$template = new Template('MessageBox.html', array(
+		$template = new Template('MessageBox.php', array(
 			'icon' => $this->icon,
 			'title' => $this->title,
 			'message' => $this->message,
 		));
 		$template->render();
 	}
+
 }
+
 ?>
