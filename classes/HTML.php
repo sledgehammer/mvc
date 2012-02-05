@@ -78,7 +78,6 @@ class HTML extends Object implements View {
 			}
 		}
 		$element->html .= '</'.$name.'>';
-		dump($element);
 		return $element;
 	}
 
