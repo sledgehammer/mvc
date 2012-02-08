@@ -9,12 +9,6 @@ namespace SledgeHammer;
 class Template extends Object implements View {
 
 	/**
-	 *
-	 * @var array
-	 */
-	static $templateFolders = array();
-
-	/**
 	 * Bestandsnaam van de template (exclusief thema map)
 	 * @var string
 	 */
@@ -61,17 +55,25 @@ class Template extends Object implements View {
 	 * @return void
 	 */
 	function render() {
-		foreach (self::$templateFolders as $folder) {
+		static $templateFolders = null;
+		if ($templateFolders === null) {
+			$templateFolders = array();
+			$modules = Framework::getModules();
+			foreach ($modules as $module) {
+				$templateFolder = $module['path'].'templates/';
+				if (file_exists($templateFolder)) {
+					$templateFolders[] = $templateFolder;
+				}
+			}
+			$templateFolders = array_reverse($templateFolders);
+		}
+		foreach ($templateFolders as $folder) {
 			if (file_exists($folder.'/'.$this->template)) {
 				extract($this->variables);
 				return include($folder.'/'.$this->template);
 			}
 		}
 		warning('Template: "'.$this->template.'" not found', array('folders' => self::$templateFolders));
-	}
-
-	static function addTemplateFolder($path) {
-		array_unshift(self::$templateFolders, $path); // schuif het nieuwe thema vooraan
 	}
 
 	private function getSubviews($array) {
