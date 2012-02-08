@@ -47,7 +47,7 @@ class HttpError extends Object implements View {
 	 */
 	function render() {
 		$error = $this->getError();
-		$messageBox = new MessageBox($error['icon'], $error['title'], $error['message']."<br />\n".value($_SERVER['SERVER_SIGNATURE']));
+		$messageBox = new Template('HttpError.php', $error);
 		$messageBox->render();
 		foreach ($this->options as $option => $value) {
 			switch ((string) $option) {
