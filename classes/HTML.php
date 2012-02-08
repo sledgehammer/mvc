@@ -70,12 +70,12 @@ class HTML extends Object implements View {
 		}
 
 		$element->html .= '>';
-		if (is_string($contents)) {
-			$element->html .= $contents;
-		} else {
+		if (is_array($contents)) {
 			foreach ($contents as $sub_element) {
 				$element->html .= $sub_element;
 			}
+		} else {
+			$element->html .= $contents;
 		}
 		$element->html .= '</'.$name.'>';
 		return $element;

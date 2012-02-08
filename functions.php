@@ -55,7 +55,7 @@ namespace SledgeHammer {
 	 * @return string
 	 */
 	function export_view($component) {
-		if (SledgeHammer\is_valid_view($component)) {
+		if (is_valid_view($component)) {
 			ob_start();
 			$component->render();
 			return ob_get_clean();
