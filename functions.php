@@ -236,44 +236,5 @@ namespace SledgeHammer {
 		$cdata = str_replace(array('[', ']'), '.', $cdata);
 		return $cdata;
 	}
-
-	/**
-	 * Reports the error/exception to the ErrorHandler and returns the error in a Json view.
-	 * The javascript client should detect and report the error to the user:
-	 *   if (result.succes !== true) { alert(result.error); }
-	 *
-	 * @param string|Exception $error  The error message or Exception
-	 * @return Json
-	 */
-	function jsonError($error) {
-		if ($error instanceof \Exception) {
-			ErrorHandler::handle_exception($error);
-			$error = $error->getMessage();
-		} else {
-			warning('JsonError: '.$error);
-		}
-		return new Json(array(
-			'success' => false,
-			'error' => $error
-		));
-	}
-
-	/**
-	 * Short for "new Json(array('success' => true))"
-	 *
-	 * @param mixed $data [optional] Gegevens die naast de success worden meegestuurd.
-	 */
-	function jsonSuccess($data = null) {
-		if ($data === null) {
-			return new Json(array(
-				'success' => true)
-			);
-		}
-		return new Json(array(
-			'success' => true,
-			'data' => $data
-		));
-	}
-
 }
 ?>
