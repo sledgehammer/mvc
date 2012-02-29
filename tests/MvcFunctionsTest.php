@@ -6,7 +6,7 @@
  */
 namespace SledgeHammer;
 
-class MvcFunctionsTests extends TestCase {
+class MvcFunctionsTest extends TestCase {
 
 	function test_explode_xml_parmeters() {
 		// array( $tag => $expected_result
@@ -25,7 +25,7 @@ class MvcFunctionsTests extends TestCase {
 			)
 		);
 		foreach ($expectations as $tag => $expectation) {
-			$this->assertEqual($expectation, explode_xml_parameters($tag));
+			$this->assertEquals($expectation, explode_xml_parameters($tag));
 		}
 	}
 
