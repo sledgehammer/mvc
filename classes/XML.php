@@ -72,7 +72,7 @@ class XML extends Object implements Document {
 			$elements = current($data);
 		}
 		if ($charset === null) {
-			$charset = $GLOBALS['charset'];
+			$charset = Framework::$charset;
 		}
 		$xml = new \SimpleXMLElement('<?xml version="1.0" encoding="'.$charset.'"?><'.$root.' />');
 		self::addNodes($xml, $elements, $root);

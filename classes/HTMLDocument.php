@@ -40,7 +40,7 @@ class HTMLDocument extends Object implements Document {
 
 	function __construct($doctype = 'html') {
 		$this->doctype = $doctype;
-		$this->showStatusbar = $GLOBALS['ErrorHandler']->html; // Als er html error getoond mogen worden, toon dan ook de statusbalk.
+		$this->showStatusbar = Framework::$errorHandler->html; // Als er html error getoond mogen worden, toon dan ook de statusbalk.
 	}
 
 	/**
@@ -50,9 +50,9 @@ class HTMLDocument extends Object implements Document {
 	function getHeaders() {
 		$headers = array(
 			'http' => array(
-				'Content-Type' => 'text/html; charset='.strtolower($GLOBALS['charset']),
+				'Content-Type' => 'text/html; charset='.strtolower(Framework::$charset),
 			),
-			'charset' => $GLOBALS['charset'],
+			'charset' => Framework::$charset,
 			'htmlParameters' => array(),
 			'bodyParameters' => array(),
 		);
@@ -61,7 +61,7 @@ class HTMLDocument extends Object implements Document {
 			$headers['link']['favicon'] = array('rel' => 'shortcut icon', 'href' => WEBROOT.'favicon.ico', 'type' => 'image/x-icon');
 		}
 		// $headers['http']['Content-Type'] = 'application/xhtml+xml';
-		if ($GLOBALS['ErrorHandler']->html) {
+		if (Framework::$errorHandler->html) {
 			$headers['css']['debug'] = WEBROOT.'core/css/debug.css';
 		}
 		$this->headers = merge_headers($headers, $this->content);
@@ -124,8 +124,9 @@ class HTMLDocument extends Object implements Document {
 				if (is_int($identifier)) {
 					$identifier = $parameters['src'];
 				}
-				$GLOBALS['included_javascript'][$identifier] = true;
-				$variables['head'][] = '<script'.implode_xml_parameters(array('src' => $url, 'type' => 'text/javascript')).'></script>'; // <script> moet gesloten worden met </script> Geeft anders problemen in IE
+				ob_start();
+				javascript_once($url, $identifier);
+				$variables['head'][] = ob_get_clean();
 			}
 		}
 		$template = new Template('doctype/'.$this->doctype.'.php', $variables);

@@ -35,13 +35,15 @@ namespace {
 	 * @return void
 	 */
 	function javascript_once($src, $identifier = null) {
+		static $included = array();
+
 		if ($identifier === null) {
 			$identifier = $src;
 		}
-		if (isset($GLOBALS['included_javascript'][$identifier])) {
+		if (isset($included[$identifier])) {
 			return;
 		}
-		$GLOBALS['included_javascript'][$identifier] = true;
+		$included[$identifier] = true;
 		echo '<script type="text/javascript" src="'.$src.'"></script>'."\n";
 	}
 
@@ -92,7 +94,7 @@ namespace SledgeHammer {
 	function implode_xml_parameters($parameterArray, $charset = null) {
 		$xml = '';
 		if ($charset === null) {
-			$charset = $GLOBALS['charset'];
+			$charset = Framework::$charset;
 		}
 		foreach ($parameterArray as $key => $value) {
 			$xml .= ' '.$key.'="'.htmlentities($value, ENT_COMPAT, $charset).'"';

@@ -50,6 +50,11 @@ abstract class VirtualFolder extends Object implements Controller {
 	 */
 	private	$parent;
 
+	/**
+	 * @var VirtualFolder The current active VirtualFolder (Is used to detect the parent)
+	 */
+	private static $current;
+
 
 	function __construct() {
 		$methods = get_public_methods($this);
@@ -217,11 +222,11 @@ abstract class VirtualFolder extends Object implements Controller {
 		if ($foundPublicFolder) {
 			return new HttpError(404, array('notice' => array(
 				'HTTP[404] File "'.basename($relativePath).'" not found in "'.dirname($relativePath).'/"',
-				'VirtualFolder "'.get_class($GLOBALS['VirtualFolder']).'" doesn\'t handle the "'.basename($GLOBALS['VirtualFolder']->getPath(true)).'" folder'
+				'VirtualFolder "'.get_class(VirtualFolder::$current).'" doesn\'t handle the "'.basename(VirtualFolder::$current->getPath(true)).'" folder'
 			)));
 		}
 		// Gaat om een bestand in een virtualfolder
-		return new HttpError(404, array('notice' => 'HTTP[404] VirtualFolder "'.get_class($GLOBALS['VirtualFolder']).'" has no "'.basename($GLOBALS['VirtualFolder']->getPath(true)).'" folder'));
+		return new HttpError(404, array('notice' => 'HTTP[404] VirtualFolder "'.get_class(VirtualFolder::$current).'" has no "'.basename(VirtualFolder::$current->getPath(true)).'" folder'));
 	}
 
 	/**
@@ -249,11 +254,11 @@ abstract class VirtualFolder extends Object implements Controller {
 		if ($this->depth !== NULL) { // Is de diepte reeds ingesteld?
 			return;
 		}
-		if (isset($GLOBALS['VirtualFolder']) == false) { // Gaat het om de eerste VirtualFolder (Website)
+		if (isset(VirtualFolder::$current) == false) { // Gaat het om de eerste VirtualFolder (Website)
 			if (($this instanceof Website) == false) {
 				notice('VirtualFolder outside a Website object?');
 			}
-			$GLOBALS['VirtualFolder'] = &$this; // De globale pointer laten verwijzen naar deze 'virtuele map'
+			VirtualFolder::$current = &$this; // De globale pointer laten verwijzen naar deze 'virtuele map'
 			if (defined('SledgeHammer\WEBPATH')) {
 				$this->depth = preg_match_all('/[^\/]+\//', WEBPATH, $match);
 			} else {
@@ -261,8 +266,8 @@ abstract class VirtualFolder extends Object implements Controller {
 			}
 			return;
 		}
-		$this->parent = &$GLOBALS['VirtualFolder'];
-		$GLOBALS['VirtualFolder'] = &$this; // De globale pointer laten verwijzen naar deze 'virtuele map'
+		$this->parent = &VirtualFolder::$current;
+		VirtualFolder::$current = &$this; // De globale pointer laten verwijzen naar deze 'virtuele map'
 		$this->depth = $this->parent->depth + $this->parent->depthIncrement;
 	}
 }

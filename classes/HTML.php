@@ -107,7 +107,7 @@ class HTML extends Object implements View {
 	 * @return html
 	 */
 	static function escape($text) {
-		return htmlentities($text, ENT_COMPAT, $GLOBALS['charset']);
+		return htmlentities($text, ENT_COMPAT, Framework::$charset);
 	}
 
 }
