@@ -60,7 +60,7 @@ class HTML extends Object implements View {
 			return $element;
 		}
 		if ($contents === '') { // Close the tag?
-			if (in_array($name, array('img', 'meta', 'div'))) {
+			if (in_array($name, array('img', 'meta', 'link', 'param', 'input', 'br', 'hr', 'div'))) {
 				$element->html .= ' />';
 			} else {
 				$element->html .= '></'.$name.'>';
