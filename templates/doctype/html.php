@@ -6,7 +6,7 @@
 <html<?php echo $htmlParameters; ?>>
 <head>
 	<title><?php echo $title; ?></title>
-<?php 
+<?php
 foreach ($head as $html) {
 	echo "\t".$html."\n";
 }
@@ -20,7 +20,7 @@ foreach ($head as $html) {
 
 
 <div class="statusbar" id="statusbar">
-	<a href="javascript:document.getElementById('statusbar').style.display='none';" title="Hide statusbar" class="statusbar_hide" style="float:right;">&#10062;</a>
+	<a href="javascript:document.getElementById('statusbar').style.display='none';" title="Hide statusbar" class="statusbar_hide" style="float:right;">&times;</a>
 	<?php echo $GLOBALS['website']->statusbar(); ?>
 </div>
 <?php endif; ?>
