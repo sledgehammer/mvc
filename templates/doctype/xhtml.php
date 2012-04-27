@@ -21,7 +21,7 @@ foreach ($head as $html) {
 
 
 <div class="statusbar" id="statusbar">
-	<a href="javascript:document.getElementById('statusbar').style.display='none';" title="Hide statusbar" class="statusbar_hide" style="float:right;">&times;</a>
+	<a href="javascript:document.getElementById('statusbar').style.display='none';" class="statusbar-close">&times;</a>
 	<?php echo $GLOBALS['website']->statusbar(); ?>
 </div>
 <?php endif; ?>
