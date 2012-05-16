@@ -63,7 +63,7 @@ class HttpError extends Object implements View {
 					break;
 
 				case 'exception':
-					ErrorHandler::handle_exception($value);
+					report_exception($value);
 					break;
 
 				default:
