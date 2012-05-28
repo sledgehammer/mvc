@@ -4,7 +4,7 @@
  *
  * @package MVC
  */
-namespace SledgeHammer;
+namespace Sledgehammer;
 class IteratorView extends Object implements \Iterator, \Countable {
 
 	/**

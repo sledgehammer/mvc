@@ -1,12 +1,17 @@
 
-SledgeHammer MVC API
----------------------
+# Sledgehammer MVC
 
 MVC aka Model View Controller
 
 
-View
--------------------
+## Model
+
+These are the classes you'll write yourself.
+If your looking for database persistance for your models check out the Sledgehammer ORM module.
+
+
+## View
+
 De "View" wordt d.m.v. Views opgebouwd.
 Deze view objects zijn te vergelijken met een ASP.NET UserControl
 
@@ -15,9 +20,9 @@ En View class *mag* een getHeaders() functie bevatten, deze returnt informatie d
 Denk aan "HTTP headers", stylesheets en andere elementen voor in de <head>
 
 
-VirtualFolders (Controller)
-----------------------------
-In tegenstelling tot andere MVC frameworks, heeft SledgeHammer MVC geen direct routing mechanisme.
+## VirtualFolders (Controller)
+
+In tegenstelling tot andere MVC frameworks, heeft Sledgehammer MVC geen direct routing mechanisme.
 
 De controllers die gebruikt worden, wordt bepaald door de url.
 Als er meerdere mappen in een url zitten worden er meerdere VirtualFolders aangeroepen.
@@ -31,6 +36,7 @@ En deze zal dan de Content/Component voor de author.html genereren.
 Het website object breidt dit component vervolgens uit met een layout en menu.
 
 
+
 TODO:
 *_folder()
 en *() uitleggen.
@@ -39,8 +45,8 @@ De url "/" gaat naar het Website object en wordt als "index.html" behandeld en z
 
 Functies in een VirtualFolder kunnen
 
-Component->getHeaders()
-------------------------
+### Component->getHeaders()
+
 De getHeaders() functie geeft een array die de volgende keys kan bevatten.
 'http'  Dit is een array die met de header() verstuurd zullen worden.
 'meta'  Dit is een array die als <meta> tag(s) in de <head> wordt toegevoegd
@@ -48,14 +54,22 @@ De getHeaders() functie geeft een array die de volgende keys kan bevatten.
 'link'  Dit is een array die als <link> tag(s) in de <head> wordt toegevoegd
 'title' Dit is de <title> die in de <head> wordt gezet.
 
-Rollen
---------
+### Rollen
 
-= Website =
+#### Website
 Het volledig afhandelen van request.
 
 Versturen naar browser
 Opslaan op schijf
 
-= HtmlDocument =
+#### HtmlDocument
 De waardes van getHeaders() verwerken in de doctype template.
+
+## Installation
+
+Place the mvc folder in the same folder as Sledgehammer's core folder.
+
+To generate a scaffolding for an MVC project, run
+```
+php sledgehammer/utils/empty_project.php
+```

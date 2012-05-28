@@ -13,7 +13,7 @@ namespace {
 	 * but render($view) generates a notice when the $view issn't a View compatible object instead of an fatal error
 	 */
 	function render($view) {
-		if (SledgeHammer\is_valid_view($view)) {
+		if (Sledgehammer\is_valid_view($view)) {
 			$view->render();
 		}
 	}
@@ -48,7 +48,7 @@ namespace {
 	}
 
 }
-namespace SledgeHammer {
+namespace Sledgehammer {
 
 	/**
 	 * Geeft de uitvoer van een component als string.

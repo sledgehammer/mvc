@@ -1,11 +1,13 @@
 <?php
 /**
- * Add Headers to any View.
- * Makes it possible to add headers from a Controller without adding a headers to all View classes.
- *
+ * ViewHeaders
  * @package MVC
  */
-namespace SledgeHammer;
+namespace Sledgehammer;
+/*
+ * Add Headers to any View.
+ * Makes it possible to add headers from a Controller without adding a headers to all View classes.
+ */
 class ViewHeaders extends Object implements View {
 
 	/**

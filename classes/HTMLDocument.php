@@ -1,10 +1,12 @@
 <?php
 /**
- * The container for generating html pages.
- *
+ * HTMLDocument
  * @package MVC
  */
-namespace SledgeHammer;
+namespace Sledgehammer;
+/**
+ * The container for generating html pages.
+ */
 class HTMLDocument extends Object implements Document {
 
 	/**

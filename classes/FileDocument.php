@@ -1,11 +1,13 @@
 <?php
 /**
- * Een bestand op het bestandsysteem naar de client sturen.
- * De MVC variant van de render_file() functie.
- *
+ * FileDocument
  * @package MVC
  */
-namespace SledgeHammer;
+namespace Sledgehammer;
+/**
+ * Een bestand op het bestandsysteem naar de client sturen.
+ * De MVC variant van de render_file() functie.
+ */
 class FileDocument extends Object implements Document {
 
 	public
@@ -103,7 +105,7 @@ class FileDocument extends Object implements Document {
 /*
 	function render() {
 		if ($this->error) {
-			if ($this->error == 404) { // Bij een 404 error een notice geven. De 500's geven al een notice. 
+			if ($this->error == 404) { // Bij een 404 error een notice geven. De 500's geven al een notice.
 				notice('HTTP[404] File "'.URL::uri().'" not found');
 			} elseif ($this->error == 403) { // De 403 error wel loggen maar niet mailen.
 				error_log('HTTP[403] Directory listing for "'.URL::uri().'" not allowed');
@@ -111,7 +113,7 @@ class FileDocument extends Object implements Document {
 			$httpError = new HttpError($this->error);
 			$component = $httpError->execute();
 			$component->render();
-			return;	
+			return;
 		}
 		send_headers($this->headers);
 		if ($this->notModified) {
@@ -123,7 +125,7 @@ class FileDocument extends Object implements Document {
 
 	/**
 	 * @return bool
-	 */	
+	 */
 	function isDocument() {
 		if ($this->error) {
 			return false; // Als het bestand niet betaat, geeft dan een foutmelding in de layout van de website

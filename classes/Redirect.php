@@ -1,15 +1,19 @@
 <?php
 /**
+ * Redirect
+ * @package MVC
+ */
+namespace Sledgehammer;
+/**
  * The MVC alternative to the redirect() function.
+ *
+ * Usage: Return a Redirect object as view in your controller.
  *
  * Because redirect() function stops execution of the script, the flow of the MVC classes is interupted.
  * The Redirect class completes the MVC flow and send the headers via the Website->handleRequest()
  *
- * (Compatible with SledgeHammer\HttpServer)
- *
- * @package MVC
+ * (Compatible with Sledgehammer\HttpServer)
  */
-namespace SledgeHammer;
 class Redirect extends Object implements Document {
 
 	private $url;
@@ -34,7 +38,10 @@ class Redirect extends Object implements Document {
 	}
 
 	function render() {
-		// do nothing
+		// javascript fallback (headers already sent)
+		echo '<script type="text/javascript">window.location="'.addslashes($url).'";</script>';
+		// Meta refresh fallback
+		echo '<noscript><meta http-equiv="refresh" content="'.addslashes('0; url='.$url).'"></noscript>';
 	}
 }
 ?>

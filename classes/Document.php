@@ -1,11 +1,13 @@
 <?php
 /**
- * A Document is a standalone view, that can't be wrapped inside another view.
- * Example documents are: Json, FileDocument and HTMLDocument
- *
+ * Document
  * @package MVC
  */
-namespace SledgeHammer;
+namespace Sledgehammer;
+/**
+ * A Document is a standalone view, that can't be wrapped inside another view.
+ * Example documents are: Json, FileDocument, Image and HTMLDocument
+ */
 interface Document extends View {
 
 	/**

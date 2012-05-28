@@ -1,11 +1,13 @@
 <?php
 /**
- * Superclass for the Website classes.
- * DesignPatterns: FrontController, Command, Chain of Responsibility
- *
+ * Website
  * @package MVC
  */
-namespace SledgeHammer;
+namespace Sledgehammer;
+/**
+ * Superclass for the Website classes.
+ * DesignPatterns: FrontController, Command, Chain of Responsibility
+ */
 abstract class Website extends VirtualFolder {
 
 	function __construct() {
@@ -20,8 +22,8 @@ abstract class Website extends VirtualFolder {
 	 */
 	function handleRequest() {
 		$document = $this->generateDocument();
-		if (!defined('SledgeHammer\MICROTIME_EXECUTE')) {
-			define('SledgeHammer\MICROTIME_EXECUTE', microtime(true));
+		if (!defined('Sledgehammer\MICROTIME_EXECUTE')) {
+			define('Sledgehammer\MICROTIME_EXECUTE', microtime(true));
 		}
 		$headers = $document->getHeaders();
 		send_headers($headers['http']);

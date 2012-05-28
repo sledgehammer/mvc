@@ -4,7 +4,7 @@
  *
  * @package MVC
  */
-namespace SledgeHammer;
+namespace Sledgehammer;
 class ObjectView extends AbstractView {
 
 	protected $_object;

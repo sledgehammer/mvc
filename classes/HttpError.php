@@ -1,13 +1,15 @@
 <?php
 /**
- * HTTP error page
- * Sends the correct HTTP header and displays an MessageBox with the error.
- *
- * @todo Add all known HTTP errors http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
- *
+ * HttpError
  * @package MVC
  */
-namespace SledgeHammer;
+namespace Sledgehammer;
+/**
+ * HTTP error page
+ * Sends the correct HTTP header and displays an page with the error.
+ *
+ * @todo Add support for all known HTTP errors http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+ */
 class HttpError extends Object implements View {
 
 	/**

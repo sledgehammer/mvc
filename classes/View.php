@@ -1,10 +1,12 @@
 <?php
 /**
- * Interface for the views
- *
+ * View
  * @package MVC
  */
-namespace SledgeHammer;
+namespace Sledgehammer;
+/**
+ * Interface for the views, the V in MVC
+ */
 interface View {
 
 	/**

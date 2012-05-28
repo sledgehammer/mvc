@@ -1,16 +1,20 @@
 <?php
 /**
- *
+ * Controller
  * @package MVC
  */
-namespace SledgeHammer;
+namespace Sledgehammer;
+/**
+ * Interface for Controllers, the C in MVC.
+ */
 interface Controller {
 
 	/**
-	 * Build The up an view
+	 * Build and return a view object
 	 *
 	 * @return View
 	 */
 	function generateContent();
+
 }
 ?>

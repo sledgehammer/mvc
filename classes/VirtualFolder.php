@@ -1,14 +1,16 @@
 <?php
 /**
+ * VirtualFolder
+ * @package MVC
+ */
+namespace Sledgehammer;
+/**
  * Superclasse van de Virtuele mappen.
  *  Door VirtualFolder creer je eenvoudig virtuele mappen en virtuele bestanden.
  *  Hierdoor heb je vrijheid in de paden die je gebruikt om de pagina's aan te duiden. I.p.v. "page.php?id=17" maak je "pages/introductie.html"
  *  tevens kun je viruele mappen nesten (Een virtuele map in een virtuele map) hierdoor kan een een hele map hergebuiken en parameterizeren.
  * DesignPattern: Chain of Responsibility & Command
- *
- * @package MVC
  */
-namespace SledgeHammer;
 abstract class VirtualFolder extends Object implements Controller {
 
 	/**
@@ -259,7 +261,7 @@ abstract class VirtualFolder extends Object implements Controller {
 				notice('VirtualFolder outside a Website object?');
 			}
 			VirtualFolder::$current = &$this; // De globale pointer laten verwijzen naar deze 'virtuele map'
-			if (defined('SledgeHammer\WEBPATH')) {
+			if (defined('Sledgehammer\WEBPATH')) {
 				$this->depth = preg_match_all('/[^\/]+\//', WEBPATH, $match);
 			} else {
 				$this->depth = 0;

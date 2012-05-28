@@ -4,7 +4,7 @@
  *
  * @package MVC
  */
-namespace SledgeHammer;
+namespace Sledgehammer;
 abstract class AbstractView extends Object implements \ArrayAccess, \Iterator {
 
 	protected

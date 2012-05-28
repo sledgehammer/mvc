@@ -1,23 +1,25 @@
 <?php
 /**
- * VirtualFolder for basic CRUD operations on a Repository model
- * @todo Support for XML format
- *
+ * CrudController
  * @package MVC
  */
-namespace SledgeHammer;
+namespace Sledgehammer;
+/**
+ * VirtualFolder for basic CRUD operations on a Repository model
+ * @todo Support for XML format
+ */
 class CrudFolder extends VirtualFolder {
-	
+
 	public
-		$requireDataOnSave = 1; // int Controleer bij de create() & update() of er $_POST data is verstuurd.  
-		
-	protected 
+		$requireDataOnSave = 1; // int Controleer bij de create() & update() of er $_POST data is verstuurd.
+
+	protected
 		$model,
 		$repository = 'default',
-		$primaryKey = 'id', // @var string $id  Wordt gebruik om te id uit de $_REQUEST te halen.  $idValue = $_POST[$this->id] 
+		$primaryKey = 'id', // @var string $id  Wordt gebruik om te id uit de $_REQUEST te halen.  $idValue = $_POST[$this->id]
 		$maxRecursion = 0;
 	/**
-	 * 
+	 *
 	 * @param Record $record in static mode
 	 * @param array options  array('repository' => 'twitter', 'primaryKey' => 'customer_id')
 	 */
@@ -37,14 +39,14 @@ class CrudFolder extends VirtualFolder {
 			return jsonError($e);
 		}
 	}
-	
+
 	function index($format) {
 		$repo = getRepository($this->repository);
 		$all = $repo->all($this->model);
 		$data = $this->extract($all, $this->maxRecursion + 1);
 		return $this->format($data, $format);
 	}
-	
+
 	function dynamicFilename($filename) {
 		$format = file_extension($filename, $id);
 		if ($id === 'list') {
@@ -53,14 +55,14 @@ class CrudFolder extends VirtualFolder {
 
 		$repo = getRepository($this->repository);
 		$instance = $repo->get($this->model, $id);
-		
+
 		$data = $this->extract($instance, $this->maxRecursion);
 		return $this->format($data, $format);
 	}
 
 	/**
 	 * Stuur de gegevens van het record naar de client
-	 * 
+	 *
 	 * @throws Exception on failure
 	 * @return Json
 	 */
@@ -73,8 +75,8 @@ class CrudFolder extends VirtualFolder {
 			$this->model => $data
 		));
 	}
-	
-	/** 
+
+	/**
 	 * @throws Exception on failure
 	 * @return Json
 	 */
@@ -87,8 +89,8 @@ class CrudFolder extends VirtualFolder {
 			'success' => true,
 		));
 	}
-	
-	/** 
+
+	/**
 	 * @throws Exception on failure
 	 * @return Json
 	 */
@@ -101,7 +103,7 @@ class CrudFolder extends VirtualFolder {
 			$this->primaryKey => $instance->{$this->primaryKey}
 		));
 	}
-	
+
 	/**
 	 * Aan de hand van de id bepalen of er een record toegevoegd of bijgewerkt moet worden.
 	 *
@@ -119,10 +121,10 @@ class CrudFolder extends VirtualFolder {
 			return $this->update();
 		}
 	}
-	
+
 	/**
 	 * De record verwijderen
-	 * 
+	 *
 	 * @throws Exception on failure
 	 * @return Json
 	 */
@@ -132,11 +134,11 @@ class CrudFolder extends VirtualFolder {
 		//throw new Exception('Verwijderen van '.$this->subject.' #'.$_POST[$this->primarykey].' is mislukt');
 		return new Json(array(
 			'success' => true
-		));		
+		));
 	}
-	
+
 	/**
-	 * @todo $_POST data filteren zodat eventuele $_POST elementen geen fouten geven set_object_vars() 
+	 * @todo $_POST data filteren zodat eventuele $_POST elementen geen fouten geven set_object_vars()
 	 * @return array
 	 */
 	protected function getNewValues() {
@@ -148,10 +150,10 @@ class CrudFolder extends VirtualFolder {
 		}
 		return $_POST;
 	}
-	
+
 	/**
 	 * Extract the raw properties from a instance
-	 * @param mixed $instance 
+	 * @param mixed $instance
 	 * @return array
 	 */
 	protected function extract($instance, $maxDepth) {
@@ -165,9 +167,9 @@ class CrudFolder extends VirtualFolder {
 				$data[$property] = $value;
 			}
 		}
-		return $data;	
+		return $data;
 	}
-	
+
 	protected function format($data, $format) {
 		if ($format === 'xml') {
 			return new XML(XML::build(array($this->model => $data)));

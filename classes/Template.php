@@ -1,11 +1,14 @@
 <?php
 /**
+ * Template
+ * @package MVC
+ */
+namespace Sledgehammer;
+/**
  * Een component voor het weergeven van php-templates.
  * De templates zijn standaard php. er wordt geen gebruik gemaakt van een tempate engine zoals bv Smarty.
  *
- * @package MVC
  */
-namespace SledgeHammer;
 class Template extends Object implements View {
 
 	/**

@@ -1,10 +1,12 @@
 <?php
 /**
- * Een component voor het weergeven van de google analytics tracker js code
- *
+ * GoogleAnalytics
  * @package MVC
  */
-namespace SledgeHammer;
+namespace Sledgehammer;
+/**
+ * Een component voor het weergeven van de google analytics tracker js code
+ */
 class GoogleAnalytics extends Object implements View {
 
 	public
