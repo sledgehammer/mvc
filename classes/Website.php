@@ -22,8 +22,8 @@ abstract class Website extends VirtualFolder {
 	 */
 	function handleRequest() {
 		$document = $this->generateDocument();
-		if (!defined('Sledgehammer\MICROTIME_EXECUTE')) {
-			define('Sledgehammer\MICROTIME_EXECUTE', microtime(true));
+		if (!defined('Sledgehammer\GENERATED')) {
+			define('Sledgehammer\GENERATED', microtime(true));
 		}
 		$headers = $document->getHeaders();
 		send_headers($headers['http']);
