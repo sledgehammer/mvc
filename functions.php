@@ -54,21 +54,29 @@ namespace Sledgehammer {
 	 * Geeft de uitvoer van een component als string.
 	 * (Uitvoer zoals emails en header() worden niet afgevangen)
 	 *
+	 * @param View $view
 	 * @return string
 	 */
-	function export_view($component) {
-		if (is_valid_view($component)) {
-			ob_start();
-			$component->render();
-			return ob_get_clean();
+	function view_to_string($view) {
+		if (is_valid_view($view) === false) {
+			return false;
 		}
+		ob_start();
+		try {
+			$view->render();
+		} catch (\Exception $e) {
+			$output = ob_get_clean();
+			report_exception($e);
+			return $output;
+		}
+		return ob_get_clean();
 	}
 
 	/**
 	 * Check if $component is compatible with the View interface, otherwise report notices
 	 *
-	 * @param View $variable
-	 * @return $bool
+	 * @param View $view
+	 * @return bool
 	 */
 	function is_valid_view(&$view = '__UNDEFINED__') {
 		if (is_view($view)) {

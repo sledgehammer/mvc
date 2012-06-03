@@ -73,3 +73,26 @@ To generate a scaffolding for an MVC project, run
 ```
 php sledgehammer/utils/empty_project.php
 ```
+
+## Twitter Bootstrap
+
+Contrains all the css & javascript from: http://twitter.github.com/bootstrap/ and adds Sledgehammer\View classes.
+
+```
+$pagination = new Pagination(5, 1);
+```
+
+Becomes:
+
+```
+<div class="pagination">
+	<ul>
+		<li class="disabled"><a href="#">«</a></li>
+		<li class="active"><a href="?page=1">1</a></li>
+		<li><a href="?page=2">2</a></li>
+		<li><a href="?page=3">3</a></li>
+		<li><a href="?page=4">4</a></li>
+		<li><a href="?page=5">»</a></li>
+	</ul>
+<div>
+```
