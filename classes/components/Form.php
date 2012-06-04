@@ -62,9 +62,9 @@ class Form extends Object implements View, Import {
 		}
 		$data = array();
 		foreach ($this->fields as $key => $field) {
-			$data[] = $field->import($fieldError, $request);
+			$data[$field->name] = $field->import($fieldError, $request);
 			if ($fieldError) {
-				$error[$fieldError] = $fieldError;
+				$error[$field->name] = $fieldError;
 			}
 		}
 		if (count($error)) {

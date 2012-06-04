@@ -48,7 +48,7 @@ class FormTest extends TestCase {
 			)
 		));
 		$data = $form->import($error, array('field1' => 'value1'));
-		// @todo assertions
+		$this->assertEquals(array('field1' => 'value1'), $data);
 	}
 
 }
