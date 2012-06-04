@@ -8,7 +8,7 @@ namespace Sledgehammer;
  *
  * @package MVC
  */
-class Breadcrumbs extends BootstrapView {
+class Breadcrumbs extends Object implements View {
 
 	protected $active = null;
 	protected $divider = '/';
@@ -18,6 +18,13 @@ class Breadcrumbs extends BootstrapView {
 	 */
 	protected $crumbs = array();
 
+	/**
+	 * Attributes for the html element.
+	 * @var array
+	 */
+	protected $attributes = array(
+		'class' => 'breadcrumb'
+	);
 
 	/**
 	 * Constructor
