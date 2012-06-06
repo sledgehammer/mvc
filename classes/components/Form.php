@@ -10,9 +10,24 @@ namespace Sledgehammer;
 class Form extends Object implements View, Import {
 
 	/**
+	 * @var string
+	 */
+	protected $legend;
+
+	/**
 	 * @var array
 	 */
-	public $fields;
+	protected $fields = array();
+
+	/**
+	 * @var array
+	 */
+	protected $actions = array();
+
+	/**
+	 * @var bool
+	 */
+	protected $fieldset = true;
 
 	/**
 	 * @var array
@@ -33,9 +48,6 @@ class Form extends Object implements View, Import {
 			} else {
 				$this->attributes[$option] = $value;
 			}
-		}
-		if (empty($this->attributes['action'])) {
-			$this->attributes['action'] = URL::getCurrentURL();
 		}
 	}
 
@@ -85,8 +97,16 @@ class Form extends Object implements View, Import {
 		} else {
 			$renderControlGroups = false;
 		}
+		if ($this->fieldset) {
+			echo "<fieldset>\n";
+			if ($this->legend !== null) {
+				echo "\t<legend>", HTML::escape($this->legend), "</legend>\n";
+			}
+		}
 
+		// Render form fields
 		foreach ($this->fields as $label => $field) {
+			echo "\t";
 			if ($renderControlGroups) {
 				echo '<div class="control-group">';
 				if (is_int($label) === false) {
@@ -94,14 +114,34 @@ class Form extends Object implements View, Import {
 				}
 				echo '<div class="controls">';
 				render($field);
-				echo "</div></div>\n";
+				echo "</div></div>";
 			} else {
 				if (is_int($label) === false) {
 					echo '<label>', HTML::escape($label), '</label>';
 				}
 				render($field);
-				echo "\n";
 			}
+			echo "\n";
+		}
+
+		// Render form actions
+		if (count($this->actions) !== 0) {
+			echo '<div class="form-actions">';
+			foreach ($this->actions as $name => $action) {
+				if (is_string($name)) {
+					if (is_array($action) === false) {
+						$action = array(
+							'label' => $action
+						);
+					}
+					$action['name'] = $name;
+				}
+				echo new Button($action);
+			}
+			echo '</div>';
+		}
+		if ($this->fieldset) {
+			echo "</fieldset>\n";
 		}
 	}
 

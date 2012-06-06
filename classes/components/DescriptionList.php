@@ -6,6 +6,8 @@ namespace Sledgehammer;
 /**
  * A Description list <dl><dt><dd></dl>
  *
+ * Tip: Use 'class' => 'dl-horizontal' for a different layout
+ *
  * @package MVC
  */
 class DescriptionList extends Object implements View {

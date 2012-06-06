@@ -41,23 +41,27 @@ abstract class VirtualFolder extends Object implements Controller {
 	/**
 	 * Bepaald of deze VirtualFolder bestandsnamen zonder extenties accepteerd.
 	 * Als deze niet geaccepteerd worden(false), zal de bestandsnaam (via een redirect) omgezet worden naar een mapnaam.
-	 *
 	 * @var bool
 	 */
 	protected $handle_filenames_without_extension = false;
 
 	/**
-	 *
-	 * @var VirtualFolder $parent  Deze virtuele map is een submap van ...
+	 * Deze virtuele map is een submap van ...
+	 * @var VirtualFolder
 	 */
 	private	$parent;
 
 	/**
-	 * @var VirtualFolder The current active VirtualFolder (Is used to detect the parent)
+	 * The current active VirtualFolder (Is used to detect the parent)
+	 * @access private
+	 * @var VirtualFolder
 	 */
-	private static $current;
+	public static $current;
 
 
+	/**
+	 * Constructor
+	 */
 	function __construct() {
 		$methods = get_public_methods($this);
 		foreach ($methods as $index => $method) {
