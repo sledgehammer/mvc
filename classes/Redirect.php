@@ -1,7 +1,6 @@
 <?php
 /**
  * Redirect
- * @package MVC
  */
 namespace Sledgehammer;
 /**
@@ -13,6 +12,8 @@ namespace Sledgehammer;
  * The Redirect class completes the MVC flow and send the headers via the Website->handleRequest()
  *
  * (Compatible with Sledgehammer\HttpServer)
+ *
+ *  @package MVC
  */
 class Redirect extends Object implements Document {
 
@@ -27,7 +28,7 @@ class Redirect extends Object implements Document {
 	function getHeaders() {
 		return array(
 			'http' => array(
-				'Status' => ($this->permanently ? '301 Moved Permanently': '302 Found'),
+				'Status' => ($this->permanently ? '301 Moved Permanently' : '302 Found'),
 				'Location' => $this->url
 			)
 		);
@@ -39,9 +40,16 @@ class Redirect extends Object implements Document {
 
 	function render() {
 		// javascript fallback (headers already sent)
-		echo '<script type="text/javascript">window.location="'.addslashes($url).'";</script>';
+		// Javascript fallback
+		echo '<script type="text/javascript">window.location='.json_encode((string) $this->url).';</script>';
+		echo '<noscript>';
 		// Meta refresh fallback
-		echo '<noscript><meta http-equiv="refresh" content="'.addslashes('0; url='.$url).'"></noscript>';
+		echo '<meta http-equiv="refresh" content="0; url='.htmlentities($this->url, ENT_QUOTES).'">';
+		// Show a link
+		echo '<a href="'.htmlentities($this->url, ENT_QUOTES).'">Continue</a>';
+		echo '</noscript>';
 	}
+
 }
+
 ?>
