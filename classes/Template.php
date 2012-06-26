@@ -70,13 +70,19 @@ class Template extends Object implements View {
 			}
 			$templateFolders = array_reverse($templateFolders);
 		}
+		// Search templates/ folders.
 		foreach ($templateFolders as $folder) {
 			if (file_exists($folder.'/'.$this->template)) {
 				extract($this->variables);
 				return include($folder.'/'.$this->template);
 			}
 		}
-		warning('Template: "'.$this->template.'" not found', array('folders' => self::$templateFolders));
+		// Absolute path?
+		if (file_exists($this->template)) {
+			extract($this->variables);
+			return include($this->template);
+		}
+		warning('Template: "'.$this->template.'" not found', array('folders' => $templateFolders));
 	}
 
 	private function getSubviews($array) {
