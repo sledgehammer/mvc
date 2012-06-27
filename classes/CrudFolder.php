@@ -1,12 +1,13 @@
 <?php
 /**
- * CrudController
- * @package MVC
+ * CrudFolder
  */
 namespace Sledgehammer;
 /**
  * VirtualFolder for basic CRUD operations on a Repository model
  * @todo Support for XML format
+ *
+ * @package MVC
  */
 class CrudFolder extends VirtualFolder {
 

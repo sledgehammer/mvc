@@ -13,6 +13,8 @@ namespace Sledgehammer;
  * } else {
  *  // do something
  * }
+ *
+ * @package MVC
  */
 interface Import {
 

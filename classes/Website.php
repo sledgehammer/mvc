@@ -1,12 +1,13 @@
 <?php
 /**
  * Website
- * @package MVC
  */
 namespace Sledgehammer;
 /**
  * Superclass for the Website classes.
  * DesignPatterns: FrontController, Command, Chain of Responsibility
+ *
+ * @package MVC
  */
 abstract class Website extends VirtualFolder {
 

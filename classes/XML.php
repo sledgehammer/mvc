@@ -1,11 +1,12 @@
 <?php
 /**
  * XML
- * @package MVC
  */
 namespace Sledgehammer;
 /**
  * Render XML output
+ *
+ * @package MVC
  */
 class XML extends Object implements Document {
 

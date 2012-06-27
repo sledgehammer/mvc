@@ -1,11 +1,12 @@
 <?php
 /**
  * Controller
- * @package MVC
  */
 namespace Sledgehammer;
 /**
  * Interface for Controllers, the C in MVC.
+ *
+ * @package MVC
  */
 interface Controller {
 

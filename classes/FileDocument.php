@@ -1,12 +1,13 @@
 <?php
 /**
  * FileDocument
- * @package MVC
  */
 namespace Sledgehammer;
 /**
  * Een bestand op het bestandsysteem naar de client sturen.
  * De MVC variant van de render_file() functie.
+ *
+ * @package MVC
  */
 class FileDocument extends Object implements Document {
 

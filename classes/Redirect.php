@@ -13,7 +13,7 @@ namespace Sledgehammer;
  *
  * (Compatible with Sledgehammer\HttpServer)
  *
- *  @package MVC
+ * @package MVC
  */
 class Redirect extends Object implements Document {
 

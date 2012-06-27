@@ -1,7 +1,6 @@
 <?php
 /**
  * VirtualFolder
- * @package MVC
  */
 namespace Sledgehammer;
 /**
@@ -10,6 +9,8 @@ namespace Sledgehammer;
  *  Hierdoor heb je vrijheid in de paden die je gebruikt om de pagina's aan te duiden. I.p.v. "page.php?id=17" maak je "pages/introductie.html"
  *  tevens kun je viruele mappen nesten (Een virtuele map in een virtuele map) hierdoor kan een een hele map hergebuiken en parameterizeren.
  * DesignPattern: Chain of Responsibility & Command
+ *
+ * @package MVC
  */
 abstract class VirtualFolder extends Object implements Controller {
 

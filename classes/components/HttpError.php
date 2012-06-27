@@ -1,7 +1,6 @@
 <?php
 /**
  * HttpError
- * @package MVC
  */
 namespace Sledgehammer;
 /**
@@ -9,6 +8,7 @@ namespace Sledgehammer;
  * Sends the correct HTTP header and displays an page with the error.
  *
  * @todo Add support for all known HTTP errors http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+ * @package MVC
  */
 class HttpError extends Object implements View {
 

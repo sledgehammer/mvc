@@ -1,11 +1,12 @@
 <?php
 /**
  * HttpProxy
- * @package MVC
  */
 namespace Sledgehammer;
 /**
  * Load the contents and http-headers of the url and use them as a remote FileDocument
+ *
+ * @package MVC
  */
 class HttpProxy extends Object implements View {
 

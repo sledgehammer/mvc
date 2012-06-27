@@ -1,12 +1,11 @@
 <?php
 /**
- * Global function of the MVC module
+ * Global function of the MVC module.
  *
  * @package MVC
  */
-
+// Functions that are available everywhere (global namespace)
 namespace {
-	// global namespace (zodat deze functies direct in een template gebruikt kunnen worden)
 
 	/**
 	 * render($view) is an alias to $view->render()
@@ -48,6 +47,7 @@ namespace {
 	}
 
 }
+// Global functions inside the Sledgehammer namespace
 namespace Sledgehammer {
 
 	/**
@@ -246,5 +246,6 @@ namespace Sledgehammer {
 		$cdata = str_replace(array('[', ']'), '.', $cdata);
 		return $cdata;
 	}
+
 }
 ?>

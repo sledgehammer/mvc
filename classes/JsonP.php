@@ -1,11 +1,12 @@
 <?php
 /**
  * JsonP
- * @package MVC
  */
 namespace Sledgehammer;
 /**
  * Renders the data as in a Jsonp wrapper
+ *
+ * @package MVC
  */
 class JsonP extends Json {
 
