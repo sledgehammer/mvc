@@ -43,7 +43,7 @@ class HttpError extends Object implements View {
 	}
 
 	/**
-	 * Render a MessageBox with the error
+	 * Render an error page.
 	 *
 	 * @return void
 	 */
