@@ -17,6 +17,12 @@ class HTMLDocument extends Object implements Document {
 	public $doctype;
 
 	/**
+	 * The value of the "ContentType: " header.
+	 * Set to "application/xhtml+xml" for XHTML
+	 */
+	public $contentType = 'text/html';
+
+	/**
 	 * @var View
 	 */
 	public $content;
@@ -43,6 +49,7 @@ class HTMLDocument extends Object implements Document {
 
 	function __construct($doctype = 'html') {
 		$this->doctype = $doctype;
+		$this->contentType = 'text/html; charset='.strtolower(Framework::$charset);
 		$this->showStatusbar = Framework::$errorHandler->html; // Als er html error getoond mogen worden, toon dan ook de statusbalk.
 	}
 
@@ -51,9 +58,10 @@ class HTMLDocument extends Object implements Document {
 	 * @return array
 	 */
 	function getHeaders() {
+
 		$headers = array(
 			'http' => array(
-				'Content-Type' => 'text/html; charset='.strtolower(Framework::$charset),
+				'Content-Type' => $this->contentType,
 			),
 			'charset' => Framework::$charset,
 			'htmlParameters' => array(),
