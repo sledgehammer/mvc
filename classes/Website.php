@@ -17,17 +17,26 @@ abstract class Website extends VirtualFolder {
 	}
 
 	/**
-	 * Send a Response based on the Request
+	 * Send a response based on the request.
 	 *
 	 * @return void
 	 */
 	function handleRequest() {
+		// Build document
 		$document = $this->generateDocument();
 		if (!defined('Sledgehammer\GENERATED')) {
 			define('Sledgehammer\GENERATED', microtime(true));
 		}
+		// Send headers
 		$headers = $document->getHeaders();
 		send_headers($headers['http']);
+		// Send the sledgehammer-statusbar as DebugR header.
+		if (DebugR::isEnabled()) {
+			ob_start();
+			statusbar();
+			DebugR::send('sledgehammer-statusbar', ob_get_clean(), true);
+		}
+		// Send the contents
 		$document->render();
 	}
 
