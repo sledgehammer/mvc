@@ -18,7 +18,7 @@
 				popout.appendChild(div);
 			}
 	}, false);
-	document.documentElement.setAttribute('data-debugR'); // Signal the extension that the eventlistener is active.
+	document.documentElement.setAttribute('data-debugR', 'active'); // Signal the extension that the eventlistener is active.
 	})();
 	</script>
 </div>
