@@ -15,6 +15,9 @@ class HttpProxy extends Object implements View {
 	private $contents;
 
 	function __construct($url) {
+		if (substr($url, 0, 7) !== 'http://' && substr($url, 0, 8) !== 'https://') {
+			throw new \Exception('Not a valid url');
+		}
 		$this->contents = file_get_contents($url);
 		if ($this->contents !== false) {
 			// Parse the headers that came with the file_get_contents() call.
@@ -28,8 +31,12 @@ class HttpProxy extends Object implements View {
 				$name = substr($header, 0, $pos);
 				$this->headers[$name] = ltrim(substr($header, $pos + 1));
 			}
-		} else {
+			if (count($this->headers) === 0) {
+				throw new \Exception('No HTTP headers');
+			}
+		} else { // An error occurred
 			if (isset($http_response_header)) {
+				// Forward the http error status
 				foreach ($http_response_header as $header) {
 					if (preg_match('/^HTTP\/1.[01](.+)$/', $header, $match)) {
 						$status = intval($match[1]);
