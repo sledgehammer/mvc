@@ -1,6 +1,6 @@
 <div class="statusbar">
 	<a href="#" onclick="this.parentNode.style.display='none';return false" class="statusbar-close">&times;</a>
-	<?php $GLOBALS['website']->statusbar(); ?><span class="statusbar-divider">, </span><span id="statusbar-debugr" class="statusbar-tab"><a href="http://debugr.net/" target="_blank">debugR</a></span>
+	<?php \Sledgehammer\statusbar(); ?><span class="statusbar-divider">, </span><span id="statusbar-debugr" class="statusbar-tab"><a href="http://debugr.net/" target="_blank">debugR</a></span>
 	<script type="text/javascript">
 	(function () {
 		var counter = 0;

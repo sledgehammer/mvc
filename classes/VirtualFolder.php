@@ -207,7 +207,7 @@ abstract class VirtualFolder extends Object implements Controller {
 		} else {
 			$folder = dirname($relativePath).'/';
 		}
-		$publicFolder = array(PATH.'application/public'.$folder);
+		$publicFolder = array(APP_DIR.'/public'.$folder);
 		$folders = explode('/', substr($folder, 1, -1));
 		if (count($folders) != 0) {
 			$module = $folders[0];

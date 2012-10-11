@@ -13,7 +13,7 @@ abstract class Website extends VirtualFolder {
 
 	function __construct() {
 		parent::__construct();
-		$this->publicMethods = array_diff($this->publicMethods, array('handleRequest', 'generateDocument', 'statusbar',  'initLanguage', 'isWrapable')); // Een aantal functies *niet* public maken
+		$this->publicMethods = array_diff($this->publicMethods, array('handleRequest', 'generateDocument', 'statusbar', 'initLanguage', 'isWrapable')); // Een aantal functies *niet* public maken
 	}
 
 	/**
@@ -53,7 +53,7 @@ abstract class Website extends VirtualFolder {
 		}
 		$isDocument = false;
 		if (method_exists($content, 'isDocument')) {
-			$isDocument =  $content->isDocument();
+			$isDocument = $content->isDocument();
 		}
 		if ($isDocument) {
 			return $content;
@@ -69,14 +69,6 @@ abstract class Website extends VirtualFolder {
 	 * @return View
 	 */
 	abstract protected function wrapContent($content);
-
-
-	/**
-	 * Render debugging information.
-	 * Allow subclasses to render custom statusbar info.
-	 */
-	function statusbar() {
-		statusbar();
-	}
 }
+
 ?>
