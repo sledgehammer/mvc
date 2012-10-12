@@ -1,7 +1,8 @@
 {
 	"name": "sledgehammer/mvc",
-	"type": "sledgehammer-module",
-	"description": "Model View Controller architecture.",
+	"description": "Sledgehammer MVC module: Provides a Model View Controller architecture",
+	"type": "library",
+	"license": "CC-BY-SA-3.0",
 	"require": {
 		"sledgehammer/core": "*"
 	},
