@@ -1,6 +1,6 @@
 <?php
 /**
- * HTMLDocument
+ * HtmlDocument
  */
 namespace Sledgehammer;
 /**
@@ -8,7 +8,7 @@ namespace Sledgehammer;
  *
  * @package MVC
  */
-class HTMLDocument extends Object implements Document {
+class HtmlDocument extends Object implements Document {
 
 	/**
 	 * Bepaald de template die door de HTMLDocument wordt gebruikt. xhtml, html of ajax

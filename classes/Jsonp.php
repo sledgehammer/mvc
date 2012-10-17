@@ -1,6 +1,6 @@
 <?php
 /**
- * JsonP
+ * Jsonp
  */
 namespace Sledgehammer;
 /**
@@ -8,7 +8,7 @@ namespace Sledgehammer;
  *
  * @package MVC
  */
-class JsonP extends Json {
+class Jsonp extends Json {
 
 	/**
 	 * @var string  The (javascript)function call for the jsonp response.

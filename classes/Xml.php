@@ -1,6 +1,6 @@
 <?php
 /**
- * XML
+ * Xml
  */
 namespace Sledgehammer;
 /**
@@ -8,7 +8,7 @@ namespace Sledgehammer;
  *
  * @package MVC
  */
-class XML extends Object implements Document {
+class Xml extends Object implements Document {
 
 	/**
 	 * @var SimpleXMLElement|DOMDocument|array|string
