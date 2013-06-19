@@ -8,7 +8,7 @@ namespace Sledgehammer;
  *
  * @package MVC
  */
-class Breadcrumbs extends Object implements View {
+class Breadcrumbs extends HtmlElement {
 
 	public $active = null;
 	public $divider = '/';
