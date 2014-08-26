@@ -1,7 +1,8 @@
 <?php
 /**
- * Doctype for an content part that will be loaded via AJAX / jQuery.load()
- * Aka use a HTMLDocument but (incl. headers) maar zonder de <html> <head> en <body> tags
+ * Partial content.
+ *
+ * Doesn't include html, head and body tags, just the contents.
+ * HtmlDocument is only used for setting the 'Content-Type'.
  */ 
-render($body); 
-?>
+render($body);
