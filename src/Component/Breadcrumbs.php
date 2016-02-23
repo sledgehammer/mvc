@@ -2,7 +2,7 @@
 /**
  * Breadcrumb
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Mvc;
 /**
  * Breadcrumb Navigation
  *

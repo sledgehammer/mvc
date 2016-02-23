@@ -4,7 +4,7 @@
  *
  * @package MVC
  */
-namespace Sledgehammer;
+namespace SledgehammerTests\Mvc;
 
 class MvcFunctionsTest extends TestCase {
 

@@ -2,7 +2,7 @@
 /**
  * Button
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Mvc;
 /**
  * A button (btn) element.
  *

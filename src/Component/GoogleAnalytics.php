@@ -2,7 +2,7 @@
 /**
  * GoogleAnalytics
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Mvc;
 /**
  * Een component voor het weergeven van de google analytics tracker js code
  *

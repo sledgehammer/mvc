@@ -2,7 +2,7 @@
 /**
  * FileDocument
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Mvc;
 /**
  * Een bestand op het bestandsysteem naar de client sturen.
  * De MVC variant van de render_file() functie.

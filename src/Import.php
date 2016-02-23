@@ -2,7 +2,7 @@
 /**
  * Import
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Mvc;
 /**
  * Iterface for importing request data.
  *

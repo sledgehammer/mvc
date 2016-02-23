@@ -2,7 +2,7 @@
 /**
  * ViewHeaders
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Mvc;
 /**
  * Add Headers to any View.
  * Makes it possible to add headers from a Controller without adding a headers to all View classes.

@@ -1,5 +1,5 @@
 <?php
-namespace Sledgehammer;
+namespace SledgehammerTests\Mvc;
 /**
  * PaginationTests
  */

@@ -2,7 +2,7 @@
 /**
  * Website
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Mvc;
 /**
  * Superclass for the Website classes.
  * DesignPatterns: FrontController, Command, Chain of Responsibility

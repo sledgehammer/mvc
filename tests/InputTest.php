@@ -2,7 +2,7 @@
 /**
  * InputTest
  */
-namespace Sledgehammer;
+namespace SledgehammerTests\Mvc;
 /**
  * Unittest for the Input class
  * @package MVC

@@ -2,7 +2,7 @@
 /**
  * CrudFolder
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Mvc;
 /**
  * VirtualFolder for basic CRUD operations on a Repository model
  * @todo Support for XML format

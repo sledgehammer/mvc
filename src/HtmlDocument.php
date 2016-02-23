@@ -2,7 +2,7 @@
 /**
  * HtmlDocument
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Mvc;
 /**
  * The container for generating html pages.
  *

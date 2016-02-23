@@ -2,7 +2,7 @@
 /**
  * Dialog
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Mvc;
 /**
  * A dialog popup with where selected choice is posted back the server.
  * Compatible with Bootrap 3 `.modal-dialog`

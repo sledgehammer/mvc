@@ -2,7 +2,7 @@
 /**
  * Nav
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Mvc;
 /**
  * Nav, tabs, and pills Highly customizable list-style navigation.
  *

@@ -2,7 +2,7 @@
 /**
  * Controller
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Mvc;
 /**
  * Interface for Controllers, the C in MVC.
  *

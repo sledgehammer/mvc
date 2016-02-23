@@ -2,7 +2,7 @@
 /**
  * DescriptionList
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Mvc;
 /**
  * A Description list <dl><dt><dd></dl>
  *

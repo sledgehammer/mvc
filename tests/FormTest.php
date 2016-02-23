@@ -2,7 +2,7 @@
 /**
  * FormTest
  */
-namespace Sledgehammer;
+namespace SledgehammerTests\Mvc;
 /**
  * Unittest for the Form class
  * @package MVC

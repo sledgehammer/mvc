@@ -2,7 +2,7 @@
 /**
  * Redirect
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Mvc;
 /**
  * The MVC alternative to the redirect() function.
  *

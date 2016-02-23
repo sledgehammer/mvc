@@ -2,7 +2,7 @@
 /**
  * Jsonp
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Mvc;
 /**
  * Renders the data as in a Jsonp wrapper
  *

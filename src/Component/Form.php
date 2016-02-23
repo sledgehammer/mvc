@@ -2,7 +2,7 @@
 /**
  * Form
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Mvc;
 /**
  * Generate and import a Form
  * @package MVC
@@ -77,7 +77,7 @@ class Form extends HtmlElement implements Import {
 			}
 			$data[$name] = $field->import($fieldError, $request);
 			if ($fieldError) {
-				$error[$field->name] = $fieldError;
+				$error[$key] = $fieldError;
 			}
 		}
 		if (count($error)) {

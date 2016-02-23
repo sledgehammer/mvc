@@ -2,7 +2,7 @@
 /**
  * VirtualFolder
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Mvc;
 /**
  * Superclasse van de Virtuele mappen.
  *  Door VirtualFolder creer je eenvoudig virtuele mappen en virtuele bestanden.

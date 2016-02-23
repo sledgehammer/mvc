@@ -2,7 +2,7 @@
 /**
  * HttpError
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Mvc;
 /**
  * HTTP error page
  * Sends the correct HTTP header and displays an page with the error.

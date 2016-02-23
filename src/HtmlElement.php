@@ -2,7 +2,7 @@
 /**
  * HtmlElement
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Mvc;
 /**
  * Baseclass for Components based on an Element.
  *

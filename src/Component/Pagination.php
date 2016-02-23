@@ -2,7 +2,7 @@
 /**
  * Pagination
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Mvc;
 /**
  * << 1 2 3 [4] 5 6 7 8 9 10 ... 42 >>
  *

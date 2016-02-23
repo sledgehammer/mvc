@@ -2,7 +2,7 @@
 /**
  * Alert
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Mvc;
 /**
  * A single alert message.
  *

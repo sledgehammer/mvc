@@ -8,5 +8,11 @@
 	},
 	"suggest": {
 		"sledgehammer/minify": "Minify assets like css, javascript and images"
-	}
+	},
+        "autoload": {
+            "psr-4": {
+                "Sledgehammer\\Mvc\\": "src"
+            },
+            "files": ["src/functions.php"]
+        }
 }

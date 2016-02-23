@@ -2,7 +2,7 @@
 /**
  * View
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Mvc;
 /**
  * Interface for the views, the V in MVC
  *

@@ -2,7 +2,7 @@
 /**
  * Input
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Mvc;
 /**
  * An <input>, <textarea> or <select> element.
  *

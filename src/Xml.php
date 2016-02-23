@@ -2,7 +2,7 @@
 /**
  * Xml
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Mvc;
 /**
  * Render XML output
  *
