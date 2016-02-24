@@ -13,6 +13,6 @@
             "psr-4": {
                 "Sledgehammer\\Mvc\\": "src"
             },
-            "files": ["src/functions.php"]
+            "files": ["src/bootstrap.php"]
         }
 }

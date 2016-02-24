@@ -1,8 +1,10 @@
 <?php
 /**
- * Import
+ * Import.
  */
+
 namespace Sledgehammer\Mvc;
+
 /**
  * Iterface for importing request data.
  *
@@ -13,26 +15,21 @@ namespace Sledgehammer\Mvc;
  * } else {
  *  // do something
  * }
- *
- * @package MVC
  */
-interface Import {
+interface Import
+{
+    /**
+     * Set the (default) value.
+     */
+    public function initial($value);
 
-	/**
-	 * Set the (default) value.
-	 *
-	 * @return void
-	 */
-	function initial($value);
-
-	/**
-	 * Returns the imported value.
-	 *
-	 * @param mixed $error
-	 * @param mixed $request
-	 * @return mixed
-	 */
-	function import(&$error, $request = null);
+    /**
+     * Returns the imported value.
+     *
+     * @param mixed $error
+     * @param mixed $request
+     *
+     * @return mixed
+     */
+    public function import(&$error, $request = null);
 }
-
-?>
