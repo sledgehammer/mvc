@@ -30,6 +30,8 @@ class Template extends Object implements View
      * @var array
      */
     public $headers;
+    
+    public static $includePaths = [\Sledgehammer\VENDOR_DIR];
 
     /**
      * @param string $template
@@ -43,16 +45,17 @@ class Template extends Object implements View
 
         if (file_exists($template)) { // file found?
             $this->template = $template;
-        } elseif (substr($template, 0, 1) === '/') { // Absolute path that doesnt exist.
-            warning('File: "'.$template.'" not found');
-            $this->template = $template;
-        } else {
-            $vendorTemplate = \Sledgehammer\VENDOR_DIR.$template;
-            if (file_exists($vendorTemplate)) { // file found?
-                $this->template = $vendorTemplate;
-            } else {
-                warning('Template: "'.$template.'" not found');
+        } elseif (substr($template, 0, 1) !== '/') { // A relative path?
+            foreach (static::$includePaths as $folder) {
+                if (file_exists($folder.$template)) { // file found?
+                    $this->template = $folder.$template;
+                    break;
+                }
             }
+        }
+        if ($this->template === null) {
+             \Sledgehammer\warning('Template: "'.$template.'" not found', ['includePaths' => static::$includePaths]);
+             $this->template = $template;
         }
     }
 
