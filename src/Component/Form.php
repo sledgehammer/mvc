@@ -1,9 +1,9 @@
 <?php
-/**
- * Form.
- */
-
 namespace Sledgehammer\Mvc\Component;
+
+use Sledgehammer\Core\Html;
+use Sledgehammer\Mvc\HtmlElement;
+use Sledgehammer\Mvc\Import;
 
 /**
  * Generate and import a Form.
@@ -44,7 +44,7 @@ class Form extends HtmlElement implements Import
 
     public function __construct($options)
     {
-        if (is_indexed($options)) {
+        if (\Sledgehammer\is_indexed($options)) {
             $options = array('fields' => $options);
         }
         parent::__construct($options);
@@ -65,7 +65,7 @@ class Form extends HtmlElement implements Import
             } elseif (strtolower($this->getAttribute('method')) === 'get') {
                 $request = $_GET;
             } else {
-                notice('Invalid import method');
+                \Sledgehammer\notice('Invalid import method');
                 $request = $_REQUEST;
             }
         }
@@ -95,7 +95,7 @@ class Form extends HtmlElement implements Import
     public function renderContents()
     {
         echo "\n";
-        if (array_value($this->attributes, 'class') === 'form-horizontal') {
+        if (\Sledgehammer\array_value($this->attributes, 'class') === 'form-horizontal') {
             $renderControlGroups = true;
         } else {
             $renderControlGroups = false;

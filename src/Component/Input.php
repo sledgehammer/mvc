@@ -1,9 +1,10 @@
 <?php
-/**
- * Input.
- */
-
 namespace Sledgehammer\Mvc\Component;
+
+use Sledgehammer\Core\Html;
+use Sledgehammer\Mvc\HtmlElement;
+use Sledgehammer\Mvc\Import;
+
 
 /**
  * An <input>, <textarea> or <select> element.
@@ -95,7 +96,7 @@ class Input extends HtmlElement implements Import
                 return; // Er is geen (volledig) bestand ge-upload
 
             default:
-                if (extract_element($request, $name, $value)) {
+                if (\Sledgehammer\extract_element($request, $name, $value)) {
                     $this->attributes['value'] = $value;
 
                     return $value;
@@ -141,7 +142,7 @@ class Input extends HtmlElement implements Import
                 $selected = $this->getAttribute('value');
                 unset($attributes['value']);
                 echo Html::element($this->tag, $attributes, true);
-                $isIndexed = is_indexed($options);
+                $isIndexed = \Sledgehammer\is_indexed($options);
                 foreach ($options as $value => $label) {
                     $option = array();
                     if ($isIndexed) {
@@ -149,7 +150,7 @@ class Input extends HtmlElement implements Import
                     } else {
                         $option['value'] = $value;
                     }
-                    if (equals($value, $selected)) {
+                    if (\Sledgehammer\equals($value, $selected)) {
                         $option['selected'] = 'selected';
                     }
                     echo Html::element('option', $option, Html::escape($label));
