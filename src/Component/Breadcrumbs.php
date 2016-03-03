@@ -2,6 +2,8 @@
 
 namespace Sledgehammer\Mvc\Component;
 
+use Sledgehammer\Core\Html;
+use Sledgehammer\Core\Singleton;
 use Sledgehammer\Mvc\HtmlElement;
 
 /**
@@ -9,7 +11,7 @@ use Sledgehammer\Mvc\HtmlElement;
  */
 class Breadcrumbs extends HtmlElement
 {
-    public $active = null;
+    use Singleton;
     /**
      * Format: array(array('url' => url, 'label' => label)).
      *
@@ -65,9 +67,8 @@ class Breadcrumbs extends HtmlElement
     public function renderContents()
     {
         echo "\n";
-        $count = count($this->crumbs);
         foreach ($this->crumbs as $crumb) {
-            if ($crumb['url'] == false || value($crumb['active'])) {
+            if ($crumb['url'] == false || \Sledgehammer\value($crumb['active'])) {
                 echo "\t<li class=\"active\">";
             } else {
                 echo "\t<li>";

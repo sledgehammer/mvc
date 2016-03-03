@@ -182,17 +182,6 @@ abstract class VirtualFolder extends Object implements Controller
         return $this->onFolderNotFound();
     }
 
-    protected function addCrumb($crumb, $url = null)
-    {
-        if ($this->parent !== null) {
-            if ($url === null) {
-                $url = $this->getPath();
-            }
-
-            return $this->parent->addCrumb($crumb, $url);
-        }
-    }
-
     /**
      * Event dat getriggert wordt als een (virtuele) bestand niet gevonden wordt.
      * Geeft deze of een parent van deze virtualfolder de mogenlijkheid om een custom actie uit te voeren.
