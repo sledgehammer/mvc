@@ -42,14 +42,12 @@ class HtmlElement extends Object implements View
         foreach ($options as $option => $value) {
             if (property_exists($this, $option)) {
                 $this->$option = $value;
-            } elseif (is_object($value) === false) {
+            } else {
                 if (is_int($option)) {
                     $this->setAttribute($value, true);
                 } else {
                     $this->setAttribute($option, $value);
                 }
-            } else {
-                warning('Property "'.$option.'" doesn\'t exist in a '.get_class($this).' object', build_properties_hint(reflect_properties($this)));
             }
         }
     }

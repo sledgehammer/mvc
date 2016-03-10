@@ -5,10 +5,16 @@
 
 namespace Sledgehammer\Mvc\Component;
 
+use Sledgehammer\Core\Html;
+use Sledgehammer\Core\Object;
+use Sledgehammer\Core\Url;
+use Sledgehammer\Mvc\Import;
+use Sledgehammer\Mvc\View;
+
 /**
  * << 1 2 3 [4] 5 6 7 8 9 10 ... 42 >>.
  */
-class Pagination extends Object implements View
+class Pagination extends Object implements View, Import
 {
     /**
      * Number of pages.
@@ -113,4 +119,18 @@ class Pagination extends Object implements View
         }
         echo '</ul></div>';
     }
+
+    public function import(&$error, $request = null)
+    {
+        if (\Sledgehammer\extract_element($_GET, $this->parameter, $value)) {
+            $this->current = $value;
+            return $value;
+        }
+    }
+
+    public function initial($value)
+    {
+        $this->current = $value;
+    }
+
 }

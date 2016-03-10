@@ -16,14 +16,14 @@ class Form extends HtmlElement implements Import
     public $legend;
 
     /**
-     * @var array
+     * @var array|Import[]
      */
-    public $fields = array();
+    public $fields = [];
 
     /**
      * @var array
      */
-    public $actions = array();
+    public $actions = [];
 
     /**
      * @var bool
@@ -57,7 +57,7 @@ class Form extends HtmlElement implements Import
         }
     }
 
-    public function import(&$error, $request = null)
+    public function import(&$errors, $request = null)
     {
         if ($request === null) {
             if (strtolower($this->getAttribute('method')) === 'post') {
@@ -70,22 +70,17 @@ class Form extends HtmlElement implements Import
             }
         }
         if (count($request) == 0) {
-            $error = false;
-
+            $errors = false;
             return;
         }
-        $data = array();
+        $data = [];
         foreach ($this->fields as $key => $field) {
-            $name = $field->getAttribute('name');
-            if ($name === null) {
-                continue;
-            }
-            $data[$name] = $field->import($fieldError, $request);
-            if ($fieldError) {
-                $error[$key] = $fieldError;
+            $data[$key] = $field->import($error, $request);
+            if ($error) {
+                $errors[$key] = $error;
             }
         }
-        if (count($error)) {
+        if (count($errors)) {
             return;
         }
 
