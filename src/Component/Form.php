@@ -114,9 +114,6 @@ class Form extends HtmlElement implements Import
                 render($field);
                 echo '</div></div>';
             } else {
-                if (is_int($label) === false) {
-                    echo '<label>', Html::escape($label), '</label>';
-                }
                 render($field);
             }
             echo "\n";

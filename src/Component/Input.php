@@ -94,6 +94,25 @@ class Input extends HtmlElement implements Import
                 }
 
                 return; // Er is geen (volledig) bestand ge-upload
+                
+            case 'checkbox':
+                unset($this->attributes['checked']);
+                $index = array_search('checked', $this->attributes);
+                if ($index !== false) {
+                    unset($this->attributes[$index]);
+                }
+                $valueAttr = $this->getAttribute('value');
+                if (\Sledgehammer\extract_element($request, $name, $value)) {
+                    $this->attributes[] = 'checked';
+                    if ($valueAttr === null) {
+                        return true;
+                    }
+                    return $value;
+                }
+                if ($valueAttr === null) {
+                    return false;
+                }
+                break;
 
             default:
                 if (\Sledgehammer\extract_element($request, $name, $value)) {
@@ -101,7 +120,6 @@ class Input extends HtmlElement implements Import
 
                     return $value;
                 }
-
                 $error = 'Import failed';
 
                 return;
