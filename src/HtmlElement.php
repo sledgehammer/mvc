@@ -1,10 +1,9 @@
 <?php
-
 namespace Sledgehammer\Mvc;
 
 use Exception;
-use Sledgehammer\Core\Object;
 use Sledgehammer\Core\Html;
+use Sledgehammer\Core\Object;
 
 /**
  * Baseclass for Components based on an Element.
@@ -69,9 +68,9 @@ class HtmlElement extends Object implements View
     public function __toString()
     {
         try {
-            return view_to_string($this);
+            return \Sledgehammer\view_to_string($this);
         } catch (Exception $e) {
-            report_exception($e);
+            \Sledgehammer\report_exception($e);
 
             return '';
         }
