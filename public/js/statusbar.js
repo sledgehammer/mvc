@@ -5,7 +5,7 @@
 			counter++;
 			var statusbar = document.getElementById('statusbar-debugr');
 			if (counter === 1) {
-				statusbar.innerHTML = '<span>Ajax: <b id="statusbar-debugr-count"></b> requests<div id="statusbar-debugr-popout" class="statusbar-popout"></div></span>';
+				statusbar.innerHTML = '<span>DebugR <b id="statusbar-debugr-count"></b> requests<div id="statusbar-debugr-popout" class="statusbar-popout"></div></span>';
 			}
 			document.getElementById('statusbar-debugr-count').innerHTML = counter;
 			var popout = document.getElementById('statusbar-debugr-popout');
@@ -15,5 +15,4 @@
 		}
 	}, false);
 	document.documentElement.setAttribute('data-debugR', 'active'); // Signal the extension that the eventlistener is active.
-})();
-
+}());
