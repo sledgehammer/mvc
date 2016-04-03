@@ -6,9 +6,9 @@ use Exception;
 use Sledgehammer\Mvc\Document\Xml;
 
 /**
- * VirtualFolder for basic CRUD operations on a Repository model.
+ * Folder for basic CRUD operations on a Repository model.
  */
-class CrudFolder extends VirtualFolder
+class CrudFolder extends Folder
 {
     public $requireDataOnSave = 1; // int Controleer bij de create() & update() of er $_POST data is verstuurd.
     protected $model;
@@ -54,7 +54,7 @@ class CrudFolder extends VirtualFolder
         return $this->format($data, $format);
     }
 
-    public function dynamicFilename($filename)
+    public function file($filename)
     {
         $format = file_extension($filename, $id);
         if ($id === 'list') {
@@ -68,7 +68,7 @@ class CrudFolder extends VirtualFolder
         return $this->format($data, $format);
     }
 
-    public function dynamicFoldername($folder, $filename = false)
+    public function folder($folder, $filename = false)
     {
         $instance = $this->load($folder);
         if (isset($instance->$filename)) {
@@ -78,7 +78,7 @@ class CrudFolder extends VirtualFolder
             return $this->format($data, 'json');
         }
 
-        return parent::dynamicFoldername($folder, $filename);
+        return parent::folder($folder, $filename);
     }
 
     /**

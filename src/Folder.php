@@ -6,15 +6,15 @@ use Exception;
 use Sledgehammer\Core\Object;
 use Sledgehammer\Core\Url;
 use Sledgehammer\Mvc\Component\HttpError;
+use Sledgehammer\Mvc\Document\Redirect;
 
 /**
  * Superclasse van de Virtuele mappen.
- *  Door VirtualFolder creer je eenvoudig virtuele mappen en virtuele bestanden.
+ *  Door Folder creer je eenvoudig virtuele mappen en virtuele bestanden.
  *  Hierdoor heb je vrijheid in de paden die je gebruikt om de pagina's aan te duiden. I.p.v. "page.php?id=17" maak je "pages/introductie.html"
  *  tevens kun je viruele mappen nesten (Een virtuele map in een virtuele map) hierdoor kan een een hele map hergebuiken en parameterizeren.
- * DesignPattern: Chain of Responsibility & Command.
  */
-abstract class VirtualFolder extends Object implements Controller
+abstract class Folder extends Object implements Controller
 {
     /**
      * Diepte van deze virtual folder.
@@ -53,14 +53,14 @@ abstract class VirtualFolder extends Object implements Controller
     /**
      * Deze virtuele map is een submap van ...
      *
-     * @var VirtualFolder
+     * @var Folder
      */
     private $parent;
 
     /**
      * The current active VirtualFolder (Is used to detect the parent).
      *
-     * @var VirtualFolder
+     * @var Folder
      */
     public static $current;
 
@@ -75,12 +75,12 @@ abstract class VirtualFolder extends Object implements Controller
                 unset($methods[$index]); // Functies die beginnen met een "_" uit de publicMethods halen
             }
         }
-        $this->publicMethods = array_diff($methods, array('execute', 'getPath', 'dynamicFilename', 'dynamicFoldername', 'onFileNotFound', 'onFolderNotFound', 'getDocument')); // Een aantal funties minder public maken
+        $this->publicMethods = array_diff($methods, array('execute', 'getPath', 'file', 'folder', 'onFileNotFound', 'onFolderNotFound', 'getDocument')); // Prevent API methods from being called via a public url.
     }
 
     /**
      * Aan de hand van de url de betreffende action functie aanroepen.
-     * Valt terug op dynamicFilename() en dynamicFoldername() functies, als de geen action functie gevonden wordt.
+     * Valt terug op file() en folder() functies, als de geen action functie gevonden wordt.
      *
      * @return Component
      */
@@ -106,7 +106,7 @@ abstract class VirtualFolder extends Object implements Controller
                 return $this->$function($extension); // Roept bijvoorbeeld de $this->index('html') functie aan.
             }
 
-            return $this->dynamicFilename($filename);
+            return $this->file($filename);
         }
         if ($folder_count > $this->depth) {
             if ($folder_count != ($this->depth + 1)) {
@@ -118,7 +118,7 @@ abstract class VirtualFolder extends Object implements Controller
                 return $this->$function($filename); // Roept bijvoorbeeld de $this->fotos_folder('index.html') functie aan.
             }
 
-            return $this->dynamicFoldername($folder, $filename);
+            return $this->folder($folder, $filename);
         }
         warning('Not enough (virtual) subfolders in URI', 'VirtualFolder depth('.$this->depth.') exceeds maximum('.count($folders).')');
 
@@ -157,12 +157,12 @@ abstract class VirtualFolder extends Object implements Controller
      *
      * @return Component
      */
-    public function dynamicFilename($filename)
+    public function file($filename)
     {
         if ($filename == 'index.html') {
             return new HttpError(403, array('notice' => array(
                 'No index() method configured for '.get_class($this),
-                'override VirtualFolder->index() or VirtualFolder->dynamicFilename() in "'.get_class($this).'"',
+                'override VirtualFolder->index() or VirtualFolder->file() in "'.get_class($this).'"',
             )));
         }
 
@@ -177,7 +177,7 @@ abstract class VirtualFolder extends Object implements Controller
      *
      * @return Component
      */
-    public function dynamicFoldername($folder)
+    public function folder($folder)
     {
         return $this->onFolderNotFound();
     }
@@ -258,7 +258,7 @@ abstract class VirtualFolder extends Object implements Controller
     /**
      * De VirtualFolder van een bepaalde class opvragen die zich hoger in de hierarchie bevind.
      *
-     * @return VirtualFolder
+     * @return Folder
      */
     public function &getParentByClass($class)
     {

@@ -11,7 +11,7 @@ use Sledgehammer\Mvc\Document\Html as HtmlDocument;
  * Superclass for the Website classes.
  * DesignPatterns: FrontController, Command, Chain of Responsibility.
  */
-abstract class Website extends VirtualFolder
+abstract class Website extends Folder
 {
     public function __construct()
     {

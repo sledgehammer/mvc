@@ -3,6 +3,7 @@
 namespace Sledgehammer\Mvc\Document;
 
 use Sledgehammer\Core\Object;
+use Sledgehammer\Mvc\Document;
 
 /**
  * The MVC alternative to the redirect() function.
