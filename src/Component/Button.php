@@ -3,26 +3,16 @@
 namespace Sledgehammer\Mvc\Component;
 
 use Sledgehammer\Core\Html;
-use Sledgehammer\Mvc\HtmlElement;
 
 /**
- * A button (btn) element.
+ * A button element.
  */
-class Button extends HtmlElement
+class Button extends Element
 {
     /**
      * @var string
      */
     public $tag = 'button';
-
-    /**
-     * Attributes for the html element.
-     *
-     * @var array
-     */
-    public $attributes = array(
-        'class' => 'btn',
-    );
 
     /**
      * @var string
@@ -72,6 +62,6 @@ class Button extends HtmlElement
 
     public function __toString()
     {
-        return \Sledgehammer\view_to_string($this);
+        return \Sledgehammer\component_to_string($this);
     }
 }

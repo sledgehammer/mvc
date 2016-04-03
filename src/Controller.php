@@ -1,7 +1,4 @@
 <?php
-/**
- * Controller.
- */
 
 namespace Sledgehammer\Mvc;
 
@@ -11,9 +8,9 @@ namespace Sledgehammer\Mvc;
 interface Controller
 {
     /**
-     * Build and return a view object.
+     * Build and return a component object.
      *
-     * @return View
+     * @return Component
      */
     public function generateContent();
 }

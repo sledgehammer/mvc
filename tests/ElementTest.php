@@ -1,18 +1,18 @@
 <?php
-/**
- * HtmlElementTest.
- */
 
 namespace SledgehammerTests\Mvc;
+
+use Sledgehammer\Mvc\Component\Element;
+use SledgehammerTests\Core\TestCase;
 
 /**
  * Unittest for the Input class.
  */
-class HtmlElementTest extends TestCase
+class ElementTest extends TestCase
 {
     public function testAttr()
     {
-        $el = new HtmlElement(array('title' => 'Hello'));
+        $el = new Element(array('title' => 'Hello'));
         $this->assertEquals('<div title="Hello"></div>', (string) $el);
         $this->assertEquals('Hello', $el->attr('title'), '.attr( attributeName ) returns the attribute');
         $this->assertEquals(null, $el->attr('foo'));
@@ -29,7 +29,7 @@ class HtmlElementTest extends TestCase
 
     public function testAddClass()
     {
-        $el = new HtmlElement(array('class' => 'alert'));
+        $el = new Element(array('class' => 'alert'));
         $el->addClass('alert-danger');
         $this->assertEquals('<div class="alert alert-danger"></div>', (string) $el);
     }

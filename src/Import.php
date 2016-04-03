@@ -1,7 +1,4 @@
 <?php
-/**
- * Import.
- */
 
 namespace Sledgehammer\Mvc;
 

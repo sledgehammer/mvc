@@ -1,9 +1,10 @@
 <?php
-/**
- * FormTest.
- */
 
 namespace SledgehammerTests\Mvc;
+
+use Sledgehammer\Mvc\Component\Form;
+use Sledgehammer\Mvc\Component\Input;
+use SledgehammerTests\Core\TestCase;
 
 /**
  * Unittest for the Form class.
@@ -17,7 +18,7 @@ class FormTest extends TestCase
                 new Input(array('name' => 'field1')),
             ),
         ));
-        $this->assertSame("<form method=\"post\">\n<fieldset>\n\t<input name=\"field1\" type=\"text\" />\n</fieldset>\n</form>", view_to_string($form));
+        $this->assertSame("<form method=\"post\">\n<fieldset>\n\t<input name=\"field1\" type=\"text\" />\n</fieldset>\n</form>", \Sledgehammer\component_to_string($form));
     }
 
     public function test_render_with_labels()
@@ -25,22 +26,10 @@ class FormTest extends TestCase
         $form = new Form(array(
             'fieldset' => false,
             'fields' => array(
-                'Label1' => new Input(array('name' => 'field1')),
+                'key1' => new Input(array('name' => 'field1', 'label' => 'Label1')),
             ),
         ));
-        $this->assertSame("<form method=\"post\">\n\t<label>Label1</label><input name=\"field1\" type=\"text\" />\n</form>", view_to_string($form));
-    }
-
-    public function test_render_with_control_groups()
-    {
-        $form = new Form(array(
-            'class' => 'form-horizontal',
-            'fieldset' => false,
-            'fields' => array(
-                'Label1' => new Input(array('name' => 'field1')),
-            ),
-        ));
-        $this->assertSame("<form method=\"post\" class=\"form-horizontal\">\n\t<div class=\"control-group\"><label class=\"control-label\">Label1</label><div class=\"controls\"><input name=\"field1\" type=\"text\" /></div></div>\n</form>", view_to_string($form));
+        $this->assertSame("<form method=\"post\">\n\t<label>Label1</label><input name=\"field1\" type=\"text\" />\n</form>", \Sledgehammer\component_to_string($form));
     }
 
     public function test_import()
@@ -48,10 +37,10 @@ class FormTest extends TestCase
         $form = new Form(array(
             'action' => '/',
             'fields' => array(
-                new Input(array('name' => 'field1')),
+                'key1' => new Input(array('name' => 'field1')),
             ),
         ));
         $data = $form->import($error, array('field1' => 'value1'));
-        $this->assertEquals(array('field1' => 'value1'), $data);
+        $this->assertEquals(array('key1' => 'value1'), $data);
     }
 }

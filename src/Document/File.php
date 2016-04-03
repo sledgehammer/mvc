@@ -1,15 +1,18 @@
 <?php
-/**
- * FileDocument.
- */
 
-namespace Sledgehammer\Mvc;
+namespace Sledgehammer\Mvc\Document;
+
+use Sledgehammer\Core\Object;
+use Sledgehammer\Mvc\Component\HttpError;
+use Sledgehammer\Mvc\Document;
 
 /**
- * Een bestand op het bestandsysteem naar de client sturen.
- * De MVC variant van de render_file() functie.
+ * Send a file from the filesystem.
+ * An MVC style implementation of the render_file() function.
+ * 
+ * Supports HTTP headers: "If-Modified-Since" and "If-None-Match".
  */
-class FileDocument extends Object implements Document
+class File extends Object implements Document
 {
     public $headers = array();
 
@@ -20,10 +23,7 @@ class FileDocument extends Object implements Document
         $fileContents;
 
     /**
-     * @param array $options array(
-     *                       'etag'=> bool,
-     *                       'file_get_contents' => bool,
-     *                       )
+     * @param array $options ['etag'=> bool, 'file_get_contents' => bool]
      */
     public function __construct($filename, $options = array('etag' => false))
     {
@@ -67,7 +67,7 @@ class FileDocument extends Object implements Document
 
             return;
         }
-        $this->headers['Content-Type'] = mimetype($filename);
+        $this->headers['Content-Type'] = \Sledgehammer\mimetype($filename);
         $this->headers['Last-Modified'] = gmdate('r', $last_modified);
         $filesize = filesize($filename);
         if ($filesize === false) {
@@ -111,26 +111,6 @@ class FileDocument extends Object implements Document
             readfile($this->filename);
         }
     }
-/*
-    function render() {
-        if ($this->error) {
-            if ($this->error == 404) { // Bij een 404 error een notice geven. De 500's geven al een notice.
-                notice('HTTP[404] File "'.URL::uri().'" not found');
-            } elseif ($this->error == 403) { // De 403 error wel loggen maar niet mailen.
-                error_log('HTTP[403] Directory listing for "'.URL::uri().'" not allowed');
-            }
-            $httpError = new HttpError($this->error);
-            $component = $httpError->execute();
-            $component->render();
-            return;
-        }
-        send_headers($this->headers);
-        if ($this->notModified) {
-            return;
-        }
-        readfile($this->filename);
-    }
- */
 
     /**
      * @return bool
@@ -138,7 +118,7 @@ class FileDocument extends Object implements Document
     public function isDocument()
     {
         if ($this->error) {
-            return false; // Als het bestand niet betaat, geeft dan een foutmelding in de layout van de website
+            return false; // If the file doesn't exist, show the error message inside the view.
         }
 
         return true;

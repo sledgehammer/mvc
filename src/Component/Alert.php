@@ -1,16 +1,11 @@
 <?php
-/**
- * Alert.
- */
 
 namespace Sledgehammer\Mvc\Component;
-
-use Sledgehammer\Mvc\HtmlElement;
 
 /**
  * A single alert message.
  */
-class Alert extends HtmlElement
+class Alert extends Element
 {
     /**
      * The alert body.

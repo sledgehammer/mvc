@@ -1,9 +1,8 @@
 <?php
-/**
- * Jsonp.
- */
 
-namespace Sledgehammer\Mvc;
+namespace Sledgehammer\Mvc\Document;
+
+use Sledgehammer\Core\Json;
 
 /**
  * Renders the data as in a Jsonp wrapper.

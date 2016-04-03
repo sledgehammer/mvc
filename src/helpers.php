@@ -1,6 +1,6 @@
 <?php
 
-use Sledgehammer\Mvc\View;
+use Sledgehammer\Mvc\Component;
 
 /**
  * Global function of the MVC module.
@@ -8,26 +8,26 @@ use Sledgehammer\Mvc\View;
  */
 
 /**
- * render($view) is an alias to $view->render()
- * but render($view) generates a notice when the $view issn't a View compatible object instead of an fatal error.
+ * render($component) is an alias to $component->render()
+ * but render($component) generates a notice when the $component isn't a component compatible object instead of an fatal error.
  */
-function render($view)
+function render($component)
 {
-    if (Sledgehammer\is_valid_view($view)) {
-        $view->render();
+    if (Sledgehammer\is_valid_component($component)) {
+        $component->render();
     }
 }
 
 /**
- * Check if the $view parameter is compatible with the View interface via ducktyping.
+ * Check if  $component is compatible with the Component interface via ducktyping.
  *
- * @param View $view
+ * @param Component $component
  *
  * @return bool
  */
-function is_view(&$view = '__UNDEFINED__')
+function is_component(&$component = '__UNDEFINED__')
 {
-    return is_object($view) && method_exists($view, 'render');
+    return is_object($component) && method_exists($component, 'render');
 }
 
 /**

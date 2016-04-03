@@ -1,14 +1,16 @@
 <?php
-namespace Sledgehammer\Mvc;
+
+namespace Sledgehammer\Mvc\Component;
 
 use Exception;
 use Sledgehammer\Core\Html;
 use Sledgehammer\Core\Object;
+use Sledgehammer\Mvc\Component;
 
 /**
- * Baseclass for Components based on an Element.
+ * Baseclass for components based on an html element.
  */
-class HtmlElement extends Object implements View
+class Element extends Object implements Component
 {
     /**
      * Element type: "div", "span", etc.
@@ -23,14 +25,14 @@ class HtmlElement extends Object implements View
      *
      * @var array
      */
-    protected $attributes = array();
+    protected $attributes = [];
 
     /**
      * Constructor.
      *
      * @param array $options Array containing properties and attribute values
      */
-    public function __construct($options = array())
+    public function __construct($options = [])
     {
         // Extract attributes override
         if (array_key_exists('attributes', $options)) {
@@ -68,7 +70,7 @@ class HtmlElement extends Object implements View
     public function __toString()
     {
         try {
-            return \Sledgehammer\view_to_string($this);
+            return \Sledgehammer\component_to_string($this);
         } catch (Exception $e) {
             \Sledgehammer\report_exception($e);
 
@@ -84,7 +86,7 @@ class HtmlElement extends Object implements View
      * @param string $attribute
      * @param mixed  $value     optional
      *
-     * @return this|HtmlElement|mixed
+     * @return this|Element|mixed
      */
     public function attr($attribute, $value = null)
     {
@@ -115,7 +117,7 @@ class HtmlElement extends Object implements View
      *
      * @param string|array $class One or more space-separated classes to be added to the class attribute.
      *
-     * @return this|HtmlElement
+     * @return this|Element
      */
     public function addClass($class)
     {
@@ -155,7 +157,7 @@ class HtmlElement extends Object implements View
      *
      * @param string|array $class
      *
-     * @return this|HtmlElement
+     * @return this|Element
      */
     public function removeClass($class)
     {
@@ -182,7 +184,7 @@ class HtmlElement extends Object implements View
      *
      * @param string $class
      *
-     * @return this|HtmlElement
+     * @return this|Element
      */
     public function toggleClass($class)
     {

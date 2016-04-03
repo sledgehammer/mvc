@@ -6,15 +6,13 @@ use Sledgehammer\Core\Html;
 use Sledgehammer\Core\Object;
 use Sledgehammer\Core\Url;
 use Sledgehammer\Mvc\Import;
-use Sledgehammer\Mvc\View;
-use function Sledgehammer\extract_element;
-use function Sledgehammer\is_indexed;
+use Sledgehammer\Mvc\Component;
 
 /**
  * A dialog popup with where selected choice is posted back the server.
  * Compatible with Bootrap 3 `.modal-dialog`.
  */
-class Dialog extends Object implements View, Import
+class Dialog extends Object implements Component, Import
 {
     private $title;
     private $body;
@@ -41,7 +39,7 @@ class Dialog extends Object implements View, Import
 
     public function initial($default)
     {
-        $indexed = is_indexed($this->choices);
+        $indexed = \Sledgehammer\is_indexed($this->choices);
         if ($indexed) {
             $key = array_search($default, $this->choices);
             if ($key === false) {
@@ -70,12 +68,12 @@ class Dialog extends Object implements View, Import
         if ($request === null) {
             $request = $_POST;
         }
-        if (extract_element($request, $this->identifier, $answer) == false) {
+        if (\Sledgehammer\extract_element($request, $this->identifier, $answer) == false) {
             $error = false;
 
             return;
         }
-        $indexed = is_indexed($this->choices);
+        $indexed = \Sledgehammer\is_indexed($this->choices);
         if ($indexed) {
             if (in_array($answer, $this->choices)) {
                 return $answer;
@@ -113,7 +111,7 @@ class Dialog extends Object implements View, Import
         echo "\t\t<div class=\"modal-body\">\n\t\t\t", $this->body, "\n\t\t</div>\n";
         if (count($this->choices) !== 0) {
             echo "\t\t<form class=\"modal-footer\" action=\"".Url::getCurrentURL().'" method="'.$this->method."\">\n";
-            $indexed = is_indexed($this->choices);
+            $indexed = \Sledgehammer\is_indexed($this->choices);
             foreach (array_reverse($this->choices) as $answer => $choice) {
                 if (is_array($choice) === false) {
                     $choice = array('label' => $choice);

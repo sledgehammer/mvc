@@ -1,15 +1,18 @@
 <?php
 
-namespace Sledgehammer\Mvc;
+namespace Sledgehammer\Mvc\Document;
 
 use Sledgehammer\Core\Debug\ErrorHandler;
 use Sledgehammer\Core\Framework;
 use Sledgehammer\Core\Object;
+use Sledgehammer\Mvc\Component;
+use Sledgehammer\Mvc\Document;
+use Sledgehammer\Mvc\Component\Template;
 
 /**
  * The container for generating html pages.
  */
-class HtmlDocument extends Object implements Document
+class Html extends Object implements Document
 {
     /**
      * Bepaald de template die door de HTMLDocument wordt gebruikt. xhtml, html of ajax.
@@ -25,7 +28,7 @@ class HtmlDocument extends Object implements Document
     public $contentType = 'text/html';
 
     /**
-     * @var View
+     * @var Component
      */
     public $content;
     /**

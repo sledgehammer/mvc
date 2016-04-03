@@ -9,8 +9,7 @@ use Exception;
 use Sledgehammer\Core\Framework;
 use Sledgehammer\Core\Object;
 use Sledgehammer\Core\Url;
-use Sledgehammer\Mvc\Template;
-use Sledgehammer\Mvc\View;
+use Sledgehammer\Mvc\Component;
 
 /**
  * HTTP error page
@@ -18,7 +17,7 @@ use Sledgehammer\Mvc\View;
  *
  * @todo Add support for all known HTTP errors http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
  */
-class HttpError extends Object implements View
+class HttpError extends Object implements Component
 {
     /**
      * The HTTP ErrorCode (404, 500, etc).

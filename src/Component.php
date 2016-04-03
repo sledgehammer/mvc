@@ -3,9 +3,9 @@
 namespace Sledgehammer\Mvc;
 
 /**
- * Interface for the views, the V in MVC.
+ * Interface for the components, the V in MVC.
  */
-interface View
+interface Component
 {
     /**
      * Render the view to the client (echo statements).

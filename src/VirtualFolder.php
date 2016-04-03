@@ -82,7 +82,7 @@ abstract class VirtualFolder extends Object implements Controller
      * Aan de hand van de url de betreffende action functie aanroepen.
      * Valt terug op dynamicFilename() en dynamicFoldername() functies, als de geen action functie gevonden wordt.
      *
-     * @return View
+     * @return Component
      */
     public function generateContent()
     {
@@ -155,7 +155,7 @@ abstract class VirtualFolder extends Object implements Controller
      *
      * @param string $filename De bestandsnaam die in deze virtuele map word opgevraagd
      *
-     * @return View
+     * @return Component
      */
     public function dynamicFilename($filename)
     {
@@ -175,7 +175,7 @@ abstract class VirtualFolder extends Object implements Controller
      * @param string       $folder De submap die in deze virtuele map opgevraagd
      * @param string|false $file   Als er geen submap volgd, dan wordt $file de bestandsnaam binnen de map. Mocht je aan de hand van de mapnaam een nieuwe VirtualFolder starten, dan wordt de $file ook door de handle_file() afgehandeld.
      *
-     * @return View
+     * @return Component
      */
     public function dynamicFoldername($folder)
     {

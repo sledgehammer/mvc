@@ -1,14 +1,14 @@
 <?php
+
 namespace Sledgehammer\Mvc\Component;
 
 use Sledgehammer\Core\Html;
-use Sledgehammer\Mvc\HtmlElement;
 use Sledgehammer\Mvc\Import;
 
 /**
  * Generate and import a Form.
  */
-class Form extends HtmlElement implements Import
+class Form extends Element implements Import
 {
     /**
      * @var string
@@ -71,6 +71,7 @@ class Form extends HtmlElement implements Import
         }
         if (count($request) == 0) {
             $errors = false;
+
             return;
         }
         $data = [];
@@ -90,11 +91,6 @@ class Form extends HtmlElement implements Import
     public function renderContents()
     {
         echo "\n";
-        if (\Sledgehammer\array_value($this->attributes, 'class') === 'form-horizontal') {
-            $renderControlGroups = true;
-        } else {
-            $renderControlGroups = false;
-        }
         if ($this->fieldset) {
             echo "<fieldset>\n";
             if ($this->legend !== null) {
@@ -105,17 +101,7 @@ class Form extends HtmlElement implements Import
         // Render form fields
         foreach ($this->fields as $label => $field) {
             echo "\t";
-            if ($renderControlGroups) {
-                echo '<div class="control-group">';
-                if (is_int($label) === false) {
-                    echo '<label class="control-label">', Html::escape($label), '</label>';
-                }
-                echo '<div class="controls">';
-                render($field);
-                echo '</div></div>';
-            } else {
-                render($field);
-            }
+            render($field);
             echo "\n";
         }
 

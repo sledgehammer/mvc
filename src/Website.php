@@ -1,13 +1,11 @@
 <?php
-/**
- * Website.
- */
 
 namespace Sledgehammer\Mvc;
 
 use Exception;
-use Sledgehammer\Mvc\Component\HttpError;
 use Sledgehammer\Core\Debug\DebugR;
+use Sledgehammer\Mvc\Component\HttpError;
+use Sledgehammer\Mvc\Document\Html as HtmlDocument;
 
 /**
  * Superclass for the Website classes.
@@ -70,9 +68,9 @@ abstract class Website extends VirtualFolder
     }
 
     /**
-     * Imbed the view inside your Layout View.
+     * Embed the component inside your Layout View.
      *
-     * @return View
+     * @return Component
      */
     abstract protected function wrapContent($content);
 }

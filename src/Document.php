@@ -1,15 +1,12 @@
 <?php
-/**
- * Document.
- */
 
 namespace Sledgehammer\Mvc;
 
 /**
- * A Document is a standalone view, that can't be wrapped inside another view.
- * Example documents are: Json, FileDocument, Image and HTMLDocument.
+ * A Document is a standalone component, that can't be wrapped inside another component.
+ * Example documents are: Json, Document\File, Image and Document\Html.
  */
-interface Document extends View
+interface Document extends Component
 {
     /**
      * Determines if the component is a Document.

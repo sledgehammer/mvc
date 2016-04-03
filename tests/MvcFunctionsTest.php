@@ -1,10 +1,12 @@
 <?php
-/**
- * Test the implementation of MVC's global functions.
- */
 
 namespace SledgehammerTests\Mvc;
 
+use SledgehammerTests\Core\TestCase;
+
+/**
+ * Test the implementation of MVC's global functions.
+ */
 class MvcFunctionsTest extends TestCase
 {
     public function test_explode_xml_parmeters()
@@ -25,7 +27,7 @@ class MvcFunctionsTest extends TestCase
             ),
         );
         foreach ($expectations as $tag => $expectation) {
-            $this->assertEquals($expectation, explode_xml_parameters($tag));
+            $this->assertEquals($expectation, \Sledgehammer\explode_xml_parameters($tag));
         }
     }
 }

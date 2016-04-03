@@ -1,14 +1,15 @@
 <?php
 
-namespace Sledgehammer\Mvc;
+namespace Sledgehammer\Mvc\Component;
 
 use Sledgehammer\Core\Object;
+use Sledgehammer\Mvc\Component;
 
 /**
  * Een component voor het weergeven van php-templates.
  * De templates zijn standaard php. er wordt geen gebruik gemaakt van een tempate engine zoals bv Smarty.
  */
-class Template extends Object implements View
+class Template extends Object implements Component
 {
     /**
      * Bestandsnaam van de template (exclusief thema map).
@@ -30,7 +31,7 @@ class Template extends Object implements View
      * @var array
      */
     public $headers;
-    
+
     public static $includePaths = [\Sledgehammer\VENDOR_DIR];
 
     /**
@@ -54,8 +55,8 @@ class Template extends Object implements View
             }
         }
         if ($this->template === null) {
-             \Sledgehammer\warning('Template: "'.$template.'" not found', ['includePaths' => static::$includePaths]);
-             $this->template = $template;
+            \Sledgehammer\warning('Template: "'.$template.'" not found', ['includePaths' => static::$includePaths]);
+            $this->template = $template;
         }
     }
 
@@ -88,7 +89,7 @@ class Template extends Object implements View
     {
         $views = array();
         foreach ($array as $element) {
-            if (is_view($element)) {
+            if (is_component($element)) {
                 $views[] = $element;
             } elseif (is_array($element)) {
                 $views = array_merge($views, $this->getSubviews($element));

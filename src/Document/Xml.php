@@ -1,9 +1,11 @@
 <?php
-/**
- * Xml.
- */
 
-namespace Sledgehammer\Mvc;
+namespace Sledgehammer\Mvc\Document;
+
+use DOMDocument;
+use Exception;
+use SimpleXMLElement;
+use Sledgehammer\Mvc\Document;
 
 /**
  * Render XML output.
@@ -28,15 +30,15 @@ class Xml extends Object implements Document
 
     public function render()
     {
-        if ($this->xml instanceof \SimpleXMLElement) {
+        if ($this->xml instanceof SimpleXMLElement) {
             $xml = $this->xml->asXML();
-        } elseif ($this->xml instanceof \DOMDocument) {
+        } elseif ($this->xml instanceof DOMDocument) {
             $xml = $this->xml->saveXML();
         } else {
             $xml = $this->xml;
         }
         if ($this->formatOutput) {
-            $doc = new \DOMDocument();
+            $doc = new DOMDocument();
             if ($doc->loadXML($xml)) {
                 $doc->formatOutput = true;
                 $xml = $doc->saveXML();
@@ -64,7 +66,7 @@ class Xml extends Object implements Document
      *
      * @param array|object $data
      *
-     * @return \SimpleXMLElement
+     * @return SimpleXMLElement
      */
     public static function build($data, $charset = null)
     {
@@ -73,7 +75,7 @@ class Xml extends Object implements Document
             $elements = get_object_vars($data);
         } else {
             if (count($data) != 1) {
-                throw new \Exception('The array should contain only 1 (root)element');
+                throw new Exception('The array should contain only 1 (root)element');
             }
             reset($data);
             $root = key($data);
@@ -82,15 +84,15 @@ class Xml extends Object implements Document
         if ($charset === null) {
             $charset = Framework::$charset;
         }
-        $xml = new \SimpleXMLElement('<?xml version="1.0" encoding="'.$charset.'"?><'.$root.' />');
+        $xml = new SimpleXMLElement('<?xml version="1.0" encoding="'.$charset.'"?><'.$root.' />');
         self::addNodes($xml, $elements, $root);
 
         return $xml;
     }
 
     /**
-     * @param \SimpleXMLElement $xml
-     * @param array             $data
+     * @param SimpleXMLElement $xml
+     * @param array            $data
      */
     private static function addNodes($xml, $data, $node, $detectEncoding = false)
     {

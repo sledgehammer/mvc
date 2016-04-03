@@ -5,25 +5,25 @@
 namespace Sledgehammer;
 
 use Exception;
-use Sledgehammer\Mvc\View;
+use Sledgehammer\Mvc\Component;
 use Sledgehammer\Core\Framework;
 
 /**
  * Geeft de uitvoer van een component als string.
  * (Uitvoer zoals emails en header() worden niet afgevangen).
  *
- * @param View $view
+ * @param Component $component
  *
  * @return string
  */
-function view_to_string($view)
+function component_to_string($component)
 {
-    if (is_valid_view($view) === false) {
+    if (is_valid_component($component) === false) {
         return false;
     }
     ob_start();
     try {
-        $view->render();
+        $component->render();
     } catch (Exception $e) {
         $output = ob_get_clean();
         report_exception($e);
@@ -35,23 +35,23 @@ function view_to_string($view)
 }
 
 /**
- * Check if $component is compatible with the View interface, otherwise report notices.
+ * Check if $component is compatible with the Component interface, otherwise report notices.
  *
- * @param View $view
+ * @param Component $component
  *
  * @return bool
  */
-function is_valid_view(&$view = '__UNDEFINED__')
+function is_valid_component(&$component = '__UNDEFINED__')
 {
-    if (is_view($view)) {
+    if (is_component($component)) {
         return true;
     }
-    if (is_object($view)) {
-        notice('Invalid $view, class "'.get_class($view).'" must implement a render() method');
-    } elseif ($view == '__UNDEFINED__') {
+    if (is_object($component)) {
+        notice(get_class($component).' is not an component', get_class($component).' doesn\'t implement a render() method');
+    } elseif ($component == '__UNDEFINED__') {
         notice('Variable is undefined');
     } else {
-        notice('Invalid datatype: "'.gettype($view).'", expecting a View object');
+        notice('Invalid datatype: "'.gettype($component).'", expecting a Component object');
     }
 
     return false;
@@ -60,8 +60,8 @@ function is_valid_view(&$view = '__UNDEFINED__')
 /**
  * Zet een array om naar xml/html parameters; array('x' => 'y') wordt ' x="y"'.
  *
- * @param array  $parameters
- * @param string $charset    De charset van de parameters (voor htmlentities). Standaard wordt de charset van het actieve document gebruikt.
+ * @param array  $parameterArray
+ * @param string $charset        De charset van de parameters (voor htmlentities). Standaard wordt de charset van het actieve document gebruikt.
  *
  * @return string
  */
@@ -82,7 +82,7 @@ function implode_xml_parameters($parameterArray, $charset = null)
  * Zet een string met parameters om naar een array.
  * ' x="y"' wordt  array('x' => 'y').
  *
- * @param string $tag
+ * @param string $parameterString
  *
  * @return array
  */
@@ -142,24 +142,24 @@ function explode_xml_parameters($parameterString)
 }
 
 /**
- * Het resultaat van 2 View->getHeaders() samenvoegen.
- * De waardes in $header1 worden aangevuld en overschreven door de waardes in header2.
+ * Merge the results from the $component->getHeaders().
+ * The headers from the $component overwrites the values in $headers.
  *
- * @param array      $headers
- * @param array|View $view    Een component of een header array
+ * @param array           $headers
+ * @param array|Component $component A component or header array
  *
  * @return array
  */
-function merge_headers($headers, $view)
+function merge_headers($headers, $component)
 {
     if (is_string(array_value($headers, 'css'))) {
         $headers['css'] = array($headers['css']);
     }
 
-    if (is_array($view)) { // Is er een header array meegegeven i.p.v. een View?
-        $appendHeaders = $view;
-    } elseif (method_exists($view, 'getHeaders')) {
-        $appendHeaders = $view->getHeaders();
+    if (is_array($component)) { // Is er een header array meegegeven i.p.v. een component?
+        $appendHeaders = $component;
+    } elseif (method_exists($component, 'getHeaders')) {
+        $appendHeaders = $component->getHeaders();
     } else {
         return $headers; // Er zijn geen headers om te mergen.
     }

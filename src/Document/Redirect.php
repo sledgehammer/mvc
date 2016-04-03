@@ -1,6 +1,6 @@
 <?php
 
-namespace Sledgehammer\Mvc;
+namespace Sledgehammer\Mvc\Document;
 
 use Sledgehammer\Core\Object;
 

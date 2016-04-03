@@ -1,14 +1,17 @@
 <?php
-/**
- * HttpProxy.
- */
 
-namespace Sledgehammer\Mvc;
+namespace Sledgehammer\Mvc\Document;
+
+use Exception;
+use Sledgehammer\Core\Object;
+use Sledgehammer\Mvc\Component;
+use Sledgehammer\Mvc\Component\HttpError;
 
 /**
- * Load the contents and http-headers of the url and use them as a remote FileDocument.
+ * Serve the http headers and contents of a remote url as a local file.
+ * Bypasses CORS restrictions on remote api's.
  */
-class HttpProxy extends Object implements View
+class Proxy extends Object implements Component
 {
     private $error = false;
     private $headers = array();
@@ -17,7 +20,7 @@ class HttpProxy extends Object implements View
     public function __construct($url)
     {
         if (substr($url, 0, 7) !== 'http://' && substr($url, 0, 8) !== 'https://') {
-            throw new \Exception('Not a valid url');
+            throw new Exception('Not a valid url');
         }
         $this->contents = file_get_contents($url);
         if ($this->contents !== false) {
@@ -33,7 +36,7 @@ class HttpProxy extends Object implements View
                 $this->headers[$name] = ltrim(substr($header, $pos + 1));
             }
             if (count($this->headers) === 0) {
-                throw new \Exception('No HTTP headers');
+                throw new Exception('No HTTP headers');
             }
         } else { // An error occurred
             if (isset($http_response_header)) {

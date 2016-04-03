@@ -3,7 +3,6 @@
 namespace Sledgehammer\Mvc\Component;
 
 use Sledgehammer\Core\Html;
-use Sledgehammer\Mvc\HtmlElement;
 
 /**
  * Nav, tabs, and pills Highly customizable list-style navigation.
@@ -11,7 +10,7 @@ use Sledgehammer\Mvc\HtmlElement;
  * .nav-list: OS X Finder/iTunes style navigation.
  * .nav-stacked: Vertical tabs or pills.
  */
-class Nav extends HtmlElement
+class Nav extends Element
 {
     /**
      * @var array

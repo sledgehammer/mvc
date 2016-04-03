@@ -3,14 +3,13 @@
 namespace Sledgehammer\Mvc\Component;
 
 use Sledgehammer\Core\Html;
-use Sledgehammer\Mvc\HtmlElement;
 
 /**
  * A Description list <dl><dt><dd></dl>.
  *
  * Tip: Use 'class' => 'dl-horizontal' for a different layout
  */
-class DescriptionList extends HtmlElement
+class DescriptionList extends Element
 {
     /**
      * @var array

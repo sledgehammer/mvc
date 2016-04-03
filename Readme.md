@@ -12,13 +12,12 @@ If your looking for database persistance for your models check out the Sledgeham
 
 ## View
 
-De "View" wordt d.m.v. Views opgebouwd.
-Deze view objects zijn te vergelijken met een ASP.NET UserControl
+The "View" is a composition of components.
 
-Een View heeft een "render" functie. Deze stuurt output direct naar de browser (echo) en heeft geen returnwaarde.
-En View class *mag* een getHeaders() functie bevatten, deze returnt informatie die voor het component verstuurd dient te worden.
-Denk aan "HTTP headers", stylesheets en andere elementen voor in de <head>
-
+Every component has a "render" function which sends the output directly to the browser (echo) and doesn't have a return value.
+A Component has an optional getHeaders() function, which is called before render() and passes info to the components higher in the component hierarchy.
+for the  bevatten, deze returnt informatie die voor het component verstuurd dient te worden.
+This can add "HTTP headers", append stylesheets and other configuration that must be injected into the `<head>`
 
 ## VirtualFolders (Controller)
 

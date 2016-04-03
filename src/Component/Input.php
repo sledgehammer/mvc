@@ -1,15 +1,14 @@
 <?php
+
 namespace Sledgehammer\Mvc\Component;
 
 use Sledgehammer\Core\Html;
-use Sledgehammer\Mvc\HtmlElement;
 use Sledgehammer\Mvc\Import;
-
 
 /**
  * An <input>, <textarea> or <select> element.
  */
-class Input extends HtmlElement implements Import
+class Input extends Element implements Import
 {
     /**
      * Prepends a <label> when set.
@@ -94,7 +93,7 @@ class Input extends HtmlElement implements Import
                 }
 
                 return; // Er is geen (volledig) bestand ge-upload
-                
+
             case 'checkbox':
                 unset($this->attributes['checked']);
                 $index = array_search('checked', $this->attributes);
@@ -107,6 +106,7 @@ class Input extends HtmlElement implements Import
                     if ($valueAttr === null) {
                         return true;
                     }
+
                     return $value;
                 }
                 if ($valueAttr === null) {

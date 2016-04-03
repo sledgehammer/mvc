@@ -4,12 +4,11 @@ namespace Sledgehammer\Mvc\Component;
 
 use Sledgehammer\Core\Html;
 use Sledgehammer\Core\Singleton;
-use Sledgehammer\Mvc\HtmlElement;
 
 /**
  * Breadcrumb Navigation.
  */
-class Breadcrumbs extends HtmlElement
+class Breadcrumbs extends Element
 {
     use Singleton;
     /**
