@@ -12,10 +12,10 @@ use Sledgehammer\Mvc\Component\Template;
 /**
  * The container for generating html pages.
  */
-class Html extends Object implements Document
+class Page extends Object implements Document
 {
     /**
-     * Bepaald de template die door de HTMLDocument wordt gebruikt. xhtml, html of ajax.
+     * Bepaald de template die door wordt gebruikt. xhtml, html of ajax.
      *
      * @var string
      */

@@ -4,7 +4,7 @@ namespace Sledgehammer\Mvc;
 
 /**
  * A Document is a standalone component, that can't be wrapped inside another component.
- * Example documents are: Json, Document\File, Image and Document\Html.
+ * Example documents are: Sledgehammer\Core\Json, Sledgehammer\Mvc\Document\File, Sledgehammer\Graphics\Image and Sledgehammer\Mvc\Document\Page.
  */
 interface Document extends Component
 {

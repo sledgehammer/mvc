@@ -5,7 +5,7 @@ namespace Sledgehammer\Mvc;
 use Exception;
 use Sledgehammer\Core\Debug\DebugR;
 use Sledgehammer\Mvc\Component\HttpError;
-use Sledgehammer\Mvc\Document\Html as HtmlDocument;
+use Sledgehammer\Mvc\Document\Page as HtmlDocument;
 
 /**
  * Superclass for the Website classes.
