@@ -2,18 +2,16 @@
 
 namespace Sledgehammer\Mvc\Component;
 
-use Sledgehammer\Core\Html;
 use Sledgehammer\Core\Object;
-use Sledgehammer\Core\Url;
-use Sledgehammer\Mvc\Import;
 use Sledgehammer\Mvc\Component;
 
 /**
  * A dialog popup with where selected choice is posted back the server.
  * Compatible with Bootrap 3 `.modal-dialog`.
  */
-class Dialog extends Object implements Component, Import
+class Dialog extends Object implements Component
 {
+    public $template = 'sledgehammer/mvc/templates/dialog.php';
     private $title;
     private $body;
     private $choices;
@@ -37,58 +35,15 @@ class Dialog extends Object implements Component, Import
         }
     }
 
-    public function initial($default)
-    {
-        $indexed = \Sledgehammer\is_indexed($this->choices);
-        if ($indexed) {
-            $key = array_search($default, $this->choices);
-            if ($key === false) {
-                foreach ($this->choices as $index => $choice) {
-                    if (is_array($choice) && $choice['label'] === $default) {
-                        $key = $index;
-                        break;
-                    }
-                }
-            }
-        } else {
-            $key = $default;
-        }
-        if ($key !== false) {
-            if (is_array($this->choices[$key]) === false) {
-                $this->choices[$key] = array(
-                    'label' => $this->choices[$key],
-                );
-            }
-            $this->choices[$key]['class'] = 'btn btn-primary';
-        }
-    }
-
-    public function import(&$error, $request = null)
+    public function prompt(&$error = null, $request = null)
     {
         if ($request === null) {
             $request = $_POST;
         }
-        if (\Sledgehammer\extract_element($request, $this->identifier, $answer) == false) {
-            $error = false;
-
-            return;
-        }
-        $indexed = \Sledgehammer\is_indexed($this->choices);
-        if ($indexed) {
-            if (in_array($answer, $this->choices)) {
-                return $answer;
-            }
-            foreach ($this->choices as $choice) {
-                if (is_array($choice) && $choice['label'] === $answer) {
-                    return $answer;
-                }
-            }
-        } elseif (isset($this->choices[$answer])) {
+        if (\Sledgehammer\extract_element($request, $this->identifier, $answer)) {
+            // @todo check available options
             return $answer;
         }
-        $error = 'Unexpected anwser "'.$answer.'", expecting "'.implode(', ', array_keys($this->choices)).'"';
-
-        return;
     }
 
     public function getHeaders()
@@ -100,35 +55,6 @@ class Dialog extends Object implements Component, Import
 
     public function render()
     {
-        echo "<div class=\"modal-dialog\">\n";
-        echo "\t<div class=\"modal-content\">\n";
-        echo "\t\t<div class=\"modal-header\">";
-        echo '<h4 class="modal-title">';
-        if ($this->close) {
-            echo '<button class="close" data-dismiss="modal">&times;</button>';
-        }
-        echo Html::escape($this->title), "</h4></div>\n";
-        echo "\t\t<div class=\"modal-body\">\n\t\t\t", $this->body, "\n\t\t</div>\n";
-        if (count($this->choices) !== 0) {
-            echo "\t\t<form class=\"modal-footer\" action=\"".Url::getCurrentURL().'" method="'.$this->method."\">\n";
-            $indexed = \Sledgehammer\is_indexed($this->choices);
-            foreach (array_reverse($this->choices) as $answer => $choice) {
-                if (is_array($choice) === false) {
-                    $choice = array('label' => $choice);
-                }
-                $choice['type'] = 'submit';
-                $choice['name'] = $this->identifier;
-                if ($indexed) {
-                    $choice['value'] = $choice['label'];
-                } else {
-                    $choice['value'] = $answer;
-                }
-                $button = new Button($choice);
-                echo "\t\t\t", $button, "\n";
-            }
-            echo "\t\t</form>\n";
-        }
-        echo "\t</div>\n";
-        echo "</div>\n";
+        render(new Template($this->template, get_object_vars($this)));
     }
 }

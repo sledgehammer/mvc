@@ -18,15 +18,20 @@ interface Import
     /**
      * Set the (default) value.
      */
-    public function initial($value);
+    public function setValue($value);
 
     /**
-     * Returns the imported value.
-     *
-     * @param mixed $error
-     * @param mixed $request
-     *
-     * @return mixed
+     * Get the current value.
      */
-    public function import(&$error, $request = null);
+    public function getValue();
+
+    /**
+     * Import the new value based on the request and return the current value;.
+     *
+     * @param mixed $error   Contains the error code(s) in ALL_CAPS
+     * @param mixed $request Allow overwriting the default $_REQUEST
+     *
+     * @return mixed The (updated) value
+     */
+    public function import(&$error = null, $request = null);
 }

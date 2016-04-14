@@ -117,7 +117,7 @@ class Pagination extends Object implements Component, Import
         echo '</ul></div>';
     }
 
-    public function import(&$error, $request = null)
+    public function import(&$error = null, $request = null)
     {
         if (\Sledgehammer\extract_element($_GET, $this->parameter, $value)) {
             $this->current = $value;
@@ -126,8 +126,12 @@ class Pagination extends Object implements Component, Import
         }
     }
 
-    public function initial($value)
+    public function setValue($value)
     {
         $this->current = $value;
+    }
+    public function getValue()
+    {
+        return $this->current;
     }
 }

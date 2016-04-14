@@ -22,108 +22,115 @@ class Input extends Element implements Import
      */
     public $tag = 'input';
 
+    /**
+     * @var mixed
+     */
+    protected $value;
+
     public function __construct($options)
     {
         if (is_string($options)) {
-            $options = array('name' => $options);
+            $options = ['name' => $options];
         }
         parent::__construct($options);
         if ($this->tag === 'input' && empty($this->attributes['type'])) {
             $this->attributes['type'] = 'text';
         }
+        if ($this->getAttribute('type') === 'checkbox') {
+            if ($this->value !== null) {
+                $this->attributes['value'] = $this->value;
+                $this->value = $this->booleanAttribute('checked') ? $this->attributes['value'] : null;
+            } else {
+                $this->value = $this->booleanAttribute('checked');
+            }
+        }
     }
 
-    public function initial($value)
+    public function setValue($value)
     {
-        $this->attributes['value'] = $value;
+        if ($this->attributes['type'] === 'checkbox' && is_bool($value)) {
+            if ($this->hasAttribute('value')) {
+                $this->value = $value ? $this->getAttribute('value') : null;
+            } else {
+                $this->value = $value;
+            }
+        } else {
+            $this->value = $value;
+        }
     }
 
-    public function import(&$error, $request = null)
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    public function import(&$error = null, $request = null)
     {
         if ($request === null) {
             $request = $_REQUEST;
         }
         $name = $this->getAttribute('name');
         if ($name === null) {
-            return; // De naam is niet opgegeven.
+            return;
+        }
+        $required = $this->hasAttribute('required');
+        if ($required && $this->getAttribute('required') === false) {
+            $required = false;
         }
         switch (strtolower($this->getAttribute('type'))) {
 
             case 'file':
                 // Import a file upload
-                if (count($_FILES) == 0) {
-                    //					if (!array_key_exists('_FILES', $request)) {
-//						return null; // Het formulier is nog niet gepost
-//					}
-                    notice('$_FILES is empty, check for <form enctype="multipart/form-data">');
+                if ($required) {
+                    if (count($_FILES) == 0) {
+                        notice('$_FILES is empty, check for <form enctype="multipart/form-data">');
 
-                    return;
+                        return;
+                    }
+                    if (array_key_exists($name, $_FILES) == false) {
+                        $error = 'MISSING_FILE';
+
+                        return;
+                    }
                 }
-                if (array_key_exists($name, $_FILES) == false) {
-                    $error = 'Invalid name';
-
-                    return;
+                $this->value = $_FILES[$name]; // @todo support for multiple files
+                if ($this->value['error'] === UPLOAD_ERR_OK) {
+                    unset($this->value['error']);
+                } else {
+                    $error = 'UPLOAD_FAILED';
+                    $constants = get_defined_constants();
+                    foreach ($constants as $constant => $constant_value) {
+                        if (substr($constant, 0, 7) === 'UPLOAD_' && $constant_value === $this->value['error']) {
+                            $error = $constant;
+                            break;
+                        }
+                    }
                 }
-                $file = $_FILES[$name]; // @todo support for multiple files
-                switch ($file['error']) {
-
-                    case UPLOAD_ERR_OK:
-                        unset($file['error']);
-
-                        return $file;
-
-                    case UPLOAD_ERR_NO_FILE:
-                        // @todo Check if the input was required.
-                        break;
-
-                    case UPLOAD_ERR_INI_SIZE:
-                        $error = 'De grootte van het bestand is groter dan de in php.ini ingestelde waarde voor upload_max_filesize';
-                        break;
-
-                    case UPLOAD_ERR_FORM_SIZE:
-                        $error = 'De grootte van het bestand is groter dan de in html gegeven MAX_FILE_SIZE';
-                        break;
-
-                    case UPLOAD_ERR_PARTIAL:
-                        $error = 'Het bestand is maar gedeeltelijk geupload';
-                        break;
-
-                    default:
-                        $error = 'Unknown error: "'.$file['error'].'"';
-                }
-
-                return; // Er is geen (volledig) bestand ge-upload
+                break;
 
             case 'checkbox':
-                unset($this->attributes['checked']);
-                $index = array_search('checked', $this->attributes);
-                if ($index !== false) {
-                    unset($this->attributes[$index]);
-                }
-                $valueAttr = $this->getAttribute('value');
                 if (\Sledgehammer\extract_element($request, $name, $value)) {
-                    $this->attributes[] = 'checked';
-                    if ($valueAttr === null) {
-                        return true;
-                    }
-
-                    return $value;
-                }
-                if ($valueAttr === null) {
-                    return false;
+                    $this->setValue(true);
+                } else {
+                    $this->setValue(false);
                 }
                 break;
 
             default:
                 if (\Sledgehammer\extract_element($request, $name, $value)) {
-                    $this->attributes['value'] = $value;
+                    $this->setValue($value);
+                    if ($required && $value === '') {
+                        $error = 'EMPTY_REQUIRED_FIELD';
+                    }
 
                     return $value;
                 }
-                $error = 'Import failed';
-
-                return;
+                if ($required) {
+                    $error = 'MISSING_FIELD';
+                }
         }
+
+        return $this->getValue();
     }
 
     public function render()
@@ -147,7 +154,7 @@ class Input extends Element implements Import
     protected function renderElement()
     {
         $type = strtolower($this->getAttribute('type'));
-        if (in_array($type, array('select', 'textarea'))) {
+        if (in_array($type, ['select', 'textarea'])) {
             $this->tag = $type;
             unset($this->attributes['type']);
         }
@@ -157,8 +164,6 @@ class Input extends Element implements Import
             case 'select':
                 $options = $attributes['options'];
                 unset($attributes['options']);
-                $selected = $this->getAttribute('value');
-                unset($attributes['value']);
                 echo Html::element($this->tag, $attributes, true);
                 $isIndexed = \Sledgehammer\is_indexed($options);
                 foreach ($options as $value => $label) {
@@ -168,7 +173,7 @@ class Input extends Element implements Import
                     } else {
                         $option['value'] = $value;
                     }
-                    if (\Sledgehammer\equals($value, $selected)) {
+                    if (\Sledgehammer\equals($value, $this->value)) {
                         $option['selected'] = 'selected';
                     }
                     echo Html::element('option', $option, Html::escape($label));
@@ -177,13 +182,57 @@ class Input extends Element implements Import
                 break;
 
             case 'textarea':
-                unset($attributes['value']);
-                echo Html::element($this->tag, $attributes, Html::escape($this->getAttribute('value')));
+                echo Html::element($this->tag, $attributes, Html::escape($this->value));
+                break;
+
+            case 'checkbox':
+                if ($this->value === false || $this->value === null) {
+                    $attributes['checked'] = false;
+                } else {
+                    $attributes['checked'] = true;
+                }
+                echo Html::element($this->tag, $attributes);
                 break;
 
             default:
+                if ($this->value !== null) {
+                    $attributes['value'] = $this->value;
+                }
                 echo Html::element($this->tag, $attributes);
                 break;
         }
+    }
+
+    public function getAttribute($name)
+    {
+        if (isset($this->attributes['type']) && $this->attributes['type'] === 'checkbox') {
+            if (strtolower($name) === 'checked') {
+                return $this->value;
+            }
+        } elseif (strtolower($name) === 'value') {
+            return $this->value;
+        }
+
+        return parent::getAttribute($name);
+    }
+
+    public function setAttribute($name, $value)
+    {
+        if (isset($this->attributes['type']) && $this->attributes['type'] === 'checkbox') {
+            if (strtolower($name) === 'checked') {
+                if (is_bool($value)) {
+                    $this->value = $value;
+                } else {
+                    $this->value = (strtolower($value) === 'checked');
+                }
+
+                return;
+            }
+        } elseif (strtolower($name) === 'value') {
+            $this->value = $value;
+
+            return;
+        }
+        parent::setAttribute($name, $value);
     }
 }

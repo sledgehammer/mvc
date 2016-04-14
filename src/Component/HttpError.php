@@ -60,7 +60,7 @@ class HttpError extends Object implements Component
     public function render()
     {
         $error = $this->getError();
-        $messageBox = new Template('sledgehammer/mvc/templates/HttpError.php', $error);
+        $messageBox = new Template('sledgehammer/mvc/templates/httperror.php', $error);
         $messageBox->render();
         foreach ($this->options as $option => $value) {
             switch ((string) $option) {

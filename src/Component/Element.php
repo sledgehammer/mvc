@@ -36,7 +36,7 @@ class Element extends Object implements Component
     {
         // Extract attributes override
         if (array_key_exists('attributes', $options)) {
-            $this->attributes = $options['attributes'];
+            $this->attr($options['attributes']);
             unset($options['attributes']);
         }
         // Set properties and attributes
@@ -95,7 +95,7 @@ class Element extends Object implements Component
                 return $this->getAttribute($attribute); // Get the value
             }
         } else {
-            $attribute = array($attribute => $value);
+            $attribute = [$attribute => $value];
         }
         foreach ($attribute as $name => $value) {
             if (is_int($name)) {
@@ -209,7 +209,7 @@ class Element extends Object implements Component
 
     /**
      * Returns the value of the named attribute on the element.
-     * If the named attribute does not exist, the value returned will be null.
+     * If the named attribute does not exist it will return null.
      *
      * @param string $name
      *
@@ -217,12 +217,9 @@ class Element extends Object implements Component
      */
     public function getAttribute($name)
     {
-        $key = strtolower($name);
-        if (array_key_exists($key, $this->attributes)) {
-            return $this->attributes[$key];
+        if ($this->hasAttribute($name)) {
+            return $this->attributes[strtolower($name)];
         }
-
-        return;
     }
 
     /**
@@ -255,8 +252,26 @@ class Element extends Object implements Component
      */
     public function hasAttribute($name)
     {
-        $key = strtolower($name);
+        return array_key_exists(strtolower($name), $this->attributes);
+    }
 
-        return array_key_exists($this->attributes[$key]) && $this->attributes[$key] !== null;
+    /**
+     * Check if a boolean attribute such as 'checked' or 'selected' is enabled.
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function booleanAttribute($name)
+    {
+        if ($this->hasAttribute($name) === false) {
+            return false;
+        }
+        $value = $this->getAttribute($name);
+        if (is_bool($value)) {
+            return $value;
+        }
+
+        return strtolower($name) === strtolower($value); // <option selected="selected">Label</option>
     }
 }
