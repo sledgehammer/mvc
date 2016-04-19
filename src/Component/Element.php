@@ -45,9 +45,9 @@ class Element extends Object implements Component
                 $this->$option = $value;
             } else {
                 if (is_int($option)) {
-                    $this->setAttribute($value, true);
+                    $this->attributes[strtolower($value)] = true;
                 } else {
-                    $this->setAttribute($option, $value);
+                    $this->attributes[strtolower($option)] = $value;
                 }
             }
         }

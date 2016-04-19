@@ -22,46 +22,44 @@ class Input extends Element implements Import
      */
     public $tag = 'input';
 
-    /**
-     * @var mixed
-     */
-    protected $value;
-
     public function __construct($options)
     {
         if (is_string($options)) {
             $options = ['name' => $options];
         }
         parent::__construct($options);
-        if ($this->tag === 'input' && empty($this->attributes['type'])) {
-            $this->attributes['type'] = 'text';
-        }
-        if ($this->getAttribute('type') === 'checkbox') {
-            if ($this->value !== null) {
-                $this->attributes['value'] = $this->value;
-                $this->value = $this->booleanAttribute('checked') ? $this->attributes['value'] : null;
-            } else {
-                $this->value = $this->booleanAttribute('checked');
-            }
-        }
     }
 
     public function setValue($value)
     {
-        if ($this->attributes['type'] === 'checkbox' && is_bool($value)) {
-            if ($this->hasAttribute('value')) {
-                $this->value = $value ? $this->getAttribute('value') : null;
+        if ($this->getAttribute('type') === 'checkbox') {
+
+            $valueAttr = $this->getAttribute('value');
+            if ($valueAttr && is_bool($value)) {
+                $this->setAttribute('checked', $value);
+            } elseif ($valueAttr) {
+                $this->setAttribute('checked', $value === $valueAttr);
             } else {
-                $this->value = $value;
+                $this->setAttribute('checked', (bool)$value);
             }
+            return $this->booleanAttribute('checked'); // return true or false
+        
         } else {
-            $this->value = $value;
+            $this->setAttribute('value', $value);
         }
     }
 
     public function getValue()
     {
-        return $this->value;
+        if ($this->getAttribute('type') === 'checkbox') {
+            $valueAttr = $this->getAttribute('value');
+            if ($valueAttr) {
+                return $this->booleanAttribute('checked') ? $valueAttr : null; // return the value or null
+            }
+            return $this->booleanAttribute('checked'); // return true or false
+        } else {
+            return $this->getAttribute('value');
+        }
     }
 
     public function import(&$error = null, $request = null)
@@ -93,14 +91,14 @@ class Input extends Element implements Import
                         return;
                     }
                 }
-                $this->value = $_FILES[$name]; // @todo support for multiple files
-                if ($this->value['error'] === UPLOAD_ERR_OK) {
-                    unset($this->value['error']);
+                $file = $_FILES[$name]; // @todo support for multiple files
+                if ($file['error'] === UPLOAD_ERR_OK) {
+                    unset($file['error']);
                 } else {
                     $error = 'UPLOAD_FAILED';
                     $constants = get_defined_constants();
                     foreach ($constants as $constant => $constant_value) {
-                        if (substr($constant, 0, 7) === 'UPLOAD_' && $constant_value === $this->value['error']) {
+                        if (substr($constant, 0, 7) === 'UPLOAD_' && $constant_value === $file['error']) {
                             $error = $constant;
                             break;
                         }
@@ -109,16 +107,20 @@ class Input extends Element implements Import
                 break;
 
             case 'checkbox':
+                $valueAttr = $this->getAttribute('value');
+                $this->setAttribute('checked', false);
                 if (\Sledgehammer\extract_element($request, $name, $value)) {
-                    $this->setValue(true);
-                } else {
-                    $this->setValue(false);
+                    if ($valueAttr) {
+                        $this->setAttribute('checked', $value === $valueAttr);
+                    } else {
+                        $this->setAttribute('checked', true);
+                    }
                 }
                 break;
 
             default:
                 if (\Sledgehammer\extract_element($request, $name, $value)) {
-                    $this->setValue($value);
+                    $this->setAttribute('value', $value);
                     if ($required && $value === '') {
                         $error = 'EMPTY_REQUIRED_FIELD';
                     }
@@ -163,8 +165,9 @@ class Input extends Element implements Import
         switch ($this->tag) {
             case 'select':
                 $options = $attributes['options'];
-                unset($attributes['options']);
+                unset($attributes['options'], $attributes['value']);
                 echo Html::element($this->tag, $attributes, true);
+                $selected = $this->getAttribute('value');
                 $isIndexed = \Sledgehammer\is_indexed($options);
                 foreach ($options as $value => $label) {
                     $option = array();
@@ -173,7 +176,7 @@ class Input extends Element implements Import
                     } else {
                         $option['value'] = $value;
                     }
-                    if (\Sledgehammer\equals($value, $this->value)) {
+                    if (\Sledgehammer\equals($value, $selected)) {
                         $option['selected'] = 'selected';
                     }
                     echo Html::element('option', $option, Html::escape($label));
@@ -182,57 +185,14 @@ class Input extends Element implements Import
                 break;
 
             case 'textarea':
-                echo Html::element($this->tag, $attributes, Html::escape($this->value));
-                break;
-
-            case 'checkbox':
-                if ($this->value === false || $this->value === null) {
-                    $attributes['checked'] = false;
-                } else {
-                    $attributes['checked'] = true;
-                }
-                echo Html::element($this->tag, $attributes);
+                unset($attributes['value']);
+                echo Html::element($this->tag, $attributes, Html::escape($this->getAttribute('value')));
                 break;
 
             default:
-                if ($this->value !== null) {
-                    $attributes['value'] = $this->value;
-                }
                 echo Html::element($this->tag, $attributes);
                 break;
         }
     }
 
-    public function getAttribute($name)
-    {
-        if (isset($this->attributes['type']) && $this->attributes['type'] === 'checkbox') {
-            if (strtolower($name) === 'checked') {
-                return $this->value;
-            }
-        } elseif (strtolower($name) === 'value') {
-            return $this->value;
-        }
-
-        return parent::getAttribute($name);
-    }
-
-    public function setAttribute($name, $value)
-    {
-        if (isset($this->attributes['type']) && $this->attributes['type'] === 'checkbox') {
-            if (strtolower($name) === 'checked') {
-                if (is_bool($value)) {
-                    $this->value = $value;
-                } else {
-                    $this->value = (strtolower($value) === 'checked');
-                }
-
-                return;
-            }
-        } elseif (strtolower($name) === 'value') {
-            $this->value = $value;
-
-            return;
-        }
-        parent::setAttribute($name, $value);
-    }
 }

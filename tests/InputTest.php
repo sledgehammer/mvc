@@ -16,7 +16,7 @@ class InputTest extends TestCase
     public function test_text_input()
     {
         $input = new Input(array('name' => 'input1'));
-        $this->assertSame('<input name="input1" type="text" />', (string) $input);
+        $this->assertSame('<input name="input1" />', (string) $input);
     }
 
     public function test_checkbox()
@@ -24,8 +24,11 @@ class InputTest extends TestCase
         $checkbox = new Input(array('type' => 'checkbox'));
         $this->assertSame('<input type="checkbox" />', (string) $checkbox);
 
-        $checkbox = new Input(array('type' => 'checkbox', 'label' => 'i agree'));
-        $this->assertSame('<label><input type="checkbox" />&nbsp;i agree</label>', (string) $checkbox);
+        $checkboxWithLabel = new Input(array('type' => 'checkbox', 'label' => 'i agree'));
+        $this->assertSame('<label><input type="checkbox" />&nbsp;i agree</label>', (string) $checkboxWithLabel);
+        
+        $checked1 = new Input(array('type' => 'checkbox', 'checked'));
+        $this->assertSame('<input type="checkbox" checked />', (string) $checked1);
     }
 
     public function test_select()
@@ -39,7 +42,7 @@ class InputTest extends TestCase
         $textarea = new Input(array('type' => 'textarea', 'value' => '"'));
         $this->assertSame('<textarea>&quot;</textarea>', (string) $textarea);
     }
-
+    
     public function test_value()
     {
         $input = new Input(['value' => '1']);
