@@ -2,30 +2,30 @@
 
 namespace Sledgehammer\Mvc\Document;
 
-use Sledgehammer\Core\Object;
+use Sledgehammer\Core\Base;
 use Sledgehammer\Mvc\Component\HttpError;
 use Sledgehammer\Mvc\Document;
 
 /**
  * Send a file from the filesystem.
  * An MVC style implementation of the render_file() function.
- * 
+ *
  * Supports HTTP headers: "If-Modified-Since" and "If-None-Match".
  */
-class File extends Object implements Document
+class File extends Base implements Document
 {
-    public $headers = array();
+    public $headers = [];
 
-    private $filename,
-        $error = false,
-        $notModified = false,
-        $etag,
-        $fileContents;
+    private $filename;
+    private $error = false;
+    private $notModified = false;
+    private $etag;
+    private $fileContents;
 
     /**
      * @param array $options ['etag'=> bool, 'file_get_contents' => bool]
      */
-    public function __construct($filename, $options = array('etag' => false))
+    public function __construct($filename, $options = ['etag' => false])
     {
         $this->filename = $filename;
         $this->etag = array_value($options, 'etag');
@@ -87,12 +87,12 @@ class File extends Object implements Document
             return $this->error->getHeaders();
         }
         if ($this->notModified) { // Is het bestand niet aangepast?
-            return array('http' => array(
+            return ['http' => [
                 'Status' => '304 Not Modified',
-            ));
+            ]];
         }
         // Het bestand bestaat en kan verstuurd worden.
-        return array('http' => $this->headers);
+        return ['http' => $this->headers];
     }
 
     public function render()

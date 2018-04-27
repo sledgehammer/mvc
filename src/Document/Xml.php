@@ -10,7 +10,7 @@ use Sledgehammer\Mvc\Document;
 /**
  * Render XML output.
  */
-class Xml extends Object implements Document
+class Xml extends Base implements Document
 {
     /**
      * @var SimpleXMLElement|DOMDocument|array|string
@@ -54,11 +54,11 @@ class Xml extends Object implements Document
 
     public function getHeaders()
     {
-        return array(
-            'http' => array(
+        return [
+            'http' => [
                 'Content-Type' => 'text/xml',
-            ),
-        );
+            ],
+        ];
     }
 
     /**

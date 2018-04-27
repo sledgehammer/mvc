@@ -33,7 +33,6 @@ class Input extends Element implements Import
     public function setValue($value)
     {
         if ($this->getAttribute('type') === 'checkbox') {
-
             $valueAttr = $this->getAttribute('value');
             if ($valueAttr && is_bool($value)) {
                 $this->setAttribute('checked', $value);
@@ -43,10 +42,8 @@ class Input extends Element implements Import
                 $this->setAttribute('checked', (bool)$value);
             }
             return $this->booleanAttribute('checked'); // return true or false
-        
-        } else {
-            $this->setAttribute('value', $value);
         }
+        $this->setAttribute('value', $value);
     }
 
     public function getValue()
@@ -57,9 +54,8 @@ class Input extends Element implements Import
                 return $this->booleanAttribute('checked') ? $valueAttr : null; // return the value or null
             }
             return $this->booleanAttribute('checked'); // return true or false
-        } else {
-            return $this->getAttribute('value');
         }
+        return $this->getAttribute('value');
     }
 
     public function import(&$error = null, $request = null)
@@ -140,7 +136,7 @@ class Input extends Element implements Import
         if ($this->label === null) {
             $this->renderElement();
         } else {
-            if (in_array(strtolower($this->getAttribute('type')), array('checkbox', 'radio'))) {
+            if (in_array(strtolower($this->getAttribute('type')), ['checkbox', 'radio'])) {
                 echo '<label>';
                 $this->renderElement();
                 echo '&nbsp;', Html::escape($this->label), '</label>';
@@ -170,7 +166,7 @@ class Input extends Element implements Import
                 $selected = $this->getAttribute('value');
                 $isIndexed = \Sledgehammer\is_indexed($options);
                 foreach ($options as $value => $label) {
-                    $option = array();
+                    $option = [];
                     if ($isIndexed) {
                         $value = $label;
                     } else {
@@ -194,5 +190,4 @@ class Input extends Element implements Import
                 break;
         }
     }
-
 }

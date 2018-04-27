@@ -27,9 +27,9 @@ class Nav extends Element
      *
      * @var array
      */
-    protected $attributes = array(
+    protected $attributes = [
         'class' => 'nav',
-    );
+    ];
 
     /**
      * Constructor.
@@ -37,7 +37,7 @@ class Nav extends Element
      * @param array $items format: array(url => label, ...) of array(url => array('icon' => icon_url, 'label' => label))
      * @param $options array
      */
-    public function __construct($items, $options = array())
+    public function __construct($items, $options = [])
     {
         $this->items = $items;
         // Set attributes and properties
@@ -78,21 +78,21 @@ class Nav extends Element
      *
      * @return \Sledgehammer\Nav
      */
-    public static function lists($items, $options = array())
+    public static function lists($items, $options = [])
     {
         $options['nav'] = 'list';
 
         return new self($items, $options);
     }
 
-    public static function tabs($items, $options = array())
+    public static function tabs($items, $options = [])
     {
         $options['nav'] = 'tabs';
 
         return new self($items, $options);
     }
 
-    public static function pills($items, $options = array())
+    public static function pills($items, $options = [])
     {
         $options['nav'] = 'pills';
 

@@ -30,7 +30,7 @@ class Button extends Element
      * @param string|array $label_or_options
      * @param array        $options
      */
-    public function __construct($label_or_options, $options = array())
+    public function __construct($label_or_options, $options = [])
     {
         if (is_array($label_or_options) === false) {
             $options['label'] = $label_or_options;

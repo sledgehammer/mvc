@@ -26,7 +26,7 @@ class CrudFolder extends Folder
      * @param Record $record in static mode
      * @param array options  array('repository' => 'twitter', 'primaryKey' => 'customer_id')
      */
-    public function __construct($model, $options = array())
+    public function __construct($model, $options = [])
     {
         parent::__construct();
         $this->handle_filenames_without_extension = true;
@@ -128,7 +128,7 @@ class CrudFolder extends Folder
         $repo = getRepository($this->repository);
         $instance = $repo->create($this->model, $this->getNewValues());
         $repo->save($model, $instance);
-//		redirect();
+        //		redirect();
 //		return Json::success($this->primaryKey => $instance->{$this->primaryKey});
     }
 
@@ -148,9 +148,8 @@ class CrudFolder extends Folder
             }
 
             return $this->create();
-        } else {
-            return $this->update();
         }
+        return $this->update();
     }
 
     /**
@@ -188,9 +187,8 @@ class CrudFolder extends Folder
     protected function format($data, $format)
     {
         if ($format === 'xml') {
-            return new Xml(Xml::build(array($this->model => $data)));
-        } else {
-            return new Json($data);
+            return new Xml(Xml::build([$this->model => $data]));
         }
+        return new Json($data);
     }
 }

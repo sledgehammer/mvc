@@ -13,37 +13,37 @@ use SledgehammerTests\Core\TestCase;
  */
 class InputTest extends TestCase
 {
-    public function test_text_input()
+    public function testTextInput()
     {
-        $input = new Input(array('name' => 'input1'));
+        $input = new Input(['name' => 'input1']);
         $this->assertSame('<input name="input1" />', (string) $input);
     }
 
-    public function test_checkbox()
+    public function testCheckbox()
     {
-        $checkbox = new Input(array('type' => 'checkbox'));
+        $checkbox = new Input(['type' => 'checkbox']);
         $this->assertSame('<input type="checkbox" />', (string) $checkbox);
 
-        $checkboxWithLabel = new Input(array('type' => 'checkbox', 'label' => 'i agree'));
+        $checkboxWithLabel = new Input(['type' => 'checkbox', 'label' => 'i agree']);
         $this->assertSame('<label><input type="checkbox" />&nbsp;i agree</label>', (string) $checkboxWithLabel);
         
-        $checked1 = new Input(array('type' => 'checkbox', 'checked'));
+        $checked1 = new Input(['type' => 'checkbox', 'checked']);
         $this->assertSame('<input type="checkbox" checked />', (string) $checked1);
     }
 
-    public function test_select()
+    public function testSelect()
     {
-        $select = new Input(array('type' => 'select', 'options' => array('option1', 'option2')));
+        $select = new Input(['type' => 'select', 'options' => ['option1', 'option2']]);
         $this->assertSame('<select><option>option1</option><option>option2</option></select>', (string) $select);
     }
 
-    public function test_textarea()
+    public function testTextarea()
     {
-        $textarea = new Input(array('type' => 'textarea', 'value' => '"'));
+        $textarea = new Input(['type' => 'textarea', 'value' => '"']);
         $this->assertSame('<textarea>&quot;</textarea>', (string) $textarea);
     }
     
-    public function test_value()
+    public function testValue()
     {
         $input = new Input(['value' => '1']);
         $this->assertSame('1', $input->getValue());

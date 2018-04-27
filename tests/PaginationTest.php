@@ -9,7 +9,7 @@ class PaginationTest extends TestCase
 {
     public function test_pagination()
     {
-        $pager = new Pagination(2, 1, array('href' => '#page'));
+        $pager = new Pagination(2, 1, ['href' => '#page']);
         $this->assertEquals(\Sledgehammer\component_to_string($pager), '<div class="pagination"><ul>
 	<li class="active"><a href="#page1">1</a></li>
 	<li><a href="#page2">2</a></li>

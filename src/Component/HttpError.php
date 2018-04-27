@@ -7,7 +7,7 @@ namespace Sledgehammer\Mvc\Component;
 
 use Exception;
 use Sledgehammer\Core\Framework;
-use Sledgehammer\Core\Object;
+use Sledgehammer\Core\Base;
 use Sledgehammer\Core\Url;
 use Sledgehammer\Mvc\Component;
 
@@ -17,7 +17,7 @@ use Sledgehammer\Mvc\Component;
  *
  * @todo Add support for all known HTTP errors http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
  */
-class HttpError extends Object implements Component
+class HttpError extends Base implements Component
 {
     /**
      * The HTTP ErrorCode (404, 500, etc).
@@ -38,7 +38,7 @@ class HttpError extends Object implements Component
      *                          warning: Report a warning after render()
      *                          exception: Report an exception after render()
      */
-    public function __construct($errorCode, $options = array())
+    public function __construct($errorCode, $options = [])
     {
         $this->errorCode = $errorCode;
         $this->options = $options;
@@ -48,10 +48,10 @@ class HttpError extends Object implements Component
     {
         $error = $this->getError();
 
-        return array(
+        return [
             'title' => $this->errorCode.' - '.$error['title'],
-            'http' => array('Status' => $this->errorCode.' '.Framework::$statusCodes[$this->errorCode]),
-        );
+            'http' => ['Status' => $this->errorCode.' '.Framework::$statusCodes[$this->errorCode]],
+        ];
     }
 
     /**
@@ -64,7 +64,6 @@ class HttpError extends Object implements Component
         $messageBox->render();
         foreach ($this->options as $option => $value) {
             switch ((string) $option) {
-
                 case 'notice':
                 case 'warning':
                     $function = $option;
@@ -80,7 +79,7 @@ class HttpError extends Object implements Component
                     break;
 
                 default:
-                    \Sledgehammer\notice('Unknown option: "'.$option.'"', array('value' => $value));
+                    \Sledgehammer\notice('Unknown option: "'.$option.'"', ['value' => $value]);
                     break;
             }
         }
@@ -89,48 +88,47 @@ class HttpError extends Object implements Component
     private function getError()
     {
         switch ($this->errorCode) {
-
             case 400:
-                return array(
+                return [
                     'icon' => 'error',
                     'title' => 'Bad Request',
                     'message' => 'Server begreep de aanvraag niet',
-                );
+                ];
 
             case 401:
-                return array(
+                return [
                     'icon' => 'warning',
                     'title' => 'Niet geauthoriseerd',
                     'message' => 'U heeft onvoldoende rechten om deze pagina te bekijken.',
-                );
+                ];
 
             case 403:
-                return array(
+                return [
                     'icon' => 'warning',
                     'title' => 'Verboden toegang',
                     'message' => (substr(Url::getCurrentURL()->path, -1) == '/') ? 'U mag de inhoud van deze map niet bekijken' : 'U mag deze pagina niet bekijken',
-                );
+                ];
 
             case 404:
-                return array(
+                return [
                     'icon' => 'warning',
                     'title' => 'Bestand niet gevonden',
                     'message' => 'De opgegeven URL "'.Url::getCurrentURL().'" kon niet worden gevonden.',
-                );
+                ];
 
             case 500:
-                return array(
+                return [
                     'icon' => 'error',
                     'title' => 'Interne serverfout',
                     'message' => 'Er is een interne fout opgetreden, excuses voor het ongemak.',
-                );
+                ];
 
             case 501:
-                return array(
+                return [
                     'icon' => 'error',
                     'title' => 'Not Implemented',
                     'message' => 'Dit wordt niet door de server ondersteund',
-                );
+                ];
 
             default:
                 throw new Exception('HTTP errorCode '.$this->errorCode.' is not (yet) supported.');

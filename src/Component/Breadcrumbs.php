@@ -16,7 +16,7 @@ class Breadcrumbs extends Element
      *
      * @var array
      */
-    public $crumbs = array();
+    public $crumbs = [];
 
     /**
      * @var string
@@ -27,16 +27,16 @@ class Breadcrumbs extends Element
      *
      * @var array
      */
-    protected $attributes = array(
+    protected $attributes = [
         'class' => 'breadcrumb',
-    );
+    ];
 
     /**
      * Constructor.
      *
      * @param array $options
      */
-    public function __construct($options = array())
+    public function __construct($options = [])
     {
         // Set attributes and properties
         foreach ($options as $option => $value) {
@@ -55,9 +55,9 @@ class Breadcrumbs extends Element
     public function add($crumb, $url = null)
     {
         if (is_array($crumb) == false) {
-            $crumb = array(
+            $crumb = [
                 'label' => $crumb,
-            );
+            ];
         }
         $crumb['url'] = $url;
         $this->crumbs[] = $crumb;
@@ -78,7 +78,7 @@ class Breadcrumbs extends Element
                 $label = Html::escape($crumb['label']);
             }
             if ($crumb['url']) {
-                echo Html::element('a', array('href' => $crumb['url']), $label);
+                echo Html::element('a', ['href' => $crumb['url']], $label);
             } else {
                 echo $label;
             }

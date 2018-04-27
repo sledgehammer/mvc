@@ -3,7 +3,7 @@
 namespace Sledgehammer\Mvc;
 
 use Exception;
-use Sledgehammer\Core\Object;
+use Sledgehammer\Core\Base;
 use Sledgehammer\Core\Url;
 use Sledgehammer\Mvc\Component\HttpError;
 use Sledgehammer\Mvc\Document\Redirect;
@@ -14,7 +14,7 @@ use Sledgehammer\Mvc\Document\Redirect;
  *  Hierdoor heb je vrijheid in de paden die je gebruikt om de pagina's aan te duiden. I.p.v. "page.php?id=17" maak je "pages/introductie.html"
  *  tevens kun je viruele mappen nesten (Een virtuele map in een virtuele map) hierdoor kan een een hele map hergebuiken en parameterizeren.
  */
-abstract class Folder extends Object implements Controller
+abstract class Folder extends Base implements Controller
 {
     /**
      * Diepte van deze virtual folder.
@@ -75,7 +75,7 @@ abstract class Folder extends Object implements Controller
                 unset($methods[$index]); // Functies die beginnen met een "_" uit de publicMethods halen
             }
         }
-        $this->publicMethods = array_diff($methods, array('execute', 'getPath', 'file', 'folder', 'onFileNotFound', 'onFolderNotFound', 'getDocument')); // Prevent API methods from being called via a public url.
+        $this->publicMethods = array_diff($methods, ['execute', 'getPath', 'file', 'folder', 'onFileNotFound', 'onFolderNotFound', 'getDocument']); // Prevent API methods from being called via a public url.
     }
 
     /**
@@ -160,10 +160,10 @@ abstract class Folder extends Object implements Controller
     public function file($filename)
     {
         if ($filename == 'index.html') {
-            return new HttpError(403, array('notice' => array(
+            return new HttpError(403, ['notice' => [
                 'No index() method configured for '.get_class($this),
                 'override VirtualFolder->index() or VirtualFolder->file() in "'.get_class($this).'"',
-            )));
+            ]]);
         }
 
         return $this->onFileNotFound();
@@ -194,7 +194,7 @@ abstract class Folder extends Object implements Controller
             return $this->parent->onFileNotFound();
         }
         $relativePath = substr(rawurldecode(Url::getCurrentURL()->path), strlen(\Sledgehammer\WEBPATH) - 1); // Relative path vanaf de WEBROOT
-        return new HttpError(404, array('notice' => 'HTTP[404] File "'.$relativePath.'" not found'));
+        return new HttpError(404, ['notice' => 'HTTP[404] File "'.$relativePath.'" not found']);
     }
 
     /**
@@ -246,13 +246,13 @@ abstract class Folder extends Object implements Controller
 //            }
 //        }
         if ($foundPublicFolder) {
-            return new HttpError(404, array('notice' => array(
+            return new HttpError(404, ['notice' => [
                 'HTTP[404] File "'.basename($relativePath).'" not found in "'.dirname($relativePath).'/"',
                 'VirtualFolder "'.get_class(self::$current).'" doesn\'t handle the "'.basename(self::$current->getPath(true)).'" folder',
-            )));
+            ]]);
         }
         // Gaat om een bestand in een virtualfolder
-        return new HttpError(404, array('notice' => 'HTTP[404] VirtualFolder "'.get_class(self::$current).'" has no "'.basename(self::$current->getPath(true)).'" folder'));
+        return new HttpError(404, ['notice' => 'HTTP[404] VirtualFolder "'.get_class(self::$current).'" has no "'.basename(self::$current->getPath(true)).'" folder']);
     }
 
     /**
@@ -264,7 +264,8 @@ abstract class Folder extends Object implements Controller
     {
         if (strtolower(get_class($this)) == strtolower($class)) { // Is dit de gespecifeerde virtualfolder?
             return $this;
-        } elseif ($this->parent === null) { // Is de virtualfolder niet gevonden in de hierarchie?
+        }
+        if ($this->parent === null) { // Is de virtualfolder niet gevonden in de hierarchie?
             $message = ($class === null) ? 'VirtualFolder "'.get_class($this).'" has no parent' : 'VirtualFolder \''.$class.'\' is niet actief';
             throw new Exception($message);
         }

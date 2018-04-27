@@ -14,7 +14,7 @@ class DescriptionList extends Element
     /**
      * @var array
      */
-    public $items = array();
+    public $items = [];
 
     /**
      * @var string
@@ -25,13 +25,13 @@ class DescriptionList extends Element
     {
         foreach ($this->items as $label => $values) {
             echo "\t";
-            echo Html::element('dt', array(), $label);
+            echo Html::element('dt', [], $label);
             if (is_array($values)) {
                 foreach ($values as $value) {
-                    echo Html::element('dd', array(), $value);
+                    echo Html::element('dd', [], $value);
                 }
             } else {
-                echo Html::element('dd', array(), $values);
+                echo Html::element('dd', [], $values);
             }
         }
     }

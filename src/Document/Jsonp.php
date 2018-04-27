@@ -21,7 +21,7 @@ class Jsonp extends Json
      */
     public function __construct($callback, $data, $charset = 'UTF-8')
     {
-        parent::__construct($data, array(), $charset);
+        parent::__construct($data, [], $charset);
         $this->callback = $callback;
         $this->headers['http']['Content-Type'] = 'text/javascript; charset=utf-8';
     }

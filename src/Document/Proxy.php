@@ -3,7 +3,7 @@
 namespace Sledgehammer\Mvc\Document;
 
 use Exception;
-use Sledgehammer\Core\Object;
+use Sledgehammer\Core\Base;
 use Sledgehammer\Mvc\Component;
 use Sledgehammer\Mvc\Component\HttpError;
 
@@ -11,10 +11,10 @@ use Sledgehammer\Mvc\Component\HttpError;
  * Serve the http headers and contents of a remote url as a local file.
  * Bypasses CORS restrictions on remote api's.
  */
-class Proxy extends Object implements Component
+class Proxy extends Base implements Component
 {
     private $error = false;
-    private $headers = array();
+    private $headers = [];
     private $contents;
 
     public function __construct($url)
@@ -27,7 +27,7 @@ class Proxy extends Object implements Component
             // Parse the headers that came with the file_get_contents() call.
             foreach ($http_response_header as $header) {
                 if (preg_match('/^HTTP\/1.[01](.+)$/', $header, $match)) {
-                    $this->headers = array(); // drop (redirect) headers
+                    $this->headers = []; // drop (redirect) headers
                     $this->headers['Status'] = ltrim($match[1]);
                     continue;
                 }
@@ -72,9 +72,9 @@ class Proxy extends Object implements Component
             return $this->error->getHeaders();
         }
 
-        return array(
+        return [
             'http' => $this->headers,
-        );
+        ];
     }
 
     public function isDocument()

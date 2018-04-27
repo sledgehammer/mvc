@@ -2,14 +2,14 @@
 
 namespace Sledgehammer\Mvc\Component;
 
-use Sledgehammer\Core\Object;
+use Sledgehammer\Core\Base;
 use Sledgehammer\Mvc\Component;
 
 /**
  * Een component voor het weergeven van php-templates.
  * De templates zijn standaard php. er wordt geen gebruik gemaakt van een tempate engine zoals bv Smarty.
  */
-class Template extends Object implements Component
+class Template extends Base implements Component
 {
     /**
      * Bestandsnaam van de template (exclusief thema map).
@@ -39,7 +39,7 @@ class Template extends Object implements Component
      * @param array  $variables
      * @param array  $headers
      */
-    public function __construct($template, $variables = array(), $headers = array())
+    public function __construct($template, $variables = [], $headers = [])
     {
         $this->variables = $variables;
         $this->headers = $headers;
@@ -87,7 +87,7 @@ class Template extends Object implements Component
 
     private function getSubviews($array)
     {
-        $views = array();
+        $views = [];
         foreach ($array as $element) {
             if (is_component($element)) {
                 $views[] = $element;

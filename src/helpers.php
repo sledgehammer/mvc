@@ -38,7 +38,7 @@ function is_component(&$component = '__UNDEFINED__')
  */
 function javascript_once($src, $identifier = null)
 {
-    static $included = array();
+    static $included = [];
 
     if ($identifier === null) {
         $identifier = $src;

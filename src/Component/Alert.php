@@ -26,9 +26,9 @@ class Alert extends Element
      *
      * @var array
      */
-    public $attributes = array(
+    public $attributes = [
         'class' => 'alert',
-    );
+    ];
 
     /**
      * Constructor.
@@ -36,7 +36,7 @@ class Alert extends Element
      * @param string $message HTML
      * @param array  $options
      */
-    public function __construct($message, $options = array())
+    public function __construct($message, $options = [])
     {
         $this->message = $message;
         // Set attributes and properties
@@ -69,7 +69,7 @@ class Alert extends Element
      */
     public static function info($message)
     {
-        return new self($message, array('class' => 'alert alert-info'));
+        return new self($message, ['class' => 'alert alert-info']);
     }
 
     /**
@@ -81,7 +81,7 @@ class Alert extends Element
      */
     public static function error($message)
     {
-        return new self($message, array('class' => 'alert alert-error'));
+        return new self($message, ['class' => 'alert alert-error']);
     }
 
     /**
@@ -93,6 +93,6 @@ class Alert extends Element
      */
     public static function success($message)
     {
-        return new self($message, array('class' => 'alert alert-success'));
+        return new self($message, ['class' => 'alert alert-success']);
     }
 }

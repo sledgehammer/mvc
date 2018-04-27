@@ -9,7 +9,7 @@ echo '<?xml'; ?> version="1.0" encoding="<?php echo $charset; ?>"?>
 	<title><?php echo $title; ?></title>
 <?php
 foreach ($head as $html) {
-	echo "\t".$html."\n";
+    echo "\t".$html."\n";
 }
 ?>
 </head>
@@ -19,7 +19,7 @@ foreach ($head as $html) {
 <?php
 render($body);
 if ($showStatusbar) {
-	include(__DIR__.'/../statusbar.php');
+    include(__DIR__.'/../statusbar.php');
 }
 ?>
 

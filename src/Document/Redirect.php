@@ -2,7 +2,7 @@
 
 namespace Sledgehammer\Mvc\Document;
 
-use Sledgehammer\Core\Object;
+use Sledgehammer\Core\Base;
 use Sledgehammer\Mvc\Document;
 
 /**
@@ -15,7 +15,7 @@ use Sledgehammer\Mvc\Document;
  *
  * (Compatible with Sledgehammer\HttpServer)
  */
-class Redirect extends Object implements Document
+class Redirect extends Base implements Document
 {
     private $url;
     private $permanently;
@@ -28,12 +28,12 @@ class Redirect extends Object implements Document
 
     public function getHeaders()
     {
-        return array(
-            'http' => array(
+        return [
+            'http' => [
                 'Status' => ($this->permanently ? '301 Moved Permanently' : '302 Found'),
                 'Location' => $this->url,
-            ),
-        );
+            ],
+        ];
     }
 
     public function isDocument()

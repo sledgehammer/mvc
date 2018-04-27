@@ -16,7 +16,7 @@ abstract class Website extends Folder
     public function __construct()
     {
         parent::__construct();
-        $this->publicMethods = array_diff($this->publicMethods, array('handleRequest', 'generateDocument', 'statusbar', 'initLanguage', 'isWrapable')); // Een aantal functies *niet* public maken
+        $this->publicMethods = array_diff($this->publicMethods, ['handleRequest', 'generateDocument', 'statusbar', 'initLanguage', 'isWrapable']); // Een aantal functies *niet* public maken
     }
 
     /**
@@ -52,7 +52,7 @@ abstract class Website extends Folder
         try {
             $content = $this->generateContent();
         } catch (Exception $exception) {
-            $content = new HttpError(500, array('exception' => $exception));
+            $content = new HttpError(500, ['exception' => $exception]);
         }
         $isDocument = false;
         if (method_exists($content, 'isDocument')) {

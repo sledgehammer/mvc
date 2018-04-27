@@ -15,7 +15,7 @@ if (count($choices) !== 0) {
     $indexed = \Sledgehammer\is_indexed($choices);
     foreach (array_reverse($choices) as $answer => $choice) {
         if (is_array($choice) === false) {
-            $choice = array('label' => $choice);
+            $choice = ['label' => $choice];
         }
         $choice['type'] = 'submit';
         $choice['name'] = $identifier;

@@ -95,7 +95,7 @@ function explode_xml_parameters($parameterString)
       }
       }
       // */
-    $parameters = array();
+    $parameters = [];
     $state = 'NAME';
     // Parse the string via a state-machine
     while ($parameterString) {
@@ -128,10 +128,10 @@ function explode_xml_parameters($parameterString)
                     $parameterString = substr($parameterString, strlen($match[0]));
                     $state = 'NAME';
                     break;
-                } else { // geen delimiter? dan is het de laatste value,
+                }   // geen delimiter? dan is het de laatste value,
                     $parameters[$attributeName] = $parameterString; // De waarde is bekend.
                     break 2;
-                }
+                
 
             default:
                 error('Invalid state');
@@ -153,7 +153,7 @@ function explode_xml_parameters($parameterString)
 function merge_headers($headers, $component)
 {
     if (is_string(array_value($headers, 'css'))) {
-        $headers['css'] = array($headers['css']);
+        $headers['css'] = [$headers['css']];
     }
 
     if (is_array($component)) { // Is er een header array meegegeven i.p.v. een component?
@@ -173,7 +173,7 @@ function merge_headers($headers, $component)
             case 'css':
             case 'javascript':
                 if (is_string($values)) {
-                    $values = array($values);
+                    $values = [$values];
                 }
                 if (empty($headers[$category])) {
                     $headers[$category] = $values;
@@ -184,7 +184,7 @@ function merge_headers($headers, $component)
 
             default:
                 if (!is_array($values)) {
-                    notice('Invalid "'.$category.'" header: values not an array, but a '.gettype($values), array('values' => $values));
+                    notice('Invalid "'.$category.'" header: values not an array, but a '.gettype($values), ['values' => $values]);
                 } elseif (empty($headers[$category])) {
                     $headers[$category] = $values;
                 } else {
@@ -218,7 +218,7 @@ function append_class_to_parameters($class, &$parameters)
 function tidy_id($cdata)
 {
     $cdata = trim($cdata);
-    $cdata = str_replace(array('[', ']'), '.', $cdata);
+    $cdata = str_replace(['[', ']'], '.', $cdata);
 
     return $cdata;
 }

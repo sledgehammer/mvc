@@ -8,7 +8,7 @@
 	<title><?php echo $title; ?></title>
 <?php
 foreach ($head as $html) {
-	echo "\t".$html."\n";
+    echo "\t".$html."\n";
 }
 ?>
 </head>
@@ -16,7 +16,9 @@ foreach ($head as $html) {
 <body<?php echo $bodyParameters; ?>>
 
 <?php render($body); ?>
-<?php if ($showStatusbar) { include(__DIR__.'/../statusbar.php'); } ?>
+<?php if ($showStatusbar) {
+    include(__DIR__.'/../statusbar.php');
+} ?>
 
 </body>
 </html>

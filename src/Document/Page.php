@@ -4,7 +4,7 @@ namespace Sledgehammer\Mvc\Document;
 
 use Sledgehammer\Core\Debug\ErrorHandler;
 use Sledgehammer\Core\Framework;
-use Sledgehammer\Core\Object;
+use Sledgehammer\Core\Base;
 use Sledgehammer\Mvc\Component;
 use Sledgehammer\Mvc\Document;
 use Sledgehammer\Mvc\Component\Template;
@@ -12,7 +12,7 @@ use Sledgehammer\Mvc\Component\Template;
 /**
  * The container for generating html pages.
  */
-class Page extends Object implements Document
+class Page extends Base implements Document
 {
     /**
      * Bepaald de template die door wordt gebruikt. xhtml, html of ajax.
@@ -68,16 +68,16 @@ class Page extends Object implements Document
      */
     public function getHeaders()
     {
-        $headers = array(
-            'http' => array(
+        $headers = [
+            'http' => [
                 'Content-Type' => $this->contentType,
-            ),
+            ],
             'charset' => Framework::$charset,
-            'htmlParameters' => array(),
-            'bodyParameters' => array(),
-        );
+            'htmlParameters' => [],
+            'bodyParameters' => [],
+        ];
         if (defined('Sledgehammer\WEBPATH') && \Sledgehammer\WEBPATH != '/' && file_exists(\Sledgehammer\PATH.'application/public/favicon.ico')) {
-            $headers['link']['favicon'] = array('rel' => 'shortcut icon', 'href' => \Sledgehammer\WEBROOT.'favicon.ico', 'type' => 'image/x-icon');
+            $headers['link']['favicon'] = ['rel' => 'shortcut icon', 'href' => \Sledgehammer\WEBROOT.'favicon.ico', 'type' => 'image/x-icon'];
         }
         // $headers['http']['Content-Type'] = 'application/xhtml+xml';
         if (ErrorHandler::instance()->html) {
@@ -99,17 +99,17 @@ class Page extends Object implements Document
         if ($this->headers == null) {
             notice(get_class($this).'->getHeaders() should be executed before '.get_class($this).'->render()');
         }
-        $variables = array(
+        $variables = [
             'charset' => $this->headers['charset'],
             'title' => array_value($this->headers, 'title'),
-            'head' => array(),
+            'head' => [],
             'htmlParameters' => \Sledgehammer\implode_xml_parameters($this->headers['htmlParameters']),
             'bodyParameters' => \Sledgehammer\implode_xml_parameters($this->headers['bodyParameters']),
             'body' => $this->content,
             'showStatusbar' => $this->showStatusbar,
-        );
+        ];
 
-        $validHeaders = array('http', 'title', 'charset', 'css', 'meta', 'link', 'javascript', 'htmlParameters', 'bodyParameters');
+        $validHeaders = ['http', 'title', 'charset', 'css', 'meta', 'link', 'javascript', 'htmlParameters', 'bodyParameters'];
         foreach ($this->headers as $key => $value) {
             if (!in_array($key, $validHeaders)) {
                 notice('Invalid header: "'.$key.'", expecting "'.\Sledgehammer\human_implode('" or "', $validHeaders, '", "').'"');
@@ -117,10 +117,10 @@ class Page extends Object implements Document
         }
 
         // tags binnen de <head> instellen
-        $head = array(
-            'meta' => array(),
-            'link' => array(),
-        );
+        $head = [
+            'meta' => [],
+            'link' => [],
+        ];
         if (isset($this->headers['meta'])) {
             $head['meta'] = $this->headers['meta'];
         }
@@ -129,7 +129,7 @@ class Page extends Object implements Document
         }
         if (isset($this->headers['css'])) {
             foreach ($this->headers['css'] as $url) {
-                $head['link'][] = array('href' => $url, 'type' => 'text/css', 'rel' => 'stylesheet');
+                $head['link'][] = ['href' => $url, 'type' => 'text/css', 'rel' => 'stylesheet'];
             }
         }
         $eot = ($this->doctype === 'xhtml') ? ' />' : '>'; // End of Tag instellen

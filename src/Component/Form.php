@@ -9,7 +9,7 @@ use Sledgehammer\Mvc\Import;
 
 /**
  * Generate and import a Form.
- * 
+ *
  * $form = new Form([new Input(['name' => 'field')]);
  * $data = $form->import()
  */

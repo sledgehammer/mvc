@@ -2,14 +2,14 @@
 
 namespace Sledgehammer\Mvc\Component;
 
-use Sledgehammer\Core\Object;
+use Sledgehammer\Core\Base;
 use Sledgehammer\Mvc\Component;
 
 /**
  * Add Headers to any Component.
  * Makes it possible to add headers from a Controller without adding a headers to all Component classes.
  */
-class Headers extends Object implements Component
+class Headers extends Base implements Component
 {
     /**
      * @var Component

@@ -2,14 +2,14 @@
 
 namespace Sledgehammer\Mvc\Component;
 
-use Sledgehammer\Core\Object;
+use Sledgehammer\Core\Base;
 use Sledgehammer\Mvc\Component;
 
 /**
  * A dialog popup with where selected choice is posted back the server.
  * Compatible with Bootrap 3 `.modal-dialog`.
  */
-class Dialog extends Object implements Component
+class Dialog extends Base implements Component
 {
     public $template = 'sledgehammer/mvc/templates/dialog.php';
     private $title;
@@ -25,7 +25,7 @@ class Dialog extends Object implements Component
      * @param array  $choices
      * @param array  $options [optional]
      */
-    public function __construct($title, $body, $choices = array(), $options = array())
+    public function __construct($title, $body, $choices = [], $options = [])
     {
         $this->title = $title;
         $this->body = $body;
@@ -48,9 +48,9 @@ class Dialog extends Object implements Component
 
     public function getHeaders()
     {
-        return array(
+        return [
             'title' => $this->title,
-        );
+        ];
     }
 
     public function render()

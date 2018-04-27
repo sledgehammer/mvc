@@ -4,13 +4,13 @@ namespace Sledgehammer\Mvc\Component;
 
 use Exception;
 use Sledgehammer\Core\Html;
-use Sledgehammer\Core\Object;
+use Sledgehammer\Core\Base;
 use Sledgehammer\Mvc\Component;
 
 /**
  * Baseclass for components based on an html element.
  */
-class Element extends Object implements Component
+class Element extends Base implements Component
 {
     /**
      * Element type: "div", "span", etc.
@@ -125,7 +125,7 @@ class Element extends Object implements Component
             $class = explode(' ', $class);
         }
         if (is_array($class) === false) {
-            $class = array($class);
+            $class = [$class];
         }
         $classes = explode(' ', trim($this->getAttribute('class')));
         foreach ($class as $name) {
@@ -165,7 +165,7 @@ class Element extends Object implements Component
             $class = explode(' ', $class);
         }
         if (is_array($class) === false) {
-            $class = array($class);
+            $class = [$class];
         }
         $classes = explode(' ', trim($this->getAttribute('class')));
         foreach ($class as $name) {
@@ -192,7 +192,7 @@ class Element extends Object implements Component
             $class = explode(' ', $class);
         }
         if (is_array($class) === false) {
-            $class = array($class);
+            $class = [$class];
         }
         foreach ($class as $name) {
             if ($this->hasClass($name)) {

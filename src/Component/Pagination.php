@@ -3,7 +3,7 @@
 namespace Sledgehammer\Mvc\Component;
 
 use Sledgehammer\Core\Html;
-use Sledgehammer\Core\Object;
+use Sledgehammer\Core\Base;
 use Sledgehammer\Core\Url;
 use Sledgehammer\Mvc\Import;
 use Sledgehammer\Mvc\Component;
@@ -11,7 +11,7 @@ use Sledgehammer\Mvc\Component;
 /**
  * << 1 2 3 [4] 5 6 7 8 9 10 ... 42 >>.
  */
-class Pagination extends Object implements Component, Import
+class Pagination extends Base implements Component, Import
 {
     /**
      * Number of pages.
@@ -46,7 +46,7 @@ class Pagination extends Object implements Component, Import
      * @param int   $current Current page
      * @param array $options [optional]
      */
-    public function __construct($count, $current = 1, $options = array())
+    public function __construct($count, $current = 1, $options = [])
     {
         $this->count = $count;
         $this->current = $current;
@@ -68,7 +68,7 @@ class Pagination extends Object implements Component, Import
         }
         $start = 1;
         $end = $this->count;
-        $pages = array();
+        $pages = [];
         $class = 'pagination';
         if ($this->align != 'left') {
             $class .= ' pagination-'.$this->align;
@@ -76,7 +76,7 @@ class Pagination extends Object implements Component, Import
         echo '<div class="'.$class."\"><ul>\n";
         // previous
         if ($this->current != 1) {
-            echo "\t<li>", Html::element('a', array('href' => $this->href.($this->current - 1)), '&laquo;'), "</li>\n";
+            echo "\t<li>", Html::element('a', ['href' => $this->href.($this->current - 1)], '&laquo;'), "</li>\n";
         }
         if ($this->count > $this->max) {
             $offset = floor($this->max / 2);
@@ -96,8 +96,8 @@ class Pagination extends Object implements Component, Import
         }
         // numbers
         for ($i = $start; $i <= $end; ++$i) {
-            $attributes = ($i == $this->current) ? array('class' => 'active') : array();
-            echo "\t", Html::element('li', $attributes, Html::element('a', array('href' => $this->href.$i), $i)), "\n";
+            $attributes = ($i == $this->current) ? ['class' => 'active'] : [];
+            echo "\t", Html::element('li', $attributes, Html::element('a', ['href' => $this->href.$i], $i)), "\n";
         }
         // total pages indication
         if ($end != $this->count) {
@@ -106,13 +106,13 @@ class Pagination extends Object implements Component, Import
                 if ($nextDecimal > $this->count) {
                     $nextDecimal = $this->count;
                 }
-                echo "\t<li>", Html::element('a', array('href' => $this->href.$nextDecimal), '...'), "</li>\n"; // @todo jump to page
+                echo "\t<li>", Html::element('a', ['href' => $this->href.$nextDecimal], '...'), "</li>\n"; // @todo jump to page
             }
-            echo "\t<li>", Html::element('a', array('href' => $this->href.($this->count)), $this->count), "</li>\n";
+            echo "\t<li>", Html::element('a', ['href' => $this->href.($this->count)], $this->count), "</li>\n";
         }
         // next
         if ($this->current != $this->count) {
-            echo "\t<li>", Html::element('a', array('href' => $this->href.($this->current + 1)), '&raquo;'), "</li>\n";
+            echo "\t<li>", Html::element('a', ['href' => $this->href.($this->current + 1)], '&raquo;'), "</li>\n";
         }
         echo '</ul></div>';
     }
