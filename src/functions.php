@@ -65,12 +65,9 @@ function is_valid_component(&$component = '__UNDEFINED__')
  *
  * @return string
  */
-function implode_xml_parameters($parameterArray, $charset = null)
+function implode_xml_parameters($parameterArray, $charset = 'UTF-8')
 {
     $xml = '';
-    if ($charset === null) {
-        $charset = Framework::$charset;
-    }
     foreach ($parameterArray as $key => $value) {
         $xml .= ' '.$key.'="'.htmlentities($value, ENT_COMPAT, $charset).'"';
     }

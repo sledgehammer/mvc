@@ -1,14 +1,10 @@
-<?php
-/**
- * HTML5
- */
-?><!DOCTYPE html>
+<!DOCTYPE html>
 <html<?php echo $htmlParameters; ?>>
 <head>
-	<title><?php echo $title; ?></title>
+    <title><?php echo $title; ?></title>
 <?php
 foreach ($head as $html) {
-    echo "\t".$html."\n";
+    echo "    ".$html."\n";
 }
 ?>
 </head>
@@ -16,7 +12,7 @@ foreach ($head as $html) {
 <body<?php echo $bodyParameters; ?>>
 
 <?php render($body); ?>
-<?php if ($showStatusbar) {
+<?php if ($statusbar) {
     include(__DIR__.'/../statusbar.php');
 } ?>
 

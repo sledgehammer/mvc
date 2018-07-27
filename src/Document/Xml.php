@@ -68,7 +68,7 @@ class Xml extends Base implements Document
      *
      * @return SimpleXMLElement
      */
-    public static function build($data, $charset = null)
+    public static function build($data, $charset = 'UTF-8')
     {
         if (is_object($data)) {
             $root = get_class($data);
@@ -80,9 +80,6 @@ class Xml extends Base implements Document
             reset($data);
             $root = key($data);
             $elements = current($data);
-        }
-        if ($charset === null) {
-            $charset = Framework::$charset;
         }
         $xml = new SimpleXMLElement('<?xml version="1.0" encoding="'.$charset.'"?><'.$root.' />');
         self::addNodes($xml, $elements, $root);

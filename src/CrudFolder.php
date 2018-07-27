@@ -4,6 +4,8 @@ namespace Sledgehammer\Mvc;
 
 use Exception;
 use Sledgehammer\Mvc\Document\Xml;
+use Sledgehammer\Core\Framework;
+use Sledgehammer\Core\Json;
 
 /**
  * Folder for basic CRUD operations on a Repository model.
@@ -41,7 +43,7 @@ class CrudFolder extends Folder
         try {
             return parent::generateContent();
         } catch (Exception $e) {
-            return Json::error($e);
+            return static::error($e);
         }
     }
 
@@ -93,7 +95,7 @@ class CrudFolder extends Folder
         $instance = $this->load($_REQUEST[$this->primaryKey]);
         $data = $this->extract($instance, $this->maxRecursion);
 
-        return Json::succes($data);
+        return static::success($data);
     }
 
     private function load($id)
@@ -115,7 +117,7 @@ class CrudFolder extends Folder
         $repo = getRepository($this->repository);
         $repo->save($this->model, $instance);
 
-        return Json::success();
+        return static::success();
     }
 
     /**
@@ -129,7 +131,7 @@ class CrudFolder extends Folder
         $instance = $repo->create($this->model, $this->getNewValues());
         $repo->save($model, $instance);
         //		redirect();
-//		return Json::success($this->primaryKey => $instance->{$this->primaryKey});
+//		return static::success($this->primaryKey => $instance->{$this->primaryKey});
     }
 
     /**
@@ -164,7 +166,7 @@ class CrudFolder extends Folder
         $repo = getRepository($this->repository);
         $repo->delete($this->model, $_POST[$this->primaryKey]);
         //throw new Exception('Verwijderen van '.$this->subject.' #'.$_POST[$this->primarykey].' is mislukt');
-        return Json::success();
+        return static::success();
     }
 
     /**
@@ -190,5 +192,61 @@ class CrudFolder extends Folder
             return new Xml(Xml::build([$this->model => $data]));
         }
         return new Json($data);
+    }
+
+
+    /**
+     * Reports the error/exception to the ErrorHandler and returns the error as Json object.
+     * The javascript client should detect and report the error to the user:
+     *   if (result.success !== true) { alert(result.error); }.
+     *
+     * @param string|Exception $error The error message or Exception
+     * @param int              $http  The HTTP status code (defaults to 400 Bad Request)
+     *
+     * @return Json
+     */
+    protected static function error($error, $http = 400)
+    {
+        // if (headers_sent() === false && DebugR::isEnabled()) {
+        //     ErrorHandler::instance()->html = false;
+        // }
+        if ($error instanceof Exception) {
+            \Sledgehammer\report_exception($error);
+            $error = $error->getMessage();
+        } else {
+            \Sledgehammer\warning($error);
+        }
+
+        return new Json([
+            'success' => false,
+            'error' => $error,
+        ], [
+            'http' => [
+                'Status' => $http.' '.Framework::$statusCodes[$http],
+                'Content-Type' => 'application/json'
+                // 'Content-Type' => (ErrorHandler::instance()->html ? 'text/html;  charset=utf-8' : 'application/json'),
+            ],
+        ]);
+    }
+
+    /**
+     * Short for "new Json(array('success' => true))".
+     *
+     * @param mixed $data [optional] The data payload
+     *
+     * @return Json
+     */
+    protected static function success($data = null)
+    {
+        if ($data === null) {
+            return new Json(array(
+                'success' => true,
+            ));
+        }
+
+        return new Json(array(
+            'success' => true,
+            'data' => $data,
+        ));
     }
 }
