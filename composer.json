@@ -1,7 +1,6 @@
 {
   "name": "sledgehammer/mvc",
-  "description":
-    "Sledgehammer MVC module: Provides a Model View Controller architecture",
+  "description": "Sledgehammer MVC module: Provides a Model View Controller architecture",
   "type": "library",
   "license": "CC-BY-SA-3.0",
   "require": {
@@ -10,10 +9,18 @@
   "suggest": {
     "sledgehammer/minify": "Minify assets like css, javascript and images"
   },
+  "scripts": {
+    "test": "phpunit"
+  },
   "autoload": {
     "psr-4": {
       "Sledgehammer\\Mvc\\": "src"
     },
-    "files": ["src/bootstrap.php"]
+    "files": [
+      "src/bootstrap.php"
+    ]
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.5"
   }
 }
