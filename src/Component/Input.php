@@ -71,7 +71,8 @@ class Input extends Element implements Import
         if ($required && $this->getAttribute('required') === false) {
             $required = false;
         }
-        switch (strtolower($this->getAttribute('type'))) {
+        $type = $this->getAttribute('type');
+        switch (strtolower($type ?? '')) {
 
             case 'file':
                 // Import a file upload
@@ -136,7 +137,8 @@ class Input extends Element implements Import
         if ($this->label === null) {
             $this->renderElement();
         } else {
-            if (in_array(strtolower($this->getAttribute('type')), ['checkbox', 'radio'])) {
+            $type = strtolower($this->getAttribute('type') ?? '');
+            if (in_array($type, ['checkbox', 'radio'])) {
                 echo '<label>';
                 $this->renderElement();
                 echo '&nbsp;', Html::escape($this->label), '</label>';
@@ -151,7 +153,7 @@ class Input extends Element implements Import
 
     protected function renderElement()
     {
-        $type = strtolower($this->getAttribute('type'));
+        $type = strtolower($this->getAttribute('type') ?? '');
         if (in_array($type, ['select', 'textarea'])) {
             $this->tag = $type;
             unset($this->attributes['type']);

@@ -4,7 +4,7 @@
   "type": "library",
   "license": "CC-BY-SA-3.0",
   "require": {
-    "sledgehammer/core": ">=18"
+    "sledgehammer/core": "dev-master"
   },
   "suggest": {
     "sledgehammer/minify": "Minify assets like css, javascript and images"
@@ -21,6 +21,6 @@
     ]
   },
   "require-dev": {
-    "phpunit/phpunit": "^9.5"
+    "phpunit/phpunit": "^13"
   }
 }
